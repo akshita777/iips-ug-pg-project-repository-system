@@ -39,15 +39,15 @@ Cross cutting pieces that serve layers rather than sitting in them: DTOs with Be
 
 ### Presentation: Next.js frontend
 
-Owns pages, the neobrutalist component kit, form validation with Zod, and the API client. It holds no business rules. Route protection is a thin token check that redirects to login. The backend remains the authority on who may do what.
+Owns pages, the institute formal component kit, form validation with Zod, and the API client. It holds no business rules. Route protection is a thin token check that redirects to login. The backend remains the authority on who may do what. Shared primitives live in `frontend/components/ui/`, layout shells in `frontend/components/layout/`, and feature pages under `frontend/app/`.
 
 ### Controller layer: HTTP boundary
 
-Owns routes, request shapes, and response codes. Controllers authenticate the caller from the JWT, delegate everything to a service, and translate domain errors into HTTP statuses through the global handler. Controllers never touch repositories or SQL. Live today: `AuthController` (register, login, refresh) and `ProjectController` (list, read, create, submit).
+Owns routes, request shapes, and response codes. Controllers authenticate the caller from the JWT, delegate everything to a service, and translate domain errors into HTTP statuses through the global handler. Controllers never touch repositories or SQL. Live today: `AuthController` (register, login, refresh), `ProjectController` (list, read, create, submit, review, approve, reject, versions, export), `AllocationController`, `EvaluationController`, `NotificationController`, `UserController`, `AnalyticsController`, `RepositoryController`, `ReviewController`, `TeamController`, and `WikiController`.
 
 ### Service layer: business rules
 
-Owns the rules that make the product correct. `AuthService` handles registration with duplicate email checks and bcrypt hashing, login through the authentication manager, and token issue. `ProjectService` enforces that only students create projects and only Draft or returned projects can be submitted. Services are transactional at the method level. Planned services (allocation, evaluation, versioning, notification) will live here under the same rules.
+Owns the rules that make the product correct. `AuthService` handles registration with duplicate email checks and bcrypt hashing, login through the authentication manager, and token issue. `ProjectService` enforces that only students create projects and only Draft or returned projects can be submitted. Services are transactional at the method level. Live services: `AuthService`, `ProjectService`, `AllocationService`, `EvaluationService`, `VersionService`, `NotificationService`, `RepositoryService`, `ReviewService`, `TeamService`, `WikiService`, `UserService`, `AnalyticsService`, `ArchiveService`.
 
 ### Security: authentication and authorization
 
@@ -82,4 +82,4 @@ Project submission: browser posts with a bearer token to `ProjectController`. `J
 
 - Stateless API with no server session makes horizontal scaling straightforward. Any instance serves any request given the database.
 - Flyway validate plus versioned migrations means deploys are repeatable across development, staging, and production.
-- The current gap to close before production traffic: no rate limiting on auth endpoints, no refresh token reuse detection, and file uploads have no virus scanning. These are recorded as hardening tasks, not as existing behavior.
+- The current gap to close before production traffic: no refresh token reuse detection, and file uploads have no virus scanning. Login rate limiting on `/api/v1/auth/*` is now live via `LoginRateLimitFilter`. These are recorded as hardening tasks, not as existing behavior.
