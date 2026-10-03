@@ -1,32 +1,43 @@
 package com.iips.pms.controller;
 
+import com.iips.pms.dto.ProjectRequest;
 import com.iips.pms.entity.Project;
-import com.iips.pms.repository.ProjectRepository;
-import lombok.RequiredArgsConstructor;
+import com.iips.pms.service.ProjectService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/projects")
-@RequiredArgsConstructor
 public class ProjectController {
-    private final ProjectRepository projectRepository;
+
+    private final ProjectService projectService;
+
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getAllProjects() {
-        return ResponseEntity.ok(projectRepository.findAll());
+    public ResponseEntity<List<Project>> getAll() {
+        return ResponseEntity.ok(projectService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProject(@PathVariable Long id) {
-        return projectRepository.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Project> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        return ResponseEntity.ok(projectRepository.save(project));
+    public ResponseEntity<Project> create(Authentication auth,
+                                          @Valid @RequestBody ProjectRequest req) {
+        return ResponseEntity.ok(projectService.create(auth.getName(), req));
+    }
+
+    @PostMapping("/{id}/submit")
+    public ResponseEntity<Project> submit(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.submit(id));
     }
 }

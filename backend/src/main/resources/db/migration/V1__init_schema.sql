@@ -11,7 +11,7 @@ CREATE TABLE projects (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT REFERENCES users(id),
     title VARCHAR(255) NOT NULL,
-    abstract TEXT,
+    abstract_text TEXT,
     tech_stack VARCHAR(500),
     status VARCHAR(20) DEFAULT 'DRAFT',
     created_at TIMESTAMP DEFAULT NOW(),

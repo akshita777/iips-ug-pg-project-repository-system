@@ -1,15 +1,10 @@
 package com.iips.pms.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "projects")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,15 +17,14 @@ public class Project {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String abstract;
+    @Column(name = "abstract_text", columnDefinition = "TEXT")
+    private String abstractText;
 
     @Column(name = "tech_stack")
     private String techStack;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
     private ProjectStatus status = ProjectStatus.DRAFT;
 
     @Column(name = "created_at")
@@ -38,6 +32,8 @@ public class Project {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Project() {}
 
     @PrePersist
     protected void onCreate() {
@@ -49,6 +45,21 @@ public class Project {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getAbstractText() { return abstractText; }
+    public void setAbstractText(String abstractText) { this.abstractText = abstractText; }
+    public String getTechStack() { return techStack; }
+    public void setTechStack(String techStack) { this.techStack = techStack; }
+    public ProjectStatus getStatus() { return status; }
+    public void setStatus(ProjectStatus status) { this.status = status; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public enum ProjectStatus {
         DRAFT, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED,
