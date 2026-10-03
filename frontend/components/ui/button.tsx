@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "accent" | "dark" | "white" | "success" | "danger";
+type Variant = "primary" | "secondary" | "accent" | "dark" | "white" | "success" | "danger" | "warn" | "lilac";
 type Size = "sm" | "md" | "lg";
 
 const variantStyles: Record<Variant, string> = {
@@ -11,7 +11,9 @@ const variantStyles: Record<Variant, string> = {
   dark: "bg-ink text-white",
   white: "bg-white text-ink",
   success: "bg-success text-ink",
-  danger: "bg-danger text-ink",
+  danger: "bg-danger text-dangerInk",
+  warn: "bg-warn text-ink",
+  lilac: "bg-lilac text-ink",
 };
 
 const sizeStyles: Record<Size, string> = {

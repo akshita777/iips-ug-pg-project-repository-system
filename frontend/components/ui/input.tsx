@@ -15,8 +15,8 @@ export function Input({ label, error, className, id, ...props }: InputProps) {
           {label}
         </label>
       )}
-      <input id={inputId} className={cn("brutal-input", error && "border-danger", className)} {...props} />
-      {error && <p className="text-sm font-bold text-danger">{error}</p>}
+      <input id={inputId} className={cn("brutal-input", error && "border-dangerInk", className)} {...props} />
+      {error && <p className="text-sm font-bold text-dangerInk">{error}</p>}
     </div>
   );
 }
@@ -30,8 +30,8 @@ export function Textarea({ label, error, className, id, ...props }: React.Textar
           {label}
         </label>
       )}
-      <textarea id={inputId} className={cn("brutal-input min-h-28", error && "border-danger", className)} {...props} />
-      {error && <p className="text-sm font-bold text-danger">{error}</p>}
+      <textarea id={inputId} className={cn("brutal-input min-h-28", error && "border-dangerInk", className)} {...props} />
+      {error && <p className="text-sm font-bold text-dangerInk">{error}</p>}
     </div>
   );
 }
