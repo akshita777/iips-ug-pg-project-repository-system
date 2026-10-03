@@ -195,6 +195,16 @@ export function ProjectDetail({ id }: { id: string }) {
     }
   }
 
+  async function removeMember(memberId: number) {
+    try {
+      await api.delete(`/projects/${id}/team/${memberId}`);
+      setTeam((prev) => prev.filter((m) => m.id !== memberId));
+      push("Member removed.", "success");
+    } catch (e) {
+      push(apiErrorMessage(e, "Remove failed."), "danger");
+    }
+  }
+
   async function saveWiki() {
     if (!wikiTitle.trim()) {
       push("Wiki title is required.", "danger");
@@ -211,6 +221,16 @@ export function ProjectDetail({ id }: { id: string }) {
       push("Wiki saved.", "success");
     } catch (e) {
       push(apiErrorMessage(e, "Wiki save failed."), "danger");
+    }
+  }
+
+  async function deleteWiki(pageId: number) {
+    try {
+      await api.delete(`/projects/${id}/wiki/${pageId}`);
+      setWiki((prev) => prev.filter((p) => p.id !== pageId));
+      push("Wiki page deleted.", "success");
+    } catch (e) {
+      push(apiErrorMessage(e, "Delete failed."), "danger");
     }
   }
 
@@ -456,10 +476,13 @@ export function ProjectDetail({ id }: { id: string }) {
                     {team.map((m, i) => (
                       <div key={m.id} className="brutal-card bg-white p-4 flex items-center gap-3">
                         <Avatar name={m.studentName || `Member ${m.studentId}`} index={i} />
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <p className="font-display font-bold">{m.studentName || `User ${m.studentId}`}</p>
                           <p className="font-mono text-xs uppercase">{m.teamRole}</p>
                         </div>
+                        <Button variant="danger" size="sm" type="button" onClick={() => removeMember(m.id)}>
+                          Remove
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -483,7 +506,12 @@ export function ProjectDetail({ id }: { id: string }) {
                   <div className="grid gap-3 md:grid-cols-2">
                     {wiki.map((p) => (
                       <div key={p.id} className="brutal-card bg-white p-4">
-                        <p className="font-display font-bold">{p.title}</p>
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-display font-bold">{p.title}</p>
+                          <Button variant="danger" size="sm" type="button" onClick={() => deleteWiki(p.id)}>
+                            Delete
+                          </Button>
+                        </div>
                         <p className="mt-1 text-sm text-ink/70 whitespace-pre-wrap">{p.body || "Empty page."}</p>
                       </div>
                     ))}

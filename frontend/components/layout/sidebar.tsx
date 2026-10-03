@@ -10,10 +10,12 @@ const linksByRole: Record<Role, { href: string; label: string }[]> = {
     { href: "/dashboard", label: "Overview" },
     { href: "/projects", label: "My projects" },
     { href: "/projects/new", label: "Submit" },
+    { href: "/preferences", label: "Preferences" },
   ],
   FACULTY: [
     { href: "/dashboard", label: "Overview" },
     { href: "/guide/reviews", label: "Reviews" },
+    { href: "/guide/students", label: "Students" },
     { href: "/projects", label: "Projects" },
   ],
   COORDINATOR: [
