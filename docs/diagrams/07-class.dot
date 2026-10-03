@@ -6,7 +6,7 @@ digraph class_diagram {
   node [fontname="Helvetica", fontsize=10, shape=record, style="filled",
         fillcolor="white", color="black", penwidth=1.5];
 
-  user [label="{User|name\l email\l password\l|+ log in()\l+ log out()\l}"];
+  user [label="{User|name\l email\l password\l}"];
   student [label="{Student|roll number\l semester\l program\l|+ submit project()\l+ upload version()\l}"];
   faculty [label="{Faculty|employee id\l department\l max capacity\l|+ review submission()\l+ approve or reject()\l}"];
   project [label="{Project|title\l abstract\l tech stack\l status\l|+ submit()\l+ approve()\l+ reject()\l}"];

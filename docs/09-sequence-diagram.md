@@ -8,7 +8,7 @@ Interaction steps are numbered in call order. Each step names the caller, the ac
 
 Source: [09-sequence-submission.dot](diagrams/09-sequence-submission.dot).
 
-Mirrors `POST /api/v1/projects/{id}/submit` in `ProjectController`.
+Follows the same steps as `POST /api/v1/projects/{id}/submit` in `ProjectController`. The guide notification step is planned next (FR-10) and not yet in code.
 
 ## 9.2 Guide Allocation
 

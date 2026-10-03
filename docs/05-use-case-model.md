@@ -49,3 +49,15 @@ Source: [05-use-case.dot](diagrams/05-use-case.dot). Recompile with `dot -Tsvg 0
 - **Precondition:** Project approved by guide
 - **Flow:** Evaluator views project, evaluator assigns marks per rubric, system calculates final score
 - **Postcondition:** Evaluation complete
+
+### UC-08: Track Project Workflow
+- **Actor:** Coordinator
+- **Precondition:** Coordinator logged in
+- **Flow:** Coordinator opens workflow view, system shows counts by status, coordinator follows up on stuck projects
+- **Postcondition:** Coordinator has full status picture
+
+### UC-09: Assign Roles
+- **Actor:** Admin
+- **Precondition:** Admin logged in
+- **Flow:** Admin opens user list, admin changes a user role, system applies new permissions on next login
+- **Postcondition:** User role updated
