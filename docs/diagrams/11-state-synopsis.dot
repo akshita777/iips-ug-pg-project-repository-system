@@ -1,0 +1,27 @@
+digraph state_synopsis {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  nodesep=0.5;
+  ranksep=0.6;
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  draft [label="Draft"];
+  submitted [label="Submitted"];
+  approved [label="Approved"];
+  returned [label="Returned"];
+  project [label="Project Open"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> draft [label="write"];
+  draft -> submitted [label="submit"];
+  submitted -> approved [label="mentor accepts"];
+  submitted -> returned [label="mentor returns"];
+  returned -> draft [label="revise"];
+  approved -> project [label="project opens"];
+  project -> end;
+}

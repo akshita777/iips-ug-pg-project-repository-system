@@ -8,7 +8,11 @@ digraph activity_submission {
   edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
 
   start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
-  login [label="Student logs in"];
+  synopsis [label="Write and submit synopsis"];
+  syn_ok [label="Synopsis approved?", shape=diamond, style="filled", fillcolor="white"];
+  revise_syn [label="Revise synopsis"];
+  window [label="Submission window open?", shape=diamond, style="filled", fillcolor="white"];
+  closed [label="Wait for the window"];
   create [label="Enter project title and details"];
   upload [label="Upload project files"];
   more [label="Add more files?", shape=diamond, style="filled", fillcolor="white"];
@@ -17,8 +21,13 @@ digraph activity_submission {
   notify [label="Guide gets notified"];
   end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
 
-  start -> login;
-  login -> create;
+  start -> synopsis;
+  synopsis -> syn_ok;
+  syn_ok -> revise_syn [label="no"];
+  revise_syn -> synopsis;
+  syn_ok -> window [label="yes"];
+  window -> closed [label="no"];
+  window -> create [label="yes"];
   create -> upload;
   upload -> more;
   more -> upload [label="yes"];

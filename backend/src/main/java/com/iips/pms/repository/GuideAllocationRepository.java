@@ -9,4 +9,5 @@ import java.util.List;
 public interface GuideAllocationRepository extends JpaRepository<GuideAllocation, Long> {
     List<GuideAllocation> findByFacultyId(Long facultyId);
     List<GuideAllocation> findByStudentId(Long studentId);
+    List<GuideAllocation> findByProjectId(Long projectId);
 }

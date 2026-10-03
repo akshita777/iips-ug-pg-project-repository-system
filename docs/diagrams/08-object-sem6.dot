@@ -2,7 +2,7 @@ digraph object_sem6 {
   rankdir=LR;
   bgcolor="white";
   fontname="Helvetica";
-  label="BCA final project, semester 6 (snapshot)";
+  label="BCA minor project, semester 6 (snapshot)";
   fontname="Helvetica-Bold";
   fontsize=12;
 
@@ -10,13 +10,18 @@ digraph object_sem6 {
         fillcolor="white", color="black", penwidth=1.5];
   edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
 
-  s1 [label="{Student|roll no: BCA-2021-001\l semester: 6\l program: BCA\l}"];
-  p1 [label="{Project|title: Online Library\l stack: Java and React\l status: Submitted\l}"];
+  s1 [label="{Student|roll no: IC2k22-12\l section: A\l semester: 6\l}"];
+  mate [label="{Student|roll no: IC2k22-31\l section: A\l teammate\l}"];
+  syn [label="{Synopsis|title: Library Portal\l status: Approved\l}"];
+  p1 [label="{Minor Project|title: Online Library\l stack: Java and React\l status: Submitted\l}"];
   v1 [label="{Version 1|uploaded: 15 Mar\l}"];
   v2 [label="{Version 2|uploaded: 01 Apr\l}"];
-  g1 [label="{Guide|name: Dr. A. Sharma\l department: Comp. Science\l}"];
+  g1 [label="{Guide|name: Dr. A. Sharma\l}"];
   a1 [label="{Allocation|status: Confirmed\l}"];
 
+  s1 -> syn [label="writes"];
+  syn -> p1 [label="approved into"];
+  mate -> p1 [label="joins"];
   s1 -> p1 [label="submits"];
   p1 -> v1 [label="has"];
   p1 -> v2 [label="has"];

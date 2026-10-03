@@ -7,12 +7,18 @@ digraph er_diagram {
         fillcolor="white", color="black", penwidth=1.5];
   edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="none"];
 
-  users [label="{users|id (PK)\l name\l email (unique)\l password\l role\l created on\l}"];
-  projects [label="{projects|id (PK)\l student id (FK)\l title\l abstract text\l tech stack\l status\l created on\l updated on\l}"];
+  users [label="{users|id (PK)\l name\l email (unique)\l password\l role\l roll number (unique)\l program code\l batch year\l section\l created on\l}"];
+  projects [label="{projects|id (PK)\l student id (FK)\l title\l abstract text\l tech stack\l type\l status\l created on\l updated on\l}"];
   versions [label="{submission versions|id (PK)\l project id (FK)\l version no\l file path\l uploaded on\l}"];
   allocs [label="{guide allocations|id (PK)\l student id (FK)\l faculty id (FK)\l project id (FK)\l status\l}"];
   evals [label="{evaluations|id (PK)\l project id (FK)\l evaluator id (FK)\l rubric id (FK)\l total marks\l feedback\l}"];
   rubrics [label="{rubrics|id (PK)\l name\l criteria (JSON)\l}"];
+  batch [label="{batch mentors|id (PK)\l faculty id (FK)\l program code\l batch year\l}"];
+  synopsis [label="{synopses|id (PK)\l student id (FK)\l title\l summary\l status\l}"];
+  windows [label="{deadline windows|id (PK)\l batch mentor id (FK)\l project type\l opens on\l closes on\l}"];
+  slots [label="{review slots|id (PK)\l faculty id (FK)\l student id (FK)\l starts at\l status\l}"];
+  prefs [label="{guide preferences|id (PK)\l student id (FK)\l faculty id (FK)\l rank\l}"];
+  teams [label="{team members|id (PK)\l project id (FK)\l student id (FK)\l team role\l}"];
 
   users -> projects [label="1 submits N"];
   projects -> versions [label="1 has N"];
@@ -21,4 +27,13 @@ digraph er_diagram {
   projects -> evals [label="1 gets N"];
   rubrics -> evals [label="1 used in N"];
   users -> evals [label="1 writes N"];
+  users -> batch [label="1 mentors 1"];
+  users -> synopsis [label="1 writes N"];
+  synopsis -> projects [label="1 opens 0..1"];
+  batch -> windows [label="1 sets N"];
+  users -> slots [label="1 offers N"];
+  slots -> users [label="booked by 0..1"];
+  users -> prefs [label="1 ranks N"];
+  projects -> teams [label="1 has 1..2"];
+  users -> teams [label="1 joins N"];
 }

@@ -15,7 +15,9 @@ digraph activity_evaluation {
   marks_in [label="Internal marks submitted"];
   marks_ex [label="External marks submitted"];
   total [label="Final score calculated"];
+  pass [label="Score passing?", shape=diamond, style="filled", fillcolor="white"];
   report [label="Report generated"];
+  rework [label="Returned for rework"];
   inform [label="Student gets notified"];
   end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
 
@@ -27,7 +29,10 @@ digraph activity_evaluation {
   external -> marks_ex;
   marks_in -> total;
   marks_ex -> total;
-  total -> report;
+  total -> pass;
+  pass -> report [label="yes"];
+  pass -> rework [label="no"];
+  rework -> inform;
   report -> inform;
   inform -> end;
 }

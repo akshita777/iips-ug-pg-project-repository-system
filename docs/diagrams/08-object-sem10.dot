@@ -2,7 +2,7 @@ digraph object_sem10 {
   rankdir=LR;
   bgcolor="white";
   fontname="Helvetica";
-  label="MCA final project, semester 10 (snapshot)";
+  label="MCA major project, semester 10 (snapshot)";
   fontname="Helvetica-Bold";
   fontsize=12;
 
@@ -10,12 +10,14 @@ digraph object_sem10 {
         fillcolor="white", color="black", penwidth=1.5];
   edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
 
-  s2 [label="{Student|roll no: MCA-2024-042\l semester: 10\l program: MCA\l}"];
-  p2 [label="{Project|title: Student Performance Predictor\l stack: Python and Next.js\l status: Under Review\l}"];
+  s2 [label="{Student|roll no: IC2k20-07\l section: B\l semester: 10\l}"];
+  p2 [label="{Major Project|title: Performance Predictor\l stack: Python and Next.js\l status: Under Review\l}"];
+  repo [label="{Linked Repo|verified: yes\l commits: 42\l}"];
   e1 [label="{Evaluation|total: 85.5\l status: Completed\l}"];
-  r1 [label="{Rubric|name: Final Viva\l}"];
+  r1 [label="{Rubric|name: MCA Major Viva\l}"];
 
   s2 -> p2 [label="submits"];
+  p2 -> repo [label="links"];
   p2 -> e1 [label="evaluated by"];
   e1 -> r1 [label="uses"];
 }

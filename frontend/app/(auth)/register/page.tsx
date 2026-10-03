@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Alert } from "@/components/ui/alert";
 import api from "@/lib/api";
 
 const roles = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN"] as const;
@@ -41,6 +42,7 @@ export default function RegisterPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("email", data.email ?? email);
       router.push("/dashboard");
     } catch {
       setError("Registration failed. This email may already be used.");
@@ -74,9 +76,7 @@ export default function RegisterPage() {
             </div>
           </div>
           {error && (
-            <div className="border-2 border-ink rounded-lg bg-danger/10 px-4 py-2.5 text-sm font-bold">
-              {error}
-            </div>
+            <Alert tone="danger">{error}</Alert>
           )}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Creating..." : "Create account"}

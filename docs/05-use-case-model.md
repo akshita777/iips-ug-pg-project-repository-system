@@ -61,3 +61,45 @@ Source: [05-use-case.dot](diagrams/05-use-case.dot). Recompile with `dot -Tpng -
 - **Precondition:** Admin logged in
 - **Flow:** Admin opens user list, admin changes a user role, system applies new permissions on next login
 - **Postcondition:** User role updated
+
+### UC-10: Submit Synopsis
+- **Actor:** Student
+- **Precondition:** Student logged in, deadline window open
+- **Flow:** Student writes title and summary, student submits, mentor gets notified
+- **Postcondition:** Synopsis in Submitted state
+
+### UC-11: Approve Synopsis
+- **Actor:** Guide
+- **Precondition:** Synopsis submitted to guide
+- **Flow:** Guide accepts and the full project opens, or guide returns it with comments
+- **Postcondition:** Synopsis approved or returned
+
+### UC-12: Set Deadlines
+- **Actor:** Batch Mentor
+- **Precondition:** Batch mentor logged in
+- **Flow:** Mentor sets open and close dates per project type, system blocks late uploads
+- **Postcondition:** Deadline window active
+
+### UC-13: Offer and Book Review Slots
+- **Actor:** Guide, Student
+- **Precondition:** Guide published slots
+- **Flow:** Student books a free slot, both sides get an in app reminder
+- **Postcondition:** Slot booked
+
+### UC-14: Link Repo and View Analysis
+- **Actor:** Student
+- **Precondition:** Project exists
+- **Flow:** Student links GitHub repo, system syncs commits and computes the parameter report
+- **Postcondition:** Analysis visible to student and mentor
+
+### UC-15: Edit Rubric
+- **Actor:** Batch Mentor
+- **Precondition:** Batch mentor logged in
+- **Flow:** Mentor adjusts criteria for the batch, new evaluations use the updated rubric
+- **Postcondition:** Rubric updated
+
+### UC-16: Browse Project Showcase
+- **Actor:** Guest, Student
+- **Precondition:** None
+- **Flow:** Visitor opens the gallery, system lists evaluated projects
+- **Postcondition:** Public list viewed

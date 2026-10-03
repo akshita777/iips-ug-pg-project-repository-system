@@ -2,8 +2,8 @@ digraph class_diagram {
   rankdir=TB;
   bgcolor="white";
   fontname="Helvetica";
-  nodesep=0.5;
-  ranksep=0.7;
+  nodesep=0.45;
+  ranksep=0.65;
 
   node [fontname="Helvetica", fontsize=10, shape=record, style="filled",
         fillcolor="white", color="black", penwidth=1.5];
@@ -11,28 +11,62 @@ digraph class_diagram {
 
   user [label="{User|name\l email\l password\l}"];
 
-  student [label="{Student|roll number\l semester\l program\l|+ submit project()\l+ upload version()\l}"];
+  student [label="{Student|roll number\l program code\l batch year\l section\l semester\l|+ submit synopsis()\l+ submit project()\l+ upload version()\l}"];
   faculty [label="{Faculty|employee id\l department\l max capacity\l|+ review submission()\l+ approve or reject()\l}"];
+  coordinator [label="{Coordinator|employee id\l department\l|+ set deadlines()\l+ confirm allocation()\l}"];
+  evaluator [label="{Evaluator|employee id\l organization\l external?\l|+ grade project()\l}"];
+  admin [label="{Administrator\l|\l}"];
 
-  project [label="{Project|title\l abstract text\l tech stack\l status\l|+ submit()\l+ approve()\l+ reject()\l}"];
+  batchmentor [label="{Batch Mentor|program code\l batch year\l|+ assign guides()\l}"];
+  synopsis [label="{Synopsis|title\l summary\l status\l|+ submit()\l+ approve()\l+ return()\l}"];
+  deadline [label="{Deadline Window|project type\l opens on\l closes on\l}"];
+  slot [label="{Review Slot|starts at\l booked by\l|+ book()\l+ cancel()\l}"];
+
+  project [label="{Project|title\l abstract text\l tech stack\l type\l status\l|+ submit()\l+ approve()\l+ reject()\l+ rework()\l}"];
   version [label="{Submission Version|version number\l file path\l uploaded on\l comments\l}"];
+  team [label="{Team Member|team role\l}"];
   allocation [label="{Guide Allocation|allocated on\l status\l}"];
+  preference [label="{Guide Preference|rank\l}"];
   evaluation [label="{Evaluation|total marks\l feedback\l status\l}"];
   rubric [label="{Rubric|name\l criteria\l}"];
+  review [label="{Code Review|status\l comments\l}"];
+  repo [label="{Linked Repository|repo url\l verified\l last synced\l}"];
+  commit [label="{Commit Record|sha\l message\l author\l}"];
+  wiki [label="{Wiki Page|title\l body\l}"];
+  notice [label="{Notification|message\l read?\l}"];
 
   { rank=same; student; faculty; }
-  { rank=same; version; evaluation; }
+  { rank=same; coordinator; evaluator; admin; }
+  { rank=same; allocation; synopsis; slot; preference; review; batchmentor; }
+  { rank=same; version; team; }
 
   user -> student [dir=back, arrowhead="empty", label="is a"];
   user -> faculty [dir=back, arrowhead="empty", label="is a"];
+  user -> coordinator [dir=back, arrowhead="empty", label="is a"];
+  user -> evaluator [dir=back, arrowhead="empty", label="is a"];
+  user -> admin [dir=back, arrowhead="empty", label="is a"];
 
+  faculty -> batchmentor [arrowhead="vee", label="assigned as"];
+  batchmentor -> deadline [arrowhead="vee", label="sets"];
+  faculty -> slot [arrowhead="vee", label="offers"];
+  student -> slot [arrowhead="vee", label="books"];
+
+  student -> synopsis [arrowhead="vee", label="writes 1..*"];
+  synopsis -> project [arrowhead="vee", label="approved into 0..1"];
   student -> project [arrowhead="vee", label="submits 1..*"];
   project -> version [arrowhead="diamond", label="has 1..*"];
-
+  project -> team [arrowhead="vee", label="has 1..2"];
+  student -> preference [arrowhead="vee", label="ranks"];
+  preference -> faculty [arrowhead="vee", label="for"];
   student -> allocation [arrowhead="vee", label="receives"];
   faculty -> allocation [arrowhead="vee", label="receives"];
   allocation -> project [arrowhead="vee", label="for"];
-
+  faculty -> review [arrowhead="vee", label="writes"];
+  review -> project [arrowhead="vee", label="on"];
   project -> evaluation [arrowhead="vee", label="gets 1..*"];
   evaluation -> rubric [arrowhead="vee", label="uses"];
+  project -> repo [arrowhead="vee", label="links 0..1"];
+  repo -> commit [arrowhead="vee", label="syncs 0..*"];
+  project -> wiki [arrowhead="vee", label="documents 0..*"];
+  project -> notice [arrowhead="vee", label="raises"];
 }
