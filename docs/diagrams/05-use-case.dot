@@ -4,10 +4,13 @@ digraph use_case_model {
   fontname="Helvetica";
   fontsize=12;
   labeljust="l";
+  nodesep=0.4;
+  ranksep=1.1;
+  splines=ortho;
 
-  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+  node [fontname="Helvetica", fontsize=11, shape=ellipse, style="filled",
         fillcolor="white", color="black", penwidth=1.5];
-  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="none"];
 
   subgraph cluster_system {
     label="Project Portal";
@@ -39,6 +42,8 @@ digraph use_case_model {
   coordinator [label="Coordinator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
   evaluator [label="Evaluator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
   admin [label="Admin", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+
+  { rank=same; student; guide; coordinator; evaluator; admin; }
 
   student -> uc_login;
   student -> uc_create;

@@ -2,13 +2,13 @@
 
 ## 14.1 Production Deployment
 
-![Production deployment](diagrams/14-deploy-prod.svg)
+![Production deployment](diagrams/14-deploy-prod.png)
 
 Source: [14-deploy-prod.dot](diagrams/14-deploy-prod.dot).
 
 ## 14.2 Development Deployment
 
-![Development deployment](diagrams/14-deploy-dev.svg)
+![Development deployment](diagrams/14-deploy-dev.png)
 
 Source: [14-deploy-dev.dot](diagrams/14-deploy-dev.dot).
 

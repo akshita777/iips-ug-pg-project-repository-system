@@ -3,23 +3,28 @@ digraph sequence_evaluation {
   bgcolor="white";
   fontname="Helvetica";
 
-  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
-        fillcolor="white", color="black", penwidth=1.5];
-  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+  node [shape=plaintext, fontname="Helvetica"];
 
-  e [label="Evaluator"];
-  fe [label="Browser"];
-  be [label="Backend API"];
-  db [label="Database"];
-
-  e -> fe [label="1. opens assigned projects"];
-  fe -> be [label="2. load assigned list"];
-  be -> db [label="3. fetch projects"];
-  db -> be [label="4. return projects"];
-  be -> fe [label="5. show project list"];
-  e -> fe [label="6. enters marks and feedback"];
-  fe -> be [label="7. save evaluation"];
-  be -> db [label="8. store marks"];
-  be -> db [label="9. update project status"];
-  be -> fe [label="10. show success"];
+  trace [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="7" BGCOLOR="white">
+      <TR><TD COLSPAN="5" BGCOLOR="white" ALIGN="LEFT"><FONT POINT-SIZE="13"><B>Evaluation</B></FONT></TD></TR>
+      <TR>
+        <TD BGCOLOR="white">Step</TD>
+        <TD BGCOLOR="white">Evaluator</TD>
+        <TD BGCOLOR="white">Browser</TD>
+        <TD BGCOLOR="white">Backend API</TD>
+        <TD BGCOLOR="white">Database</TD>
+      </TR>
+      <TR><TD>1</TD><TD ALIGN="LEFT">opens assigned projects</TD><TD></TD><TD></TD><TD></TD></TR>
+      <TR><TD>2</TD><TD></TD><TD ALIGN="LEFT">asks for the list</TD><TD></TD><TD></TD></TR>
+      <TR><TD>3</TD><TD></TD><TD></TD><TD ALIGN="LEFT">fetches assigned projects</TD><TD></TD></TR>
+      <TR><TD>4</TD><TD></TD><TD></TD><TD></TD><TD ALIGN="LEFT">returns the rows</TD></TR>
+      <TR><TD>5</TD><TD></TD><TD ALIGN="LEFT">shows the list</TD><TD></TD><TD></TD></TR>
+      <TR><TD>6</TD><TD ALIGN="LEFT">enters marks and feedback</TD><TD></TD><TD></TD><TD></TD></TR>
+      <TR><TD>7</TD><TD></TD><TD ALIGN="LEFT">submits the evaluation</TD><TD></TD><TD></TD></TR>
+      <TR><TD>8</TD><TD></TD><TD></TD><TD ALIGN="LEFT">saves marks</TD><TD></TD></TR>
+      <TR><TD>9</TD><TD></TD><TD></TD><TD ALIGN="LEFT">updates project status</TD><TD></TD></TR>
+      <TR><TD>10</TD><TD></TD><TD ALIGN="LEFT">shows success</TD><TD></TD><TD></TD></TR>
+    </TABLE>
+  >];
 }

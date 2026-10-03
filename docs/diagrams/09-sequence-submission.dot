@@ -3,20 +3,25 @@ digraph sequence_submission {
   bgcolor="white";
   fontname="Helvetica";
 
-  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
-        fillcolor="white", color="black", penwidth=1.5];
-  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+  node [shape=plaintext, fontname="Helvetica"];
 
-  s [label="Student"];
-  fe [label="Browser"];
-  be [label="Backend API"];
-  db [label="Database"];
-
-  s -> fe [label="1. clicks Submit"];
-  fe -> be [label="2. POST project submit"];
-  be -> db [label="3. mark status Submitted"];
-  db -> be [label="4. confirm saved"];
-  be -> db [label="5. create guide notification"];
-  be -> fe [label="6. return success"];
-  fe -> s [label="7. show confirmation"];
+  trace [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="7" BGCOLOR="white">
+      <TR><TD COLSPAN="5" BGCOLOR="white" ALIGN="LEFT"><FONT POINT-SIZE="13"><B>Project submission</B></FONT></TD></TR>
+      <TR>
+        <TD BGCOLOR="white">Step</TD>
+        <TD BGCOLOR="white">Student</TD>
+        <TD BGCOLOR="white">Browser</TD>
+        <TD BGCOLOR="white">Backend API</TD>
+        <TD BGCOLOR="white">Database</TD>
+      </TR>
+      <TR><TD>1</TD><TD ALIGN="LEFT">clicks Submit</TD><TD></TD><TD></TD><TD></TD></TR>
+      <TR><TD>2</TD><TD></TD><TD ALIGN="LEFT">sends POST submit</TD><TD></TD><TD></TD></TR>
+      <TR><TD>3</TD><TD></TD><TD></TD><TD ALIGN="LEFT">sets status to Submitted</TD><TD></TD></TR>
+      <TR><TD>4</TD><TD></TD><TD></TD><TD></TD><TD ALIGN="LEFT">saves the row</TD></TR>
+      <TR><TD>5</TD><TD></TD><TD></TD><TD ALIGN="LEFT">creates guide notice</TD><TD></TD></TR>
+      <TR><TD>6</TD><TD></TD><TD></TD><TD ALIGN="LEFT">replies success</TD><TD></TD></TR>
+      <TR><TD>7</TD><TD></TD><TD ALIGN="LEFT">shows confirmation</TD><TD></TD><TD></TD></TR>
+    </TABLE>
+  >];
 }

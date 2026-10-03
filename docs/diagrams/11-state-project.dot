@@ -1,7 +1,9 @@
 digraph state_project {
-  rankdir=LR;
+  rankdir=TB;
   bgcolor="white";
   fontname="Helvetica";
+  nodesep=0.5;
+  ranksep=0.55;
 
   node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
         fillcolor="white", color="black", penwidth=1.5];
@@ -10,10 +12,10 @@ digraph state_project {
   start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
   draft [label="Draft"];
   submitted [label="Submitted"];
-  review [label="Under Review"];
+  review [label="Under\lReview\l"];
   approved [label="Approved"];
-  rejected [label="Needs Changes"];
-  pending [label="Awaiting Evaluation"];
+  rejected [label="Needs\lChanges\l"];
+  pending [label="Awaiting\lEvaluation\l"];
   evaluated [label="Evaluated"];
   archived [label="Archived"];
   end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
