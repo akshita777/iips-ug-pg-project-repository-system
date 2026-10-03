@@ -85,6 +85,11 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+      {role === "STUDENT" && (
+        <a href="/student" className="brutal-btn bg-ink text-white inline-block">
+          Open Student Dashboard
+        </a>
+      )}
     </div>
   );
 }
