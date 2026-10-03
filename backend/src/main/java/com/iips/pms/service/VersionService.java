@@ -1,5 +1,6 @@
 package com.iips.pms.service;
 
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.entity.Project;
 import com.iips.pms.entity.SubmissionVersion;
 import com.iips.pms.entity.User;
@@ -48,7 +49,7 @@ public class VersionService {
     public SubmissionVersion upload(Long projectId, String callerEmail,
                                     MultipartFile file, String comments) throws IOException {
         Project project = findProject(projectId);
-        User caller = userRepository.findByEmail(callerEmail).orElseThrow();
+        User caller = userRepository.findByEmail(callerEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         if (!(caller instanceof com.iips.pms.entity.Student)
                 || !project.getStudent().getId().equals(caller.getId())) {
             throw new IllegalStateException("Only the owning student can upload versions");
@@ -78,11 +79,11 @@ public class VersionService {
 
     private Project findProject(Long id) {
         return projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
     }
 
     private void checkAccess(Project project, String callerEmail) {
-        User caller = userRepository.findByEmail(callerEmail).orElseThrow();
+        User caller = userRepository.findByEmail(callerEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         if (project.getStudent().getEmail().equals(callerEmail)) {
             return;
         }

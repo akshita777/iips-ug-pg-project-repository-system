@@ -3,9 +3,12 @@ package com.iips.pms.service;
 import com.iips.pms.dto.ProjectRequest;
 import com.iips.pms.entity.Project;
 import com.iips.pms.entity.Student;
+import com.iips.pms.event.ProjectStatusEvent;
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.repository.GuideAllocationRepository;
 import com.iips.pms.repository.ProjectRepository;
 import com.iips.pms.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +20,15 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final GuideAllocationRepository allocationRepository;
+    private final ApplicationEventPublisher events;
 
     public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
-                          GuideAllocationRepository allocationRepository) {
+                          GuideAllocationRepository allocationRepository,
+                          ApplicationEventPublisher events) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.allocationRepository = allocationRepository;
+        this.events = events;
     }
 
     public List<Project> findAll() {
@@ -30,13 +36,14 @@ public class ProjectService {
     }
 
     public Project findById(Long id) {
-        return projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
+        return projectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project not found: " + id));
     }
 
     @Transactional
     public Project create(String studentEmail, ProjectRequest req) {
-        var user = userRepository.findByEmail(studentEmail).orElseThrow();
+        var user = userRepository.findByEmail(studentEmail).orElseThrow(
+                () -> new ResourceNotFoundException("User not found: " + studentEmail));
         if (!(user instanceof Student student)) {
             throw new IllegalStateException("Only students can create projects");
         }
@@ -56,8 +63,7 @@ public class ProjectService {
                 && project.getStatus() != Project.ProjectStatus.REJECTED) {
             throw new IllegalStateException("Only DRAFT or REJECTED projects can be submitted");
         }
-        project.setStatus(Project.ProjectStatus.SUBMITTED);
-        return projectRepository.save(project);
+        return moveTo(project, Project.ProjectStatus.SUBMITTED);
     }
 
     @Transactional
@@ -67,8 +73,7 @@ public class ProjectService {
         if (project.getStatus() != Project.ProjectStatus.SUBMITTED) {
             throw new IllegalStateException("Only SUBMITTED projects can move to review");
         }
-        project.setStatus(Project.ProjectStatus.UNDER_REVIEW);
-        return projectRepository.save(project);
+        return moveTo(project, Project.ProjectStatus.UNDER_REVIEW);
     }
 
     @Transactional
@@ -78,8 +83,7 @@ public class ProjectService {
         if (project.getStatus() != Project.ProjectStatus.UNDER_REVIEW) {
             throw new IllegalStateException("Only projects UNDER_REVIEW can be approved");
         }
-        project.setStatus(Project.ProjectStatus.APPROVED);
-        return projectRepository.save(project);
+        return moveTo(project, Project.ProjectStatus.APPROVED);
     }
 
     @Transactional
@@ -89,8 +93,7 @@ public class ProjectService {
         if (project.getStatus() != Project.ProjectStatus.UNDER_REVIEW) {
             throw new IllegalStateException("Only projects UNDER_REVIEW can be returned");
         }
-        project.setStatus(Project.ProjectStatus.REJECTED);
-        return projectRepository.save(project);
+        return moveTo(project, Project.ProjectStatus.REJECTED);
     }
 
     private void checkAllocatedGuide(Project project, String guideEmail) {
@@ -99,5 +102,13 @@ public class ProjectService {
         if (!allocated) {
             throw new IllegalStateException("Only the allocated guide can review this project");
         }
+    }
+
+    private Project moveTo(Project project, Project.ProjectStatus next) {
+        Project.ProjectStatus current = project.getStatus();
+        project.setStatus(next);
+        Project saved = projectRepository.save(project);
+        events.publishEvent(new ProjectStatusEvent(project.getId(), current, next));
+        return saved;
     }
 }

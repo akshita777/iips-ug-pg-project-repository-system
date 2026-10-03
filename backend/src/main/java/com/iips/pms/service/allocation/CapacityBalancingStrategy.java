@@ -1,5 +1,6 @@
 package com.iips.pms.service.allocation;
 
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.entity.Faculty;
 import com.iips.pms.entity.Student;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,6 @@ public class CapacityBalancingStrategy implements AllocationStrategy {
         }
         return withRoom.stream()
                 .min(Comparator.comparingInt(f -> currentLoad.getOrDefault(f.getId(), 0)))
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
     }
 }

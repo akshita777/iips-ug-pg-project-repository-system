@@ -1,5 +1,6 @@
 package com.iips.pms.service;
 
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.dto.AuthRequest;
 import com.iips.pms.dto.AuthResponse;
 import com.iips.pms.dto.RegisterRequest;
@@ -59,7 +60,7 @@ public class AuthService {
     public AuthResponse login(AuthRequest req) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email(), req.password()));
-        var user = userRepository.findByEmail(req.email()).orElseThrow();
+        var user = userRepository.findByEmail(req.email()).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
         String refresh = jwtUtil.generateRefreshToken(user.getEmail());
         return new AuthResponse(token, refresh, user.getEmail(), user.getRole());
@@ -67,7 +68,7 @@ public class AuthService {
 
     public AuthResponse refresh(String refreshToken) {
         String email = jwtUtil.extractEmail(refreshToken);
-        var user = userRepository.findByEmail(email).orElseThrow();
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         String token = jwtUtil.generateToken(email, user.getRole());
         return new AuthResponse(token, refreshToken, email, user.getRole());
     }

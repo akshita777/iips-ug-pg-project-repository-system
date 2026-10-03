@@ -1,5 +1,6 @@
 package com.iips.pms.service;
 
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.dto.UserResponse;
 import com.iips.pms.entity.User;
 import com.iips.pms.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserService {
                     "Role must be STUDENT, FACULTY, COORDINATOR, EVALUATOR, or ADMIN");
         }
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("User not found: " + userId));
+                () -> new ResourceNotFoundException("User not found: " + userId));
         userRepository.updateRole(userId, normalized);
         return new UserResponse(user.getId(), user.getName(), user.getEmail(), normalized);
     }

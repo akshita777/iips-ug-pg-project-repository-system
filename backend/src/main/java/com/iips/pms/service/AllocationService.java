@@ -1,5 +1,6 @@
 package com.iips.pms.service;
 
+import com.iips.pms.exception.ResourceNotFoundException;
 import com.iips.pms.dto.PreferenceRequest;
 import com.iips.pms.entity.Faculty;
 import com.iips.pms.entity.GuideAllocation;
@@ -46,7 +47,7 @@ public class AllocationService {
     }
 
     public List<GuideAllocation> listForCaller(String callerEmail) {
-        User caller = userRepository.findByEmail(callerEmail).orElseThrow();
+        User caller = userRepository.findByEmail(callerEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         if ("COORDINATOR".equals(caller.getRole()) || "ADMIN".equals(caller.getRole())) {
             return allocationRepository.findAll();
         }
@@ -58,12 +59,12 @@ public class AllocationService {
 
     @Transactional
     public void savePreferences(String callerEmail, PreferenceRequest req) {
-        User caller = userRepository.findByEmail(callerEmail).orElseThrow();
+        User caller = userRepository.findByEmail(callerEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         if (!(caller instanceof Student student)) {
             throw new IllegalStateException("Only students submit guide preferences");
         }
         Project project = projectRepository.findById(req.projectId()).orElseThrow(
-                () -> new IllegalArgumentException("Project not found: " + req.projectId()));
+                () -> new ResourceNotFoundException("Project not found: " + req.projectId()));
         if (!project.getStudent().getId().equals(student.getId())) {
             throw new IllegalStateException("You can only set preferences for your own project");
         }
@@ -74,7 +75,7 @@ public class AllocationService {
         int rank = 1;
         for (Long facultyId : req.facultyIds()) {
             Faculty faculty = facultyRepository.findById(facultyId).orElseThrow(
-                    () -> new IllegalArgumentException("Faculty not found: " + facultyId));
+                    () -> new ResourceNotFoundException("Faculty not found: " + facultyId));
             GuidePreference pref = new GuidePreference();
             pref.setStudent(student);
             pref.setFaculty(faculty);
@@ -135,7 +136,7 @@ public class AllocationService {
     public GuideAllocation override(Long allocationId, Long facultyId) {
         GuideAllocation allocation = findById(allocationId);
         Faculty faculty = facultyRepository.findById(facultyId).orElseThrow(
-                () -> new IllegalArgumentException("Faculty not found: " + facultyId));
+                () -> new ResourceNotFoundException("Faculty not found: " + facultyId));
         allocation.setFaculty(faculty);
         allocation.setStatus(GuideAllocation.AllocationStatus.OVERRIDDEN);
         return allocationRepository.save(allocation);
@@ -143,6 +144,6 @@ public class AllocationService {
 
     private GuideAllocation findById(Long id) {
         return allocationRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("Allocation not found: " + id));
+                () -> new ResourceNotFoundException("Allocation not found: " + id));
     }
 }
