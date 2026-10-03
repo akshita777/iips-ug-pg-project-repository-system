@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,6 +123,26 @@ public class RepositoryService {
     public List<CommitRecord> commits(Long projectId) {
         findProject(projectId);
         return commitRepository.findByProjectIdOrderByCommittedAtDesc(projectId);
+    }
+
+    public List<Map<String, String>> branches(Long projectId) {
+        LinkedRepository link = getLink(projectId);
+        String apiUrl = "https://api.github.com/repos/" + link.getRepoOwner()
+                + "/" + link.getRepoName() + "/branches?per_page=30";
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+            List<Map<String, String>> branches = new ArrayList<>();
+            for (JsonNode branch : objectMapper.readTree(response.getBody())) {
+                branches.add(Map.of(
+                        "name", branch.path("name").asText(),
+                        "sha", branch.path("commit").path("sha").asText("")));
+            }
+            return branches;
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new IllegalArgumentException("GitHub repository not found or private: " + link.getRepoUrl());
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not reach GitHub: " + e.getMessage());
+        }
     }
 
     private Project findProject(Long id) {

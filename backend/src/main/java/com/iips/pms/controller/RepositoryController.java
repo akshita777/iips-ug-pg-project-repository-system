@@ -43,4 +43,10 @@ public class RepositoryController {
     public ResponseEntity<List<CommitRecord>> commits(@PathVariable Long projectId) {
         return ResponseEntity.ok(repositoryService.commits(projectId));
     }
+
+    @GetMapping("/branches")
+    public ResponseEntity<List<java.util.Map<String, String>>> branches(
+            @PathVariable Long projectId) {
+        return ResponseEntity.ok(repositoryService.branches(projectId));
+    }
 }
