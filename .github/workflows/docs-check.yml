@@ -1,0 +1,17 @@
+name: Docs Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  mermaid:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Mermaid diagrams
+        uses: mermaid-js/mermaid-cli-action@v1
+        with:
+          files: "docs/**/*.md"

@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Build
+frontend/.next/
+frontend/out/
+backend/build/
+*.class
+*.jar
+*.war
+
+# Environment
+.env
+.env.local
+.env.*.local
+frontend/.env*
+backend/src/main/resources/application-local.yml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+frontend/coverage/
+backend/target/site/jacoco/
+
+# Agent files (NEVER push)
+.opencode/
+AGENTS.md
+knowledge/
+*.plan.md
+
+# Database
+*.db
+*.sqlite
+
+# Uploads
+uploads/
+backend/uploads/
