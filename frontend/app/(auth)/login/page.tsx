@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Alert } from "@/components/ui/alert";
 import api from "@/lib/api";
 
 const schema = z.object({
@@ -52,9 +53,7 @@ export default function LoginPage() {
           <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
           <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" />
           {error && (
-            <div className="border-2 border-ink rounded-lg bg-danger/10 px-4 py-2.5 text-sm font-bold">
-              {error}
-            </div>
+            <Alert tone="danger">{error}</Alert>
           )}
           <Button type="submit" variant="dark" className="w-full" disabled={loading}>
             {loading ? "Logging in..." : "Login"}

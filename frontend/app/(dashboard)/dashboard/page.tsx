@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 
@@ -21,7 +22,7 @@ const roleContent: Record<string, { title: string; desc: string; cards: [string,
     cards: [
       ["Pending Reviews", "Projects waiting for your review.", "bg-warn"],
       ["My Students", "Students allocated to you.", "bg-accent"],
-      ["History", "Already reviewed submissions.", "bg-muted"],
+      ["History", "Already reviewed submissions.", "bg-lilac"],
     ],
   },
   COORDINATOR: {
@@ -48,7 +49,7 @@ const roleContent: Record<string, { title: string; desc: string; cards: [string,
     cards: [
       ["Users", "Manage student and faculty accounts.", "bg-accent"],
       ["Roles", "Assign and change roles.", "bg-secondary"],
-      ["System", "Configuration and backups.", "bg-muted"],
+      ["System", "Configuration and backups.", "bg-lilac"],
     ],
   },
 };
@@ -79,11 +80,16 @@ export default function DashboardPage() {
       </div>
       <div className="grid gap-5 md:grid-cols-3">
         {content.cards.map(([title, desc, bg]) => (
-          <Card key={title} className={bg}>
+          <Card key={title} className={`${bg} brutal-card-hover`}>
             <CardTitle>{title}</CardTitle>
-            <CardDescription className="!text-ink/80">{desc}</CardDescription>
+            <CardDescription className="!text-ink/70">{desc}</CardDescription>
           </Card>
         ))}
+      </div>
+      <div className="brutal-card bg-white p-4 flex flex-wrap items-center gap-2 text-sm">
+        <span className="font-display font-bold">Quick links:</span>
+        <Link href="/projects/new" className="brutal-badge bg-primary">New project</Link>
+        <Link href="/design-system" className="brutal-badge bg-white">Design system</Link>
       </div>
     </div>
   );
