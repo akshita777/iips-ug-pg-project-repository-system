@@ -1,0 +1,25 @@
+digraph sequence_allocation {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  c [label="Coordinator"];
+  fe [label="Browser"];
+  be [label="Backend API"];
+  db [label="Database"];
+
+  c -> fe [label="1. opens allocation page"];
+  fe -> be [label="2. request suggestions"];
+  be -> db [label="3. load students and faculty"];
+  db -> be [label="4. return data"];
+  be -> be [label="5. run allocation logic"];
+  be -> fe [label="6. show suggestions"];
+  c -> fe [label="7. confirm or adjust"];
+  fe -> be [label="8. save allocation"];
+  be -> db [label="9. store allocation"];
+  be -> fe [label="10. show confirmation"];
+}

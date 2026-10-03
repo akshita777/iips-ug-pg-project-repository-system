@@ -1,0 +1,22 @@
+digraph sequence_submission {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  s [label="Student"];
+  fe [label="Browser"];
+  be [label="Backend API"];
+  db [label="Database"];
+
+  s -> fe [label="1. clicks Submit"];
+  fe -> be [label="2. POST project submit"];
+  be -> db [label="3. mark status Submitted"];
+  db -> be [label="4. confirm saved"];
+  be -> db [label="5. create guide notification"];
+  be -> fe [label="6. return success"];
+  fe -> s [label="7. show confirmation"];
+}

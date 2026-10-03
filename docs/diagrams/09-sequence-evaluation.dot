@@ -1,0 +1,25 @@
+digraph sequence_evaluation {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  e [label="Evaluator"];
+  fe [label="Browser"];
+  be [label="Backend API"];
+  db [label="Database"];
+
+  e -> fe [label="1. opens assigned projects"];
+  fe -> be [label="2. load assigned list"];
+  be -> db [label="3. fetch projects"];
+  db -> be [label="4. return projects"];
+  be -> fe [label="5. show project list"];
+  e -> fe [label="6. enters marks and feedback"];
+  fe -> be [label="7. save evaluation"];
+  be -> db [label="8. store marks"];
+  be -> db [label="9. update project status"];
+  be -> fe [label="10. show success"];
+}

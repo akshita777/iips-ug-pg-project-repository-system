@@ -1,0 +1,22 @@
+digraph comm_evaluation {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee", dir="both"];
+
+  e [label="Evaluator"];
+  svc [label="Evaluation Service"];
+  db [label="Database", shape=cylinder, style="filled"];
+  s [label="Student"];
+
+  e -> svc [label="1. open assigned"];
+  svc -> db [label="2. load projects"];
+  db -> svc [label="3. return list"];
+  svc -> e [label="4. display"];
+  e -> svc [label="5. submit marks"];
+  svc -> db [label="6. save marks"];
+  svc -> s [label="7. inform student"];
+}

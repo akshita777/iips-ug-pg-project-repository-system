@@ -1,0 +1,24 @@
+digraph comm_allocation {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee", dir="both"];
+
+  c [label="Coordinator"];
+  a [label="Allocation Service"];
+  db [label="Database", shape=cylinder, style="filled"];
+  s [label="Student"];
+  f [label="Faculty"];
+
+  c -> a [label="1. request plan"];
+  a -> db [label="2. load data"];
+  db -> a [label="3. return data"];
+  a -> c [label="4. show plan"];
+  c -> a [label="5. confirm"];
+  a -> db [label="6. save"];
+  a -> s [label="7. inform"];
+  a -> f [label="8. inform"];
+}

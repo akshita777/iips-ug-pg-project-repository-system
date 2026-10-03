@@ -1,0 +1,23 @@
+digraph comm_submission {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee", dir="both"];
+
+  s [label="Student"];
+  p [label="Project"];
+  v [label="Version"];
+  n [label="Notification"];
+  g [label="Guide"];
+  db [label="Database", shape=cylinder, style="filled"];
+
+  s -> p [label="1. submit"];
+  p -> v [label="2. save version"];
+  p -> n [label="3. raise alert"];
+  n -> g [label="4. notify"];
+  g -> p [label="5. review"];
+  p -> db [label="6. persist"];
+}
