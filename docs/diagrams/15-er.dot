@@ -1,0 +1,24 @@
+digraph er_diagram {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=10, shape=record, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="none"];
+
+  users [label="{users|id (PK)\l name\l email (unique)\l password\l role\l created on\l}"];
+  projects [label="{projects|id (PK)\l student id (FK)\l title\l abstract\l tech stack\l status\l}"];
+  versions [label="{versions|id (PK)\l project id (FK)\l version no\l file path\l uploaded on\l}"];
+  allocs [label="{allocations|id (PK)\l student id (FK)\l faculty id (FK)\l project id (FK)\l status\l}"];
+  evals [label="{evaluations|id (PK)\l project id (FK)\l evaluator id (FK)\l rubric id (FK)\l total marks\l feedback\l}"];
+  rubrics [label="{rubrics|id (PK)\l name\l criteria (JSON)\l}"];
+
+  users -> projects [label="1 submits N"];
+  projects -> versions [label="1 has N"];
+  users -> allocs [label="1 gets N"];
+  projects -> allocs [label="1 has 1"];
+  projects -> evals [label="1 gets N"];
+  rubrics -> evals [label="1 used in N"];
+  users -> evals [label="1 writes N"];
+}

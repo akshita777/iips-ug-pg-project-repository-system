@@ -1,0 +1,34 @@
+digraph package_diagram {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=tab, style="filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  ui [label="ui\npresentation"];
+  auth [label="auth"];
+  apiclient [label="api client"];
+  ctrl [label="controller"];
+  svc [label="service"];
+  repo [label="repository"];
+  entity [label="entity"];
+  sec [label="security"];
+  dto [label="dto"];
+  db [label="database", shape=cylinder, style="filled"];
+  store [label="file store"];
+  notify [label="notify"];
+
+  ui -> auth;
+  ui -> apiclient;
+  apiclient -> ctrl [label="REST"];
+  ctrl -> svc;
+  svc -> repo;
+  svc -> sec;
+  svc -> dto;
+  repo -> entity;
+  entity -> db;
+  svc -> store;
+  svc -> notify;
+}

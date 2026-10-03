@@ -1,0 +1,38 @@
+digraph state_student {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=9, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  s1 [label="Sem 1"];
+  s2 [label="Sem 2"];
+  s3 [label="Sem 3"];
+  s4 [label="Sem 4"];
+  s5 [label="Sem 5"];
+  s6 [label="Sem 6\nBCA Project"];
+  bca [label="BCA Done"];
+  s7 [label="Sem 7"];
+  s8 [label="Sem 8"];
+  s9 [label="Sem 9"];
+  s10 [label="Sem 10\nMCA Project"];
+  mca [label="MCA Done"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> s1 [label="join BCA"];
+  s1 -> s2 [label="pass"];
+  s2 -> s3 [label="pass"];
+  s3 -> s4 [label="pass"];
+  s4 -> s5 [label="pass"];
+  s5 -> s6 [label="pass"];
+  s6 -> bca [label="viva done"];
+  bca -> s7 [label="join MCA"];
+  s7 -> s8 [label="pass"];
+  s8 -> s9 [label="pass"];
+  s9 -> s10 [label="pass"];
+  s10 -> mca [label="viva done"];
+  mca -> end;
+}

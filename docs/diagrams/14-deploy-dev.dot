@@ -1,0 +1,19 @@
+digraph deploy_dev {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  dev [label="Developer PC"];
+  next [label="Next.js Dev\nport 3000"];
+  api [label="Spring Boot Dev\nport 8080"];
+  pg [label="PostgreSQL\nDocker :5432", shape=cylinder, style="filled"];
+
+  dev -> next [label="pnpm dev"];
+  dev -> api [label="mvn run"];
+  next -> api [label="REST"];
+  api -> pg [label="JDBC"];
+}

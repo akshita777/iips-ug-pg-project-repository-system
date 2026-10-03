@@ -1,0 +1,27 @@
+digraph state_allocation {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  pending [label="Pending"];
+  suggested [label="Suggested"];
+  confirmed [label="Confirmed"];
+  changed [label="Changed"];
+  active [label="Active"];
+  done [label="Completed"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> pending [label="prefs given"];
+  pending -> suggested [label="auto run"];
+  suggested -> confirmed [label="accept"];
+  suggested -> changed [label="adjust"];
+  changed -> confirmed [label="accept"];
+  confirmed -> active [label="term starts"];
+  active -> done [label="term ends"];
+  done -> end;
+}

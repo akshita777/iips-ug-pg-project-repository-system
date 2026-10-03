@@ -1,0 +1,24 @@
+digraph deploy_prod {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  browser [label="Student Browser"];
+  cdn [label="CDN\nVercel Edge"];
+  next [label="Next.js Frontend\nVercel"];
+  api [label="Spring Boot API\nApp Server"];
+  pg [label="PostgreSQL\nManaged DB", shape=cylinder, style="filled"];
+  files [label="File Store\nS3", shape=cylinder, style="filled"];
+  mail [label="Mail Server"];
+
+  browser -> cdn [label="HTTPS"];
+  cdn -> next [label="serve pages"];
+  next -> api [label="REST JSON"];
+  api -> pg [label="JDBC"];
+  api -> files [label="upload"];
+  api -> mail [label="SMTP"];
+}

@@ -1,0 +1,36 @@
+digraph component_diagram {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=component, style="filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  browser [label="Browser"];
+  next [label="Next.js App"];
+  nextauth [label="NextAuth"];
+  apiclient [label="API Client"];
+  spring [label="Spring Boot API"];
+  controllers [label="Controllers"];
+  services [label="Services"];
+  security [label="Security\nJWT"];
+  jpa [label="Spring Data JPA"];
+  flyway [label="Flyway"];
+  pg [label="PostgreSQL", shape=cylinder, style="filled"];
+  s3 [label="File Store", shape=cylinder, style="filled"];
+  mail [label="Mail Service"];
+
+  browser -> next [label="HTTPS"];
+  next -> nextauth;
+  next -> apiclient;
+  apiclient -> spring [label="REST JSON"];
+  spring -> controllers;
+  controllers -> services;
+  services -> security;
+  services -> jpa;
+  jpa -> pg;
+  flyway -> pg [label="migrate"];
+  services -> s3;
+  services -> mail;
+}
