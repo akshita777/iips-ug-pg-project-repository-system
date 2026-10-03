@@ -11,9 +11,16 @@
 A comprehensive academic project repository and record management system for IIPS DAVV, supporting the full 10-semester UG-PG lifecycle with formal project submissions at BCA (Sem 6) and MCA (Sem 10).
 
 **Key Features:**
+- GitHub OAuth authentication
 - Project submission with version control
+- GitHub repository linking (commits, branches, PRs, issues)
+- Code review workflow
 - Guide allocation (rule-based + HOD approval)
 - Evaluation management (rubric-based)
+- Team collaboration
+- Project wiki/documentation
+- Analytics & reporting
+- Backup & archival
 - Longitudinal student record (Sem 1-10)
 - Role-based access (Student, Guide, Coordinator, Evaluator, Admin)
 
@@ -26,7 +33,8 @@ A comprehensive academic project repository and record management system for IIP
 | Frontend | Next.js 15, TypeScript, Tailwind, shadcn/ui |
 | Backend | Spring Boot 3.5, Spring Data JPA, Spring Security JWT |
 | Database | PostgreSQL 17, Flyway migrations |
-| Auth | NextAuth (FE) + Spring Security JWT (BE) |
+| Auth | NextAuth GitHub OAuth (FE) + Spring Security JWT (BE) |
+| VCS | GitHub API (repo linking, commits, PRs, issues) |
 | Diagrams | Mermaid (GitHub-native) |
 
 ---

@@ -97,12 +97,13 @@ Sem 10 (MCA):  Final Project Submission → Evaluation → Viva
 |-------|------|---------|--------|
 | Frontend | Next.js | 15.1+ | App Router, Server Actions, Vercel deploy |
 | UI | Tailwind + shadcn/ui | latest | Rapid wireframe → prototype |
-| Auth (FE) | NextAuth | v5 | RBAC, session management |
+| Auth (FE) | NextAuth | v5 | GitHub OAuth + credentials, RBAC |
 | Backend | Spring Boot | 3.5+ | Enterprise Java, OOAD mapping |
 | ORM | Spring Data JPA | 3.5+ | Entity = Class Diagram 1:1 |
 | DB | PostgreSQL | 17 | ACID, FKs, version history |
 | Migrations | Flyway | 10+ | Versioned schema, reproducible |
 | Auth (BE) | Spring Security + JWT | 6+ | Stateless RBAC |
+| VCS | GitHub API | — | Repo linking, commits, PRs, issues |
 | Storage | S3-compatible / local | — | Reports, PPTs, code zips |
 | Diagrams | Mermaid | — | GitHub-native rendering |
 
@@ -118,6 +119,8 @@ Sem 10 (MCA):  Final Project Submission → Evaluation → Viva
 | Observer | Status notifications | Decouple status change from notification |
 | Strategy | Guide allocation + grading | Swappable algorithms |
 | Singleton | Spring beans | Default scope |
+| Adapter | GitHub API service | Abstract VCS provider |
+| Facade | VCS service layer | Simplify GitHub API complexity |
 
 ---
 
@@ -130,12 +133,24 @@ iips-ug-pg-project-repository-system/
 ├── frontend/              # Next.js 15
 │   ├── app/
 │   ├── components/
+│   │   ├── auth/          # Login, register, OAuth
+│   │   ├── dashboard/     # Role-based dashboards
+│   │   ├── vcs/           # Commits, branches, PRs
+│   │   ├── review/        # Code review workflow
+│   │   ├── issues/        # Issue tracking
+│   │   ├── wiki/          # Project documentation
+│   │   ├── team/          # Team collaboration
+│   │   └── analytics/     # Reports & metrics
 │   ├── lib/
 │   └── public/
 ├── backend/               # Spring Boot 3.5
 │   ├── src/main/java/com/iips/pms/
 │   │   ├── controller/
 │   │   ├── service/
+│   │   │   ├── vcs/       # GitHub API integration
+│   │   │   ├── review/    # Code review
+│   │   │   ├── analytics/ # Reporting
+│   │   │   └── archive/   # Backup & archival
 │   │   ├── repository/
 │   │   ├── entity/
 │   │   ├── dto/
