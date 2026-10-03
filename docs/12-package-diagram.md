@@ -2,9 +2,9 @@
 
 ## 12.1 System Packages
 
-![Package diagram](diagrams/12-package.svg)
+![Package diagram](diagrams/12-package.png)
 
-Source: [12-package.dot](diagrams/12-package.dot). Recompile with `dot -Tsvg 12-package.dot -o 12-package.svg`.
+Source: [12-package.dot](diagrams/12-package.dot). Recompile with `dot -Tpng -Gdpi=150 12-package.dot -o 12-package.png`.
 
 ## 12.2 Backend Package Structure
 

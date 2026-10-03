@@ -2,9 +2,9 @@
 
 ## 5.1 Use Case Diagram
 
-![Use case diagram](diagrams/05-use-case.svg)
+![Use case diagram](diagrams/05-use-case.png)
 
-Source: [05-use-case.dot](diagrams/05-use-case.dot). Recompile with `dot -Tsvg 05-use-case.dot -o 05-use-case.svg`.
+Source: [05-use-case.dot](diagrams/05-use-case.dot). Recompile with `dot -Tpng -Gdpi=150 05-use-case.dot -o 05-use-case.png`.
 
 ## 5.2 Use Case Descriptions
 

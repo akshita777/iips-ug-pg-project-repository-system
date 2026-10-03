@@ -2,9 +2,9 @@
 
 ## 15.1 ER Diagram
 
-![ER diagram](diagrams/15-er.svg)
+![ER diagram](diagrams/15-er.png)
 
-Source: [15-er.dot](diagrams/15-er.dot). Recompile with `dot -Tsvg 15-er.dot -o 15-er.svg`.
+Source: [15-er.dot](diagrams/15-er.dot). Recompile with `dot -Tpng -Gdpi=150 15-er.dot -o 15-er.png`.
 
 ## 15.2 Relational Schema
 

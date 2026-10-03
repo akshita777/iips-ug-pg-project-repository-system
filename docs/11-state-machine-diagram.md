@@ -2,7 +2,7 @@
 
 ## 11.1 Project Lifecycle
 
-![Project lifecycle](diagrams/11-state-project.svg)
+![Project lifecycle](diagrams/11-state-project.png)
 
 Source: [11-state-project.dot](diagrams/11-state-project.dot).
 
@@ -10,7 +10,7 @@ States: Draft, Submitted, Under Review, Approved, Needs Changes, Awaiting Evalua
 
 ## 11.2 Student Record Lifecycle (Sem 1-10)
 
-![Student record lifecycle](diagrams/11-state-student.svg)
+![Student record lifecycle](diagrams/11-state-student.png)
 
 Source: [11-state-student.dot](diagrams/11-state-student.dot).
 
@@ -18,7 +18,7 @@ BCA semesters 1 to 5 build the profile. Semester 6 carries the BCA final project
 
 ## 11.3 Guide Allocation States
 
-![Guide allocation states](diagrams/11-state-allocation.svg)
+![Guide allocation states](diagrams/11-state-allocation.png)
 
 Source: [11-state-allocation.dot](diagrams/11-state-allocation.dot).
 

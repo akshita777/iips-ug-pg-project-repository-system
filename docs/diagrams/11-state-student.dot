@@ -1,7 +1,9 @@
 digraph state_student {
-  rankdir=LR;
+  rankdir=TB;
   bgcolor="white";
   fontname="Helvetica";
+  nodesep=0.45;
+  ranksep=0.5;
 
   node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled",
         fillcolor="white", color="black", penwidth=1.5];
@@ -13,14 +15,22 @@ digraph state_student {
   s3 [label="Sem 3"];
   s4 [label="Sem 4"];
   s5 [label="Sem 5"];
-  s6 [label="Sem 6\nBCA Project"];
-  bca [label="BCA Done"];
-  s7 [label="Sem 7"];
-  s8 [label="Sem 8"];
-  s9 [label="Sem 9"];
-  s10 [label="Sem 10\nMCA Project"];
-  mca [label="MCA Done"];
+  s6 [label="Sem 6\lBCA Project\l"];
+  bca [label="BCA\lDone\l"];
+  s7 [label="Sem 7\l"];
+  s8 [label="Sem 8\l"];
+  s9 [label="Sem 9\l"];
+  s10 [label="Sem 10\lMCA Project\l"];
+  mca [label="MCA\lDone\l"];
   end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  // BCA semesters run down the left column, MCA down the right
+  { rank=same; s1; s7; }
+  { rank=same; s2; s8; }
+  { rank=same; s3; s9; }
+  { rank=same; s4; s10; }
+  { rank=same; s5; mca; }
+  { rank=same; s6; bca; }
 
   start -> s1 [label="join BCA"];
   s1 -> s2 [label="pass"];
@@ -29,6 +39,7 @@ digraph state_student {
   s4 -> s5 [label="pass"];
   s5 -> s6 [label="pass"];
   s6 -> bca [label="viva done"];
+
   bca -> s7 [label="join MCA"];
   s7 -> s8 [label="pass"];
   s8 -> s9 [label="pass"];

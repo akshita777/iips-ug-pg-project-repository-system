@@ -2,9 +2,9 @@
 
 ## 13.1 System Components
 
-![Component diagram](diagrams/13-component.svg)
+![Component diagram](diagrams/13-component.png)
 
-Source: [13-component.dot](diagrams/13-component.dot). Recompile with `dot -Tsvg 13-component.dot -o 13-component.svg`.
+Source: [13-component.dot](diagrams/13-component.dot). Recompile with `dot -Tpng -Gdpi=150 13-component.dot -o 13-component.png`.
 
 ## 13.2 Component Interfaces
 

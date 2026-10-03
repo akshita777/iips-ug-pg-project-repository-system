@@ -4,7 +4,7 @@ Interaction steps are numbered in call order. Each step names the caller, the ac
 
 ## 9.1 Project Submission
 
-![Project submission sequence](diagrams/09-sequence-submission.svg)
+![Project submission sequence](diagrams/09-sequence-submission.png)
 
 Source: [09-sequence-submission.dot](diagrams/09-sequence-submission.dot).
 
@@ -12,12 +12,12 @@ Follows the same steps as `POST /api/v1/projects/{id}/submit` in `ProjectControl
 
 ## 9.2 Guide Allocation
 
-![Guide allocation sequence](diagrams/09-sequence-allocation.svg)
+![Guide allocation sequence](diagrams/09-sequence-allocation.png)
 
 Source: [09-sequence-allocation.dot](diagrams/09-sequence-allocation.dot).
 
 ## 9.3 Evaluation
 
-![Evaluation sequence](diagrams/09-sequence-evaluation.svg)
+![Evaluation sequence](diagrams/09-sequence-evaluation.png)
 
 Source: [09-sequence-evaluation.dot](diagrams/09-sequence-evaluation.dot).

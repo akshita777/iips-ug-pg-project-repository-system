@@ -2,28 +2,37 @@ digraph class_diagram {
   rankdir=TB;
   bgcolor="white";
   fontname="Helvetica";
+  nodesep=0.5;
+  ranksep=0.7;
 
   node [fontname="Helvetica", fontsize=10, shape=record, style="filled",
         fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=9, color="black"];
 
   user [label="{User|name\l email\l password\l}"];
+
   student [label="{Student|roll number\l semester\l program\l|+ submit project()\l+ upload version()\l}"];
   faculty [label="{Faculty|employee id\l department\l max capacity\l|+ review submission()\l+ approve or reject()\l}"];
-  project [label="{Project|title\l abstract\l tech stack\l status\l|+ submit()\l+ approve()\l+ reject()\l}"];
+
+  project [label="{Project|title\l abstract text\l tech stack\l status\l|+ submit()\l+ approve()\l+ reject()\l}"];
   version [label="{Submission Version|version number\l file path\l uploaded on\l comments\l}"];
   allocation [label="{Guide Allocation|allocated on\l status\l}"];
   evaluation [label="{Evaluation|total marks\l feedback\l status\l}"];
   rubric [label="{Rubric|name\l criteria\l}"];
 
-  edge [fontname="Helvetica", fontsize=10, color="black"];
+  { rank=same; student; faculty; }
+  { rank=same; version; evaluation; }
 
-  student -> user [arrowhead="empty", label="is a"];
-  faculty -> user [arrowhead="empty", label="is a"];
+  user -> student [dir=back, arrowhead="empty", label="is a"];
+  user -> faculty [dir=back, arrowhead="empty", label="is a"];
+
   student -> project [arrowhead="vee", label="submits 1..*"];
   project -> version [arrowhead="diamond", label="has 1..*"];
+
   student -> allocation [arrowhead="vee", label="receives"];
   faculty -> allocation [arrowhead="vee", label="receives"];
   allocation -> project [arrowhead="vee", label="for"];
+
   project -> evaluation [arrowhead="vee", label="gets 1..*"];
   evaluation -> rubric [arrowhead="vee", label="uses"];
 }

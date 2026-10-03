@@ -16,7 +16,7 @@ jobs:
       - name: Compile DOT diagrams
         run: |
           for f in docs/diagrams/*.dot; do
-            dot -Tsvg "$f" -o "${f%.dot}.svg";
+            dot -Tpng -Gdpi=150 "$f" -o "${f%.dot}.png";
           done
-      - name: Check for uncommitted SVG changes
-        run: git diff --exit-code -- docs/diagrams/*.svg
+      - name: Check for uncommitted PNG changes
+        run: git diff --exit-code -- docs/diagrams/*.png
