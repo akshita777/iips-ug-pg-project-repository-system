@@ -1,7 +1,7 @@
 # IIPS UG-PG Academic Project Repository & Record Management System
 
 **Institution:** IIPS DAVV, Indore  
-**Program:** BCA (Sem 1-6) + MCA (Sem 7-10)  
+**Program:** MCA Integrated (2022-2027)
 **Lab:** Object-Oriented Analysis & Design
 
 ---
