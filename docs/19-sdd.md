@@ -15,11 +15,11 @@ This document is the technical reference for building and running the IIPS Proje
 | UI kit | Institute formal components in `frontend/components/ui` | Live |
 | Backend | Spring Boot 3.5 with plain Java, no Lombok | Live |
 | Data access | Spring Data JPA repositories | Live |
-| Database | PostgreSQL 17, schema owned by Flyway | Live |
+| Database | PostgreSQL 17 locally, Supabase Postgres in staging and production, schema owned by Flyway | Live via env config |
 | Auth | Spring Security with JWT bearer tokens and role checks | Live |
 | Frontend sessions | Token storage with refresh retry in the API client | Live |
 | GitHub OAuth | NextAuth with GitHub provider | Planned, issue 35 |
-| File storage | Local disk in development, S3 compatible store in production | Live local, S3 Planned |
+| File storage | Local disk in development, Supabase Storage in staging and production | Live |
 | API docs | Springdoc OpenAPI served from the backend | Live |
 
 ## 19.3 Module Design

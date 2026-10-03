@@ -1,6 +1,7 @@
 package com.iips.pms.service;
 
 import com.iips.pms.exception.ResourceNotFoundException;
+import com.iips.pms.storage.FileStorage;
 import com.iips.pms.entity.Project;
 import com.iips.pms.entity.SubmissionVersion;
 import com.iips.pms.entity.User;
@@ -8,14 +9,11 @@ import com.iips.pms.repository.GuideAllocationRepository;
 import com.iips.pms.repository.ProjectRepository;
 import com.iips.pms.repository.SubmissionVersionRepository;
 import com.iips.pms.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -26,20 +24,20 @@ public class VersionService {
     private final GuideAllocationRepository allocationRepository;
     private final UserRepository userRepository;
     private final DeadlineService deadlineService;
-    private final Path storageRoot;
+    private final FileStorage fileStorage;
 
     public VersionService(ProjectRepository projectRepository,
                           SubmissionVersionRepository versionRepository,
                           GuideAllocationRepository allocationRepository,
                           UserRepository userRepository,
                           DeadlineService deadlineService,
-                          @Value("${storage.local.path:./uploads}") String storagePath) {
+                          FileStorage fileStorage) {
         this.projectRepository = projectRepository;
         this.versionRepository = versionRepository;
         this.allocationRepository = allocationRepository;
         this.userRepository = userRepository;
         this.deadlineService = deadlineService;
-        this.storageRoot = Path.of(storagePath);
+        this.fileStorage = fileStorage;
     }
 
     public List<SubmissionVersion> list(Long projectId, String callerEmail) {
@@ -61,22 +59,18 @@ public class VersionService {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Uploaded file is empty");
         }
-        String cleanName = Path.of(file.getOriginalFilename() == null ? "upload.bin"
-                : file.getOriginalFilename()).getFileName().toString();
 
         List<SubmissionVersion> existing =
                 versionRepository.findByProjectIdOrderByVersionNumberDesc(projectId);
         int next = existing.isEmpty() ? 1 : existing.get(0).getVersionNumber() + 1;
 
-        Path dir = storageRoot.resolve("project-" + projectId);
-        Files.createDirectories(dir);
-        Path target = dir.resolve("v" + next + "_" + cleanName);
-        file.transferTo(target);
+        String storedAt = fileStorage.store(projectId, next,
+                file.getOriginalFilename(), file.getBytes());
 
         SubmissionVersion version = new SubmissionVersion();
         version.setProject(project);
         version.setVersionNumber(next);
-        version.setFilePath(target.toString());
+        version.setFilePath(storedAt);
         version.setComments(comments);
         return versionRepository.save(version);
     }

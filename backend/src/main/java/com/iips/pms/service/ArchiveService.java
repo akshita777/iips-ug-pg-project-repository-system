@@ -10,12 +10,12 @@ import com.iips.pms.repository.GuideAllocationRepository;
 import com.iips.pms.repository.ProjectRepository;
 import com.iips.pms.repository.SubmissionVersionRepository;
 import com.iips.pms.repository.UserRepository;
+import com.iips.pms.storage.FileStorage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -30,19 +30,22 @@ public class ArchiveService {
     private final GuideAllocationRepository allocationRepository;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final FileStorage fileStorage;
 
     public ArchiveService(ProjectRepository projectRepository,
                           SubmissionVersionRepository versionRepository,
                           EvaluationRepository evaluationRepository,
                           GuideAllocationRepository allocationRepository,
                           UserRepository userRepository,
-                          ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper,
+                          FileStorage fileStorage) {
         this.projectRepository = projectRepository;
         this.versionRepository = versionRepository;
         this.evaluationRepository = evaluationRepository;
         this.allocationRepository = allocationRepository;
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
+        this.fileStorage = fileStorage;
     }
 
     public StreamingResponseBody exportZip(Long projectId, String callerEmail) {
@@ -78,13 +81,17 @@ public class ArchiveService {
                 zip.closeEntry();
                 for (SubmissionVersion version
                         : versionRepository.findByProjectIdOrderByVersionNumberDesc(projectId)) {
-                    Path file = Path.of(version.getFilePath());
-                    if (!Files.isRegularFile(file)) {
+                    String location = version.getFilePath();
+                    if (!fileStorage.exists(location)) {
                         continue;
                     }
-                    zip.putNextEntry(new ZipEntry("v" + version.getVersionNumber() + "_"
-                            + file.getFileName()));
-                    Files.copy(file, zip);
+                    String name = location.contains("/")
+                            ? location.substring(location.lastIndexOf('/') + 1)
+                            : location;
+                    zip.putNextEntry(new ZipEntry("v" + version.getVersionNumber() + "_" + name));
+                    try (InputStream in = fileStorage.load(location)) {
+                        in.transferTo(zip);
+                    }
                     zip.closeEntry();
                 }
             }
