@@ -34,8 +34,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    setState(readAuth());
-    setReady(true);
+    const local = readAuth();
+    if (local.token) {
+      setState(local);
+      setReady(true);
+      return;
+    }
+    // Fall back to a GitHub OAuth session so OAuth logins stay logged in
+    fetch("/api/auth/session")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((session) => {
+        if (session?.user?.email) {
+          localStorage.setItem("email", session.user.email);
+          localStorage.setItem("role", "STUDENT");
+          localStorage.setItem("token", "oauth-session");
+          setState({ token: "oauth-session", role: "STUDENT", email: session.user.email });
+        }
+      })
+      .catch(() => {})
+      .finally(() => setReady(true));
   }, []);
 
   const login = React.useCallback((token: string, refreshToken: string, role: Role, email: string) => {
