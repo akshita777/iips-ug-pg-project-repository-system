@@ -3,6 +3,7 @@ package com.iips.pms.service;
 import com.iips.pms.dto.ProjectRequest;
 import com.iips.pms.entity.Project;
 import com.iips.pms.entity.Student;
+import com.iips.pms.repository.GuideAllocationRepository;
 import com.iips.pms.repository.ProjectRepository;
 import com.iips.pms.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final GuideAllocationRepository allocationRepository;
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
+                          GuideAllocationRepository allocationRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.allocationRepository = allocationRepository;
     }
 
     public List<Project> findAll() {
@@ -54,5 +58,46 @@ public class ProjectService {
         }
         project.setStatus(Project.ProjectStatus.SUBMITTED);
         return projectRepository.save(project);
+    }
+
+    @Transactional
+    public Project startReview(Long id, String guideEmail) {
+        Project project = findById(id);
+        checkAllocatedGuide(project, guideEmail);
+        if (project.getStatus() != Project.ProjectStatus.SUBMITTED) {
+            throw new IllegalStateException("Only SUBMITTED projects can move to review");
+        }
+        project.setStatus(Project.ProjectStatus.UNDER_REVIEW);
+        return projectRepository.save(project);
+    }
+
+    @Transactional
+    public Project approve(Long id, String guideEmail) {
+        Project project = findById(id);
+        checkAllocatedGuide(project, guideEmail);
+        if (project.getStatus() != Project.ProjectStatus.UNDER_REVIEW) {
+            throw new IllegalStateException("Only projects UNDER_REVIEW can be approved");
+        }
+        project.setStatus(Project.ProjectStatus.APPROVED);
+        return projectRepository.save(project);
+    }
+
+    @Transactional
+    public Project reject(Long id, String guideEmail) {
+        Project project = findById(id);
+        checkAllocatedGuide(project, guideEmail);
+        if (project.getStatus() != Project.ProjectStatus.UNDER_REVIEW) {
+            throw new IllegalStateException("Only projects UNDER_REVIEW can be returned");
+        }
+        project.setStatus(Project.ProjectStatus.REJECTED);
+        return projectRepository.save(project);
+    }
+
+    private void checkAllocatedGuide(Project project, String guideEmail) {
+        boolean allocated = allocationRepository.findByProjectId(project.getId()).stream()
+                .anyMatch(a -> a.getFaculty().getEmail().equals(guideEmail));
+        if (!allocated) {
+            throw new IllegalStateException("Only the allocated guide can review this project");
+        }
     }
 }

@@ -2,12 +2,16 @@ package com.iips.pms.controller;
 
 import com.iips.pms.dto.ProjectRequest;
 import com.iips.pms.entity.Project;
+import com.iips.pms.entity.SubmissionVersion;
 import com.iips.pms.service.ProjectService;
+import com.iips.pms.service.VersionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,9 +19,11 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final VersionService versionService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, VersionService versionService) {
         this.projectService = projectService;
+        this.versionService = versionService;
     }
 
     @GetMapping
@@ -39,5 +45,35 @@ public class ProjectController {
     @PostMapping("/{id}/submit")
     public ResponseEntity<Project> submit(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.submit(id));
+    }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<Project> startReview(@PathVariable Long id, Authentication auth) {
+        return ResponseEntity.ok(projectService.startReview(id, auth.getName()));
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<Project> approve(@PathVariable Long id, Authentication auth) {
+        return ResponseEntity.ok(projectService.approve(id, auth.getName()));
+    }
+
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<Project> reject(@PathVariable Long id, Authentication auth) {
+        return ResponseEntity.ok(projectService.reject(id, auth.getName()));
+    }
+
+    @GetMapping("/{id}/versions")
+    public ResponseEntity<List<SubmissionVersion>> versions(@PathVariable Long id,
+                                                            Authentication auth) {
+        return ResponseEntity.ok(versionService.list(id, auth.getName()));
+    }
+
+    @PostMapping("/{id}/versions")
+    public ResponseEntity<SubmissionVersion> uploadVersion(@PathVariable Long id,
+                                                           Authentication auth,
+                                                           @RequestParam("file") MultipartFile file,
+                                                           @RequestParam(value = "comments", required = false)
+                                                           String comments) throws IOException {
+        return ResponseEntity.ok(versionService.upload(id, auth.getName(), file, comments));
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -73,7 +74,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/allocations/**").hasAnyRole("COORDINATOR", "ADMIN")
+                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/allocations").authenticated()
+                .requestMatchers("/api/v1/allocations/suggest",
+                        "/api/v1/allocations/confirm",
+                        "/api/v1/allocations/override").hasAnyRole("COORDINATOR", "ADMIN")
+                .requestMatchers("/api/v1/allocations/preferences").hasRole("STUDENT")
                 .requestMatchers("/api/v1/evaluations/**").hasAnyRole("EVALUATOR", "COORDINATOR", "ADMIN")
                 .anyRequest().authenticated()
             )

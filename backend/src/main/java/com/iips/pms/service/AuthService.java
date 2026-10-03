@@ -3,6 +3,9 @@ package com.iips.pms.service;
 import com.iips.pms.dto.AuthRequest;
 import com.iips.pms.dto.AuthResponse;
 import com.iips.pms.dto.RegisterRequest;
+import com.iips.pms.entity.Administrator;
+import com.iips.pms.entity.Coordinator;
+import com.iips.pms.entity.Evaluator;
 import com.iips.pms.entity.Faculty;
 import com.iips.pms.entity.Student;
 import com.iips.pms.entity.User;
@@ -33,24 +36,24 @@ public class AuthService {
         if (userRepository.existsByEmail(req.email())) {
             throw new IllegalArgumentException("Email already registered");
         }
+        String role = req.role().toUpperCase();
         User user;
-        if ("STUDENT".equalsIgnoreCase(req.role())) {
-            Student s = new Student();
-            s.setName(req.name());
-            s.setEmail(req.email());
-            s.setPassword(passwordEncoder.encode(req.password()));
-            user = s;
-        } else {
-            Faculty f = new Faculty();
-            f.setName(req.name());
-            f.setEmail(req.email());
-            f.setPassword(passwordEncoder.encode(req.password()));
-            user = f;
+        switch (role) {
+            case "STUDENT" -> user = new Student();
+            case "FACULTY" -> user = new Faculty();
+            case "COORDINATOR" -> user = new Coordinator();
+            case "EVALUATOR" -> user = new Evaluator();
+            case "ADMIN" -> user = new Administrator();
+            default -> throw new IllegalArgumentException(
+                    "Role must be STUDENT, FACULTY, COORDINATOR, EVALUATOR, or ADMIN");
         }
+        user.setName(req.name());
+        user.setEmail(req.email());
+        user.setPassword(passwordEncoder.encode(req.password()));
         userRepository.save(user);
-        String token = jwtUtil.generateToken(req.email(), req.role());
+        String token = jwtUtil.generateToken(req.email(), role);
         String refresh = jwtUtil.generateRefreshToken(req.email());
-        return new AuthResponse(token, refresh, req.email(), req.role());
+        return new AuthResponse(token, refresh, req.email(), role);
     }
 
     public AuthResponse login(AuthRequest req) {
