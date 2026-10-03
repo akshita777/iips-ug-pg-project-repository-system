@@ -3,6 +3,7 @@
 import * as React from "react";
 import api from "@/lib/api";
 import { apiErrorMessage, type GuideAllocation } from "@/lib/types";
+import { parseFacultyIds } from "@/lib/filters";
 import { useToast } from "@/components/ui/toast";
 import { Protected } from "@/components/layout/protected";
 import { Table } from "@/components/ui/table";
@@ -35,10 +36,7 @@ export default function PreferencesPage() {
 
   async function save() {
     const pid = Number(projectId);
-    const fids = facultyIds
-      .split(",")
-      .map((s) => Number(s.trim()))
-      .filter((n) => Number.isFinite(n) && n > 0);
+    const fids = parseFacultyIds(facultyIds);
     if (!pid || fids.length === 0) {
       push("Enter your project id and at least one faculty id, comma separated.", "danger");
       return;

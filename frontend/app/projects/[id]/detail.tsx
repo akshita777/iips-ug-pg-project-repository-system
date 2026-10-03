@@ -23,6 +23,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
+import { formatRelative, validateUpload } from "@/lib/format";
 
 const tabs = [
   { id: "files", label: "Files" },
@@ -100,6 +101,11 @@ export function ProjectDetail({ id }: { id: string }) {
   async function uploadVersion() {
     if (!file) {
       push("Pick a file first.", "danger");
+      return;
+    }
+    const invalid = validateUpload(file);
+    if (invalid) {
+      push(invalid, "danger");
       return;
     }
     setUploading(true);
@@ -323,7 +329,7 @@ export function ProjectDetail({ id }: { id: string }) {
                           <td className="font-mono font-bold">v{v.versionNumber}</td>
                           <td className="font-mono text-xs break-all">{v.filePath}</td>
                           <td className="text-ink/70">{v.comments || "—"}</td>
-                          <td className="text-xs">{v.uploadedAt || "—"}</td>
+                          <td className="text-xs">{formatRelative(v.uploadedAt)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -376,7 +382,7 @@ export function ProjectDetail({ id }: { id: string }) {
                             <StatusBadge status={r.status} />
                           </td>
                           <td className="text-ink/70">{r.comments || "—"}</td>
-                          <td className="text-xs">{r.createdAt || "—"}</td>
+                          <td className="text-xs">{formatRelative(r.createdAt)}</td>
                         </tr>
                       ))}
                     </tbody>
