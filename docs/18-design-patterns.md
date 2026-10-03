@@ -1,68 +1,75 @@
 # 18. Design Patterns
 
-## 18.1 Patterns Used
+This document records the patterns used in the codebase today and the ones planned for upcoming issues. A pattern appears under Used only if you can open the file and see it. Everything else sits under Planned with the issue that will introduce it.
 
-| Pattern | Location | Purpose |
-|---------|----------|---------|
-| **Layered Architecture** | Entire backend | Separation of concerns |
-| **Repository** | Spring Data JPA | Data access abstraction |
-| **DTO** | Controller ↔ Service | API contract isolation |
-| **Factory** | EvaluationService | Create different evaluator types |
-| **Observer** | NotificationService | Decouple status change from notification |
-| **Strategy** | AllocationService | Swappable allocation algorithms |
-| **Singleton** | Spring beans | Default scope for services |
-| **Builder** | Entity construction | Complex object creation |
-| **Adapter** | S3StorageService | Abstract storage provider |
+---
 
-## 18.2 Pattern Details
+## 18.1 Used Today
 
-### Repository Pattern
+### Layered Architecture
+
+The backend separates HTTP handling, business rules, data access, and domain state into the controller, service, repository, and entity packages. The full map is in `docs/17-layered-architecture.md`. The payoff is that a change to grading rules touches one service, and a change to an endpoint touches one controller.
+
+### Repository
+
+Each aggregate root gets an interface that extends `JpaRepository` and declares finders in plain method names. Callers never see SQL. Live examples in `backend/src/main/java/com/iips/pms/repository/`:
+
 ```java
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByStudentId(Long studentId);
-    List<Project> findByStatus(ProjectStatus status);
+    List<Project> findByStatus(Project.ProjectStatus status);
+}
+
+public interface SubmissionVersionRepository extends JpaRepository<SubmissionVersion, Long> {
+    List<SubmissionVersion> findByProjectIdOrderByVersionNumberDesc(Long projectId);
 }
 ```
 
-### Strategy Pattern (Guide Allocation)
+### Data Transfer Object
+
+Controllers accept and return records from `backend/src/main/java/com/iips/pms/dto/`, never entities. Validation annotations ride on the DTOs, so bad input is rejected at the boundary with a clear message:
+
 ```java
-public interface AllocationStrategy {
-    List<GuideAllocation> allocate(List<Student> students, List<Faculty> faculty);
-}
-
-@Component
-public class PreferenceBasedAllocation implements AllocationStrategy { ... }
-
-@Component
-public class CapacityBasedAllocation implements AllocationStrategy { ... }
+public record RegisterRequest(
+        @NotBlank String name,
+        @Email @NotBlank String email,
+        @NotBlank String password,
+        @NotBlank String role
+) {}
 ```
 
-### Observer Pattern (Notifications)
-```java
-@Component
-public class ProjectStatusObserver {
-    @EventListener
-    public void onStatusChange(ProjectStatusEvent event) {
-        notificationService.notify(event.getProjectId(), event.getNewStatus());
-    }
-}
-```
+### Dependency Injection with Constructor Wiring
 
-### Factory Pattern (Evaluation)
-```java
-@Component
-public class EvaluationFactory {
-    public Evaluation createEvaluation(EvaluatorType type, Project project) {
-        return switch (type) {
-            case INTERNAL -> new InternalEvaluation(project);
-            case EXTERNAL -> new ExternalEvaluation(project);
-        };
-    }
-}
-```
+Services, controllers, and security components declare their collaborators as final fields set through constructors. Spring wires them at startup, which keeps classes testable without the container and makes the dependency graph visible in plain Java. No field injection and no service locator calls appear anywhere.
 
-## 18.3 Why These Patterns?
-- **Layered + Repository:** Clean architecture, testable, OOAD traceable
-- **Strategy:** Allocation algorithm can be changed without modifying callers
-- **Observer:** Status changes trigger notifications without coupling
-- **Factory:** Different evaluation types with common interface
+### Intercepting Filter for Authentication
+
+`JwtAuthFilter` extends `OncePerRequestFilter` and sits ahead of the username password filter in the chain declared by `SecurityConfig`. Every request passes through it exactly once. It extracts the bearer token, verifies it through `JwtUtil`, and fills the security context or lets the request continue unauthenticated. Authentication stays in one place instead of being repeated across controllers.
+
+### Singleton Beans by Default
+
+All services, repositories, and security components are Spring singletons. This is the framework default rather than a hand written pattern, and it fits because these collaborators hold no per request state. Request scoped data travels in method arguments and the security context instead.
+
+---
+
+## 18.2 Planned
+
+These are agreed designs for open issues. They are not in the codebase yet.
+
+### Strategy for Guide Allocation
+
+The allocation service will depend on an `AllocationStrategy` interface so the coordinator can switch between preference matching and capacity balancing without touching callers. Planned home: `backend/src/main/java/com/iips/pms/service/allocation/`.
+
+### Observer for Status Notifications
+
+Project status changes will publish a domain event, and a listener will send the student and guide notifications. This keeps `ProjectService` free of mail and messaging code. Planned home: an event class next to the entity plus a listener in the notification service.
+
+### Factory for Evaluation Setup
+
+Evaluation creation will move behind a small factory that builds the correct evaluation shape for internal versus external examiners from a shared rubric. This keeps the branching in one place when a third evaluator type arrives.
+
+---
+
+## 18.3 Why This Set
+
+Layered plus Repository plus DTO gives clean architecture that is testable and traces directly to the OOAD diagrams. Constructor injection keeps the object graph honest. The filter centralizes a cross cutting concern that would otherwise spread across every controller. Strategy, Observer, and Factory are reserved for the exact spots where variation and decoupling are already known, which follows the rule of introducing a pattern at the third use rather than the first.
