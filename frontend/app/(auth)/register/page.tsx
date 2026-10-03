@@ -56,6 +56,7 @@ export default function RegisterPage() {
       <Card className="bg-white">
         <CardTitle className="text-2xl">Create account</CardTitle>
         <CardDescription>Join the IIPS project portal.</CardDescription>
+        <Link href="/api/auth/signin/github" className="brutal-btn bg-ink text-white block text-center mt-4">Continue with GitHub</Link>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <Input label="Full name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Aarav Sharma" />
           <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
