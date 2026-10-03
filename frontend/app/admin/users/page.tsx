@@ -1,0 +1,108 @@
+"use client";
+
+import * as React from "react";
+import api from "@/lib/api";
+import { apiErrorMessage, type UserRow, type Role } from "@/lib/types";
+import { useToast } from "@/components/ui/toast";
+import { Protected } from "@/components/layout/protected";
+import { Table, TableSkeleton } from "@/components/ui/table";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
+
+const roles: Role[] = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN"];
+
+export default function UsersPage() {
+  const { push } = useToast();
+  const [users, setUsers] = React.useState<UserRow[]>([]);
+  const [summary, setSummary] = React.useState<Record<string, unknown> | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
+
+  React.useEffect(() => {
+    Promise.all([
+      api.get<UserRow[]>("/users"),
+      api.get<Record<string, unknown>>("/analytics/summary").catch(() => ({ data: null })),
+    ])
+      .then(([u, s]) => {
+        setUsers(u.data);
+        setSummary(s.data);
+      })
+      .catch((e) => setError(apiErrorMessage(e, "Could not load users.")))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function changeRole(id: number, role: Role) {
+    try {
+      const { data } = await api.patch<UserRow>(`/users/${id}/role`, { role });
+      setUsers((prev) => prev.map((u) => (u.id === id ? data : u)));
+      push(`Role set to ${role}.`, "success");
+    } catch (e) {
+      push(apiErrorMessage(e, "Role change failed."), "danger");
+    }
+  }
+
+  return (
+    <Protected allowed={["ADMIN"]}>
+      <div className="space-y-5">
+        <div className="brutal-card bg-secondary p-6">
+          <h1 className="text-2xl md:text-3xl font-black">Users and system</h1>
+          <p className="mt-1 text-sm text-ink/70">Manage accounts, assign roles, view department summary.</p>
+        </div>
+
+        {error && <Alert tone="danger">{error}</Alert>}
+
+        {summary && (
+          <Card className="bg-white">
+            <CardTitle>Department summary</CardTitle>
+            <pre className="mt-2 overflow-x-auto font-mono text-xs bg-muted border-2 border-ink rounded-lg p-3">
+              {JSON.stringify(summary, null, 2)}
+            </pre>
+          </Card>
+        )}
+
+        {loading ? (
+          <div className="brutal-card bg-white">
+            <TableSkeleton rows={4} />
+          </div>
+        ) : users.length === 0 ? (
+          <EmptyState title="No users" desc="Registered accounts appear here." />
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id}>
+                  <td className="font-bold">{u.name}</td>
+                  <td className="font-mono text-xs">{u.email}</td>
+                  <td>
+                    <span className="brutal-badge bg-ink text-white">{u.role}</span>
+                  </td>
+                  <td>
+                    <div className="flex flex-wrap gap-1.5">
+                      {roles
+                        .filter((r) => r !== u.role)
+                        .map((r) => (
+                          <Button key={r} variant="white" size="sm" type="button" onClick={() => changeRole(u.id, r)}>
+                            {r}
+                          </Button>
+                        ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </Protected>
+  );
+}
