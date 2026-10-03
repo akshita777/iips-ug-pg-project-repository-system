@@ -21,6 +21,7 @@ const linksByRole: Record<Role, { href: string; label: string }[]> = {
   COORDINATOR: [
     { href: "/dashboard", label: "Overview" },
     { href: "/coordinator/allocation", label: "Allocation" },
+    { href: "/admin/analytics", label: "Analytics" },
     { href: "/projects", label: "Projects" },
   ],
   EVALUATOR: [
@@ -31,6 +32,7 @@ const linksByRole: Record<Role, { href: string; label: string }[]> = {
   ADMIN: [
     { href: "/dashboard", label: "Overview" },
     { href: "/admin/users", label: "Users" },
+    { href: "/admin/analytics", label: "Analytics" },
     { href: "/projects", label: "Projects" },
   ],
 };

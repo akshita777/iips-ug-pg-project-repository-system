@@ -61,6 +61,25 @@ export default function AssignedPage() {
     }
   }
 
+  async function addRubric() {
+    try {
+      const { data } = await api.post<Rubric>("/evaluations/rubrics", {
+        name: "Standard rubric",
+        criteria: {
+          documentation: 20,
+          implementation: 50,
+          demo: 20,
+          viva: 10,
+        },
+      });
+      setRubrics((prev) => [...prev, data]);
+      setRubricId(String(data.id));
+      push("Standard rubric created.", "success");
+    } catch (e) {
+      push(apiErrorMessage(e, "Could not create rubric."), "danger");
+    }
+  }
+
   return (
     <Protected allowed={["EVALUATOR", "COORDINATOR", "ADMIN"]}>
       <div className="space-y-5">
@@ -88,7 +107,14 @@ export default function AssignedPage() {
                 {r.name}
               </button>
             ))}
-            {rubrics.length === 0 && <span className="text-sm text-ink/60">No rubrics seeded. Enter rubric id manually below.</span>}
+            {rubrics.length === 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-ink/60">No rubrics seeded yet.</span>
+                <Button variant="white" size="sm" type="button" onClick={addRubric}>
+                  Create standard rubric
+                </Button>
+              </div>
+            )}
           </div>
           {!rubrics.length && (
             <Input label="Rubric ID" name="rubricId" value={rubricId} onChange={(e) => setRubricId(e.target.value)} placeholder="e.g. 1" />
