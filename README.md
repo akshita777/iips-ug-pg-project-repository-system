@@ -42,27 +42,44 @@ A comprehensive academic project repository and record management system for IIP
 ## Quick Start
 
 ### Prerequisites
-- Node.js 20+
+- Node.js 20+ and pnpm
 - Java 21+
-- PostgreSQL 17+
+- PostgreSQL 17+ (or a Supabase project, see below)
+
+### Backend
+
+Secrets live in `backend/.env.local`, which git ignores. Fill it once from
+`backend/.env.example`, then every session is a single command:
+
+```bash
+cd backend
+./dev.sh
+```
+
+`dev.sh` sources `.env.local` and runs `mvn spring-boot:run` on port 8080.
 
 ### Frontend
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
-### Backend
-```bash
-cd backend
-./mvnw spring-boot:run
-```
+### Database
 
-### Database (Docker)
+Two ways to run it:
+
+**Supabase (default for this project).** Set `DB_HOST`, `DB_PASSWORD`,
+`STORAGE_TYPE=supabase`, `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` in
+`backend/.env.local`. No local database needed. Use the direct connection on
+port 5432, not the pooler, so Flyway migrations V1 to V8 apply cleanly.
+
+**Local (offline development).** Leave those unset and start Postgres yourself:
 ```bash
 docker run -d -p 5432:5432 -e POSTGRES_DB=pms -e POSTGRES_PASSWORD=postgres postgres:17
 ```
+
+Migrations run automatically on backend boot either way.
 
 ---
 
