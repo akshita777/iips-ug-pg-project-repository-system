@@ -1,0 +1,21 @@
+digraph object_sem10 {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  label="MCA final project, semester 10 (snapshot)";
+  fontname="Helvetica-Bold";
+  fontsize=12;
+
+  node [fontname="Helvetica", fontsize=10, shape=record, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  s2 [label="{Student|roll no: MCA-2024-042\l semester: 10\l program: MCA\l}"];
+  p2 [label="{Project|title: Student Performance Predictor\l stack: Python and Next.js\l status: Under Review\l}"];
+  e1 [label="{Evaluation|total: 85.5\l status: Completed\l}"];
+  r1 [label="{Rubric|name: Final Viva\l}"];
+
+  s2 -> p2 [label="submits"];
+  p2 -> e1 [label="evaluated by"];
+  e1 -> r1 [label="uses"];
+}

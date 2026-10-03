@@ -1,0 +1,25 @@
+digraph object_sem6 {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  label="BCA final project, semester 6 (snapshot)";
+  fontname="Helvetica-Bold";
+  fontsize=12;
+
+  node [fontname="Helvetica", fontsize=10, shape=record, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  s1 [label="{Student|roll no: BCA-2021-001\l semester: 6\l program: BCA\l}"];
+  p1 [label="{Project|title: Online Library\l stack: Java and React\l status: Submitted\l}"];
+  v1 [label="{Version 1|uploaded: 15 Mar\l}"];
+  v2 [label="{Version 2|uploaded: 01 Apr\l}"];
+  g1 [label="{Guide|name: Dr. A. Sharma\l department: Comp. Science\l}"];
+  a1 [label="{Allocation|status: Confirmed\l}"];
+
+  s1 -> p1 [label="submits"];
+  p1 -> v1 [label="has"];
+  p1 -> v2 [label="has"];
+  s1 -> a1 [label="receives"];
+  g1 -> a1 [label="receives"];
+}
