@@ -17,6 +17,7 @@ backend/build/
 .env.local
 .env.*.local
 frontend/.env*
+!frontend/.env.example
 backend/src/main/resources/application-local.yml
 
 # IDE
@@ -40,9 +41,8 @@ yarn-error.log*
 frontend/coverage/
 backend/target/site/jacoco/
 
-# Agent files (NEVER push)
+# Agent working files (NEVER push)
 .opencode/
-AGENTS.md
 knowledge/
 *.plan.md
 
