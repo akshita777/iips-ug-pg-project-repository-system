@@ -44,6 +44,9 @@ public class TeamService {
         if (teamRepository.existsByProjectIdAndStudentId(projectId, studentId)) {
             throw new IllegalStateException("Student is already on this team");
         }
+        if (teamRepository.findByProjectId(projectId).size() >= 1) {
+            throw new IllegalStateException("Teams are capped at two members including the owner");
+        }
         TeamMember.TeamRole role;
         try {
             role = TeamMember.TeamRole.valueOf(teamRole.toUpperCase());

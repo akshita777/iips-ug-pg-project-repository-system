@@ -33,6 +33,10 @@ class ProjectServiceTest {
     private GuideAllocationRepository allocationRepository;
     @Mock
     private ApplicationEventPublisher events;
+    @Mock
+    private SynopsisService synopsisService;
+    @Mock
+    private DeadlineService deadlineService;
 
     @InjectMocks
     private ProjectService projectService;

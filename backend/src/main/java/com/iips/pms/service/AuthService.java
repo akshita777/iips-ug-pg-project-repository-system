@@ -47,6 +47,10 @@ public class AuthService {
                 s.setProgramCode(parsed.programCode());
                 s.setBatchYear(parsed.batchYear());
                 s.setSection(RollNumber.sectionFor(req.name(), req.section()));
+                if (req.semester() == null || req.semester() < 1 || req.semester() > 10) {
+                    throw new IllegalArgumentException("Semester must be between 1 and 10");
+                }
+                s.setSemester(req.semester());
                 user = s;
             }
             case "FACULTY" -> user = new Faculty();

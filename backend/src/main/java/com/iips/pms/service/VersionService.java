@@ -25,17 +25,20 @@ public class VersionService {
     private final SubmissionVersionRepository versionRepository;
     private final GuideAllocationRepository allocationRepository;
     private final UserRepository userRepository;
+    private final DeadlineService deadlineService;
     private final Path storageRoot;
 
     public VersionService(ProjectRepository projectRepository,
                           SubmissionVersionRepository versionRepository,
                           GuideAllocationRepository allocationRepository,
                           UserRepository userRepository,
+                          DeadlineService deadlineService,
                           @Value("${storage.local.path:./uploads}") String storagePath) {
         this.projectRepository = projectRepository;
         this.versionRepository = versionRepository;
         this.allocationRepository = allocationRepository;
         this.userRepository = userRepository;
+        this.deadlineService = deadlineService;
         this.storageRoot = Path.of(storagePath);
     }
 
@@ -54,6 +57,7 @@ public class VersionService {
                 || !project.getStudent().getId().equals(caller.getId())) {
             throw new IllegalStateException("Only the owning student can upload versions");
         }
+        deadlineService.checkOpen(project.getStudent(), project.getType());
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Uploaded file is empty");
         }

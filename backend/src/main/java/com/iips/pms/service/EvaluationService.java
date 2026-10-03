@@ -7,6 +7,7 @@ import com.iips.pms.entity.Project;
 import com.iips.pms.entity.Rubric;
 import com.iips.pms.entity.User;
 import com.iips.pms.repository.EvaluationRepository;
+import com.iips.pms.repository.GuideAllocationRepository;
 import com.iips.pms.repository.ProjectRepository;
 import com.iips.pms.repository.RubricRepository;
 import com.iips.pms.repository.UserRepository;
@@ -23,15 +24,18 @@ public class EvaluationService {
     private final ProjectRepository projectRepository;
     private final RubricRepository rubricRepository;
     private final UserRepository userRepository;
+    private final GuideAllocationRepository allocationRepository;
 
     public EvaluationService(EvaluationRepository evaluationRepository,
                              ProjectRepository projectRepository,
                              RubricRepository rubricRepository,
-                             UserRepository userRepository) {
+                             UserRepository userRepository,
+                             GuideAllocationRepository allocationRepository) {
         this.evaluationRepository = evaluationRepository;
         this.projectRepository = projectRepository;
         this.rubricRepository = rubricRepository;
         this.userRepository = userRepository;
+        this.allocationRepository = allocationRepository;
     }
 
     public List<Rubric> rubrics() {
@@ -46,13 +50,16 @@ public class EvaluationService {
     @Transactional
     public Evaluation submit(String evaluatorEmail, EvaluationRequest req) {
         User evaluator = userRepository.findByEmail(evaluatorEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
-        if (!"EVALUATOR".equals(evaluator.getRole())
-                && !"COORDINATOR".equals(evaluator.getRole())
-                && !"ADMIN".equals(evaluator.getRole())) {
-            throw new IllegalStateException("Only evaluators can submit marks");
-        }
         Project project = projectRepository.findById(req.projectId()).orElseThrow(
                 () -> new ResourceNotFoundException("Project not found: " + req.projectId()));
+        boolean staff = "EVALUATOR".equals(evaluator.getRole())
+                || "COORDINATOR".equals(evaluator.getRole())
+                || "ADMIN".equals(evaluator.getRole());
+        boolean ownGuide = allocationRepository.findByProjectId(project.getId()).stream()
+                .anyMatch(a -> a.getFaculty().getEmail().equals(evaluatorEmail));
+        if (!staff && !ownGuide) {
+            throw new IllegalStateException("Only evaluators or the allocated guide submit marks");
+        }
         if (project.getStatus() != Project.ProjectStatus.APPROVED
                 && project.getStatus() != Project.ProjectStatus.EVALUATION_PENDING
                 && project.getStatus() != Project.ProjectStatus.EVALUATED) {

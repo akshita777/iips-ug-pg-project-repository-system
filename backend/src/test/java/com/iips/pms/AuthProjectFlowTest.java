@@ -44,10 +44,16 @@ class AuthProjectFlowTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private com.iips.pms.repository.UserRepository userRepository;
+
+    @Autowired
+    private com.iips.pms.repository.SynopsisRepository synopsisRepository;
+
     @Test
     void registerLoginCreateAndSubmitProject() throws Exception {
         String registerBody = """
-                {"name":"Test Student","email":"flow@iips.edu","password":"secret123","role":"STUDENT"}""";
+                {"name":"Test Student","email":"flow@iips.edu","password":"secret123","role":"STUDENT","rollNumber":"IC2K22-12","semester":6}""";
         String token = mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(registerBody))
@@ -57,6 +63,14 @@ class AuthProjectFlowTest {
 
         String projectBody = """
                 {"title":"Flow Project","abstractText":"Abstract","techStack":"Java"}""";
+        com.iips.pms.entity.User student =
+                userRepository.findByEmail("flow@iips.edu").orElseThrow();
+        com.iips.pms.entity.Synopsis synopsis = new com.iips.pms.entity.Synopsis();
+        synopsis.setStudent((com.iips.pms.entity.Student) student);
+        synopsis.setTitle("Flow Synopsis");
+        synopsis.setSummary("Summary");
+        synopsis.setStatus(com.iips.pms.entity.Synopsis.SynopsisStatus.APPROVED);
+        synopsisRepository.save(synopsis);
         String projectResponse = mockMvc.perform(post("/api/v1/projects")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)

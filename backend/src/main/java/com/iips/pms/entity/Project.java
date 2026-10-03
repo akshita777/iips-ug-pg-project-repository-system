@@ -25,6 +25,10 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private ProjectType type = ProjectType.MINOR;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProjectStatus status = ProjectStatus.DRAFT;
 
     @Column(name = "created_at")
@@ -58,11 +62,17 @@ public class Project {
     public void setTechStack(String techStack) { this.techStack = techStack; }
     public ProjectStatus getStatus() { return status; }
     public void setStatus(ProjectStatus status) { this.status = status; }
+    public ProjectType getType() { return type; }
+    public void setType(ProjectType type) { this.type = type; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public enum ProjectStatus {
         DRAFT, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED,
         EVALUATION_PENDING, EVALUATED, ARCHIVED
+    }
+
+    public enum ProjectType {
+        MINOR, MAJOR
     }
 }

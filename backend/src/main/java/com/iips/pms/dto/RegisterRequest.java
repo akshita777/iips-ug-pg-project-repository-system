@@ -9,5 +9,6 @@ public record RegisterRequest(
         @NotBlank String password,
         @NotBlank String role,
         String rollNumber,
-        String section
+        String section,
+        Integer semester
 ) {}

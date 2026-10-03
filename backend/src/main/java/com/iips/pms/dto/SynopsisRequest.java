@@ -2,9 +2,7 @@ package com.iips.pms.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ProjectRequest(
+public record SynopsisRequest(
         @NotBlank String title,
-        String abstractText,
-        String techStack,
-        String type
+        @NotBlank String summary
 ) {}

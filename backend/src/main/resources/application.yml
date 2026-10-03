@@ -19,8 +19,8 @@ spring:
     baseline-on-migrate: true
   servlet:
     multipart:
-      max-file-size: 25MB
-      max-request-size: 25MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 server:
   port: 8080

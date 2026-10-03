@@ -21,14 +21,20 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final GuideAllocationRepository allocationRepository;
     private final ApplicationEventPublisher events;
+    private final SynopsisService synopsisService;
+    private final DeadlineService deadlineService;
 
     public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
                           GuideAllocationRepository allocationRepository,
-                          ApplicationEventPublisher events) {
+                          ApplicationEventPublisher events,
+                          SynopsisService synopsisService,
+                          DeadlineService deadlineService) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.allocationRepository = allocationRepository;
         this.events = events;
+        this.synopsisService = synopsisService;
+        this.deadlineService = deadlineService;
     }
 
     public List<Project> findAll() {
@@ -47,11 +53,30 @@ public class ProjectService {
         if (!(user instanceof Student student)) {
             throw new IllegalStateException("Only students can create projects");
         }
+        Project.ProjectType type;
+        try {
+            type = req.type() == null ? Project.ProjectType.MINOR
+                    : Project.ProjectType.valueOf(req.type().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Project type must be MINOR or MAJOR");
+        }
+        if (type == Project.ProjectType.MINOR
+                && (student.getSemester() == null || student.getSemester() != 6)) {
+            throw new IllegalStateException("Minor projects belong to semester 6");
+        }
+        if (type == Project.ProjectType.MAJOR
+                && (student.getSemester() == null || student.getSemester() != 10)) {
+            throw new IllegalStateException("Major projects belong to semester 10");
+        }
+        if (!synopsisService.hasApproved(student)) {
+            throw new IllegalStateException("An approved synopsis is required before creating a project");
+        }
         Project project = new Project();
         project.setStudent(student);
         project.setTitle(req.title());
         project.setAbstractText(req.abstractText());
         project.setTechStack(req.techStack());
+        project.setType(type);
         project.setStatus(Project.ProjectStatus.DRAFT);
         return projectRepository.save(project);
     }
@@ -60,9 +85,11 @@ public class ProjectService {
     public Project submit(Long id) {
         Project project = findById(id);
         if (project.getStatus() != Project.ProjectStatus.DRAFT
-                && project.getStatus() != Project.ProjectStatus.REJECTED) {
-            throw new IllegalStateException("Only DRAFT or REJECTED projects can be submitted");
+                && project.getStatus() != Project.ProjectStatus.REJECTED
+                && project.getStatus() != Project.ProjectStatus.EVALUATED) {
+            throw new IllegalStateException("Only DRAFT, REJECTED, or returned projects can be submitted");
         }
+        deadlineService.checkOpen(project.getStudent(), project.getType());
         return moveTo(project, Project.ProjectStatus.SUBMITTED);
     }
 
