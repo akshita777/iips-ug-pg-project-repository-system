@@ -4,8 +4,8 @@ digraph use_case_model {
   fontname="Helvetica";
   fontsize=12;
   labeljust="l";
-  nodesep=0.4;
-  ranksep=1.1;
+  nodesep=0.5;
+  ranksep=2.2;
   splines=ortho;
 
   node [fontname="Helvetica", fontsize=11, shape=ellipse, style="filled",
@@ -21,16 +21,25 @@ digraph use_case_model {
     penwidth=1.5;
 
     uc_login [label="Log in and register"];
+    uc_synopsis [label="Submit synopsis"];
     uc_create [label="Create project"];
     uc_submit [label="Submit project for review"];
     uc_version [label="Upload new version"];
+    uc_repo [label="Link repo and view analysis"];
+    uc_wiki [label="Write project wiki"];
+    uc_book [label="Book review slot"];
     uc_result [label="View evaluation result"];
+    uc_showcase [label="Browse project showcase"];
+    uc_syn_ok [label="Approve synopsis"];
     uc_review [label="Review submission"];
     uc_decide [label="Approve or ask for changes"];
     uc_students [label="View allocated students"];
+    uc_slots [label="Offer review slots"];
     uc_allocate [label="Allocate guides"];
     uc_override [label="Change allocation"];
     uc_workflow [label="Track project workflow"];
+    uc_deadlines [label="Set deadlines"];
+    uc_rubric [label="Edit rubric"];
     uc_evaluate [label="Evaluate project"];
     uc_marks [label="Submit marks and feedback"];
     uc_users [label="Manage users"];
@@ -39,27 +48,38 @@ digraph use_case_model {
 
   student [label="Student", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
   guide [label="Guide", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
-  coordinator [label="Coordinator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+  coordinator [label="Batch Mentor", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
   evaluator [label="Evaluator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
   admin [label="Admin", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
-
-  { rank=same; student; guide; coordinator; evaluator; admin; }
+  guest [label="Guest", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
 
   student -> uc_login;
+  student -> uc_synopsis;
   student -> uc_create;
   student -> uc_submit;
   student -> uc_version;
+  student -> uc_repo;
+  student -> uc_wiki;
+  student -> uc_book;
   student -> uc_result;
+  student -> uc_showcase;
 
   guide -> uc_login;
+  guide -> uc_syn_ok;
   guide -> uc_review;
   guide -> uc_decide;
   guide -> uc_students;
+  guide -> uc_slots;
+  guide -> uc_wiki;
+  guide -> uc_evaluate;
+  guide -> uc_marks;
 
   coordinator -> uc_login;
   coordinator -> uc_allocate;
   coordinator -> uc_override;
   coordinator -> uc_workflow;
+  coordinator -> uc_deadlines;
+  coordinator -> uc_rubric;
 
   evaluator -> uc_login;
   evaluator -> uc_evaluate;
@@ -68,4 +88,6 @@ digraph use_case_model {
   admin -> uc_login;
   admin -> uc_users;
   admin -> uc_roles;
+
+  guest -> uc_showcase;
 }
