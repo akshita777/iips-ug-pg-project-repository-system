@@ -36,6 +36,7 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("email", data.email ?? email);
       router.push("/dashboard");
     } catch {
       setError("Login failed. Check your email and password.");

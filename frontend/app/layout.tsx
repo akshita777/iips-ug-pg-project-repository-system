@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth";
+import { ToastProvider } from "@/components/ui/toast";
 
 const archivo = Archivo({ subsets: ["latin"], variable: "--font-display" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-body" });
@@ -59,7 +61,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </div>
         </header>
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 py-8">
+          <AuthProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </AuthProvider>
+        </main>
         <footer className="border-t-2 border-ink mt-12 bg-white">
           <div className="mx-auto max-w-6xl px-4 py-5 text-sm font-body flex flex-wrap items-center justify-between gap-2">
             <span className="font-bold">IIPS DAVV, Indore</span>

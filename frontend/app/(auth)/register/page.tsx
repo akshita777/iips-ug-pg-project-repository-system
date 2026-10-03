@@ -42,6 +42,7 @@ export default function RegisterPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("email", data.email ?? email);
       router.push("/dashboard");
     } catch {
       setError("Registration failed. This email may already be used.");
