@@ -1,0 +1,29 @@
+digraph activity_submission {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  login [label="Student logs in"];
+  create [label="Enter project title and details"];
+  upload [label="Upload project files"];
+  more [label="Add more files?", shape=diamond, style="filled", fillcolor="white"];
+  submit [label="Submit for review"];
+  status [label="Status becomes Submitted"];
+  notify [label="Guide gets notified"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> login;
+  login -> create;
+  create -> upload;
+  upload -> more;
+  more -> upload [label="yes"];
+  more -> submit [label="no"];
+  submit -> status;
+  status -> notify;
+  notify -> end;
+}

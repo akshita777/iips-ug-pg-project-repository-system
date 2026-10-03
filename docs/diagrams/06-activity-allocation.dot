@@ -1,0 +1,29 @@
+digraph activity_allocation {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  prefs [label="Students submit guide preferences"];
+  auto [label="System prepares draft allocation"];
+  review [label="Coordinator reviews draft"];
+  check [label="Allocation looks fair?", shape=diamond, style="filled", fillcolor="white"];
+  confirm [label="Confirm allocation"];
+  manual [label="Adjust allocation manually"];
+  inform [label="Students and guides get notified"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> prefs;
+  prefs -> auto;
+  auto -> review;
+  review -> check;
+  check -> confirm [label="yes"];
+  check -> manual [label="no"];
+  manual -> confirm;
+  confirm -> inform;
+  inform -> end;
+}

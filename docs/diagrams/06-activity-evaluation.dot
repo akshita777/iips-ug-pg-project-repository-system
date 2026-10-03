@@ -1,0 +1,33 @@
+digraph activity_evaluation {
+  rankdir=TB;
+  bgcolor="white";
+  fontname="Helvetica";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
+  approved [label="Guide approves project"];
+  assign [label="Project assigned to evaluators"];
+  internal [label="Internal evaluator reviews"];
+  external [label="External evaluator reviews"];
+  marks_in [label="Internal marks submitted"];
+  marks_ex [label="External marks submitted"];
+  total [label="Final score calculated"];
+  report [label="Report generated"];
+  inform [label="Student gets notified"];
+  end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
+
+  start -> approved;
+  approved -> assign;
+  assign -> internal;
+  assign -> external;
+  internal -> marks_in;
+  external -> marks_ex;
+  marks_in -> total;
+  marks_ex -> total;
+  total -> report;
+  report -> inform;
+  inform -> end;
+}

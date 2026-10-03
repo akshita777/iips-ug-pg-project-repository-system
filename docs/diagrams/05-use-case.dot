@@ -1,0 +1,66 @@
+digraph use_case_model {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  fontsize=12;
+  labeljust="l";
+
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled",
+        fillcolor="white", color="black", penwidth=1.5];
+  edge [fontname="Helvetica", fontsize=10, color="black", arrowhead="vee"];
+
+  subgraph cluster_system {
+    label="Project Portal";
+    fontname="Helvetica-Bold";
+    fontsize=12;
+    style="rounded,dashed";
+    color="black";
+    penwidth=1.5;
+
+    uc_login [label="Log in and register"];
+    uc_create [label="Create project"];
+    uc_submit [label="Submit project for review"];
+    uc_version [label="Upload new version"];
+    uc_result [label="View evaluation result"];
+    uc_review [label="Review submission"];
+    uc_decide [label="Approve or ask for changes"];
+    uc_students [label="View allocated students"];
+    uc_allocate [label="Allocate guides"];
+    uc_override [label="Change allocation"];
+    uc_workflow [label="Track project workflow"];
+    uc_evaluate [label="Evaluate project"];
+    uc_marks [label="Submit marks and feedback"];
+    uc_users [label="Manage users"];
+    uc_roles [label="Assign roles"];
+  }
+
+  student [label="Student", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+  guide [label="Guide", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+  coordinator [label="Coordinator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+  evaluator [label="Evaluator", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+  admin [label="Admin", shape=ellipse, style="filled", fillcolor="white", penwidth=2];
+
+  student -> uc_login;
+  student -> uc_create;
+  student -> uc_submit;
+  student -> uc_version;
+  student -> uc_result;
+
+  guide -> uc_login;
+  guide -> uc_review;
+  guide -> uc_decide;
+  guide -> uc_students;
+
+  coordinator -> uc_login;
+  coordinator -> uc_allocate;
+  coordinator -> uc_override;
+  coordinator -> uc_workflow;
+
+  evaluator -> uc_login;
+  evaluator -> uc_evaluate;
+  evaluator -> uc_marks;
+
+  admin -> uc_login;
+  admin -> uc_users;
+  admin -> uc_roles;
+}
