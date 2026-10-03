@@ -14,30 +14,29 @@ export const metadata: Metadata = {
   description: "IIPS UG-PG Academic Project Repository and Record Management System",
 };
 
-const tickerItems = ["BCA Sem 1-6", "MCA Sem 7-10", "Synopsis", "Guide Allocation", "Review", "Evaluation", "Viva", "Archive"];
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${archivo.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body min-h-screen bg-paper`}>
-        <div className="border-b-2 border-ink bg-ink text-paper overflow-hidden py-1.5" aria-hidden="true">
-          <div className="ticker-track font-display text-xs font-bold uppercase tracking-widest">
-            {[...tickerItems, ...tickerItems].map((item, i) => (
-              <span key={i} className="flex items-center gap-8">
-                <span>{item}</span>
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-              </span>
-            ))}
+        <div className="border-b border-ink/10 bg-navy text-white py-1.5" aria-hidden="true">
+          <div className="mx-auto max-w-6xl px-4 text-xs font-display font-semibold tracking-wide flex flex-wrap items-center justify-between gap-1">
+            <span>IIPS DAVV, Indore | Government Recognized Institute</span>
+            <span className="text-saffron font-bold uppercase tracking-widest">BCA Sem 1-6 plus MCA Sem 7-10</span>
           </div>
         </div>
-        <header className="border-b-2 border-ink bg-primary">
-          <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center border-2 border-ink rounded-lg bg-ink font-display text-sm font-black text-primary">
+        <header className="border-b-2 border-navy bg-white">
+          <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-navy bg-navy font-display text-xs font-black text-white">
                 IP
               </span>
-              <span className="font-display text-xl font-black tracking-tight">
-                IIPS PMS
+              <span>
+                <span className="block font-display text-lg font-black tracking-tight text-navy">
+                  IIPS Project Portal
+                </span>
+                <span className="block text-xs font-body text-ink/60">
+                  Academic Project Repository
+                </span>
               </span>
             </Link>
             <nav className="flex items-center gap-1">
@@ -54,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 href="https://github.com/animishraa05/iips-ug-pg-project-repository-system"
                 target="_blank"
                 rel="noreferrer"
-                className="brutal-btn bg-ink text-white !shadow-none text-sm ml-2"
+                className="brutal-btn bg-navy text-white !shadow-none text-sm ml-2"
               >
                 GitHub
               </a>
@@ -66,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ToastProvider>{children}</ToastProvider>
           </AuthProvider>
         </main>
-        <footer className="border-t-2 border-ink mt-12 bg-white">
+        <footer className="border-t-2 border-navy mt-12 bg-white">
           <div className="mx-auto max-w-6xl px-4 py-5 text-sm font-body flex flex-wrap items-center justify-between gap-2">
             <span className="font-bold">IIPS DAVV, Indore</span>
             <span className="font-mono text-xs uppercase tracking-wide">BCA Sem 1-6 plus MCA Sem 7-10</span>

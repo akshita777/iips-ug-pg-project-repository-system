@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --paper: #fffef9;
-  --ink: #1c1b1a;
+  --paper: #ffffff;
+  --ink: #1a2233;
 }
 
 @layer base {
@@ -13,8 +13,6 @@
   }
   body {
     @apply bg-paper text-ink font-body;
-    background-image: radial-gradient(#1c1b1a14 1px, transparent 1px);
-    background-size: 22px 22px;
   }
   h1,
   h2,
@@ -29,54 +27,53 @@
 
 @layer components {
   .brutal-card {
-    @apply bg-white border-2 border-ink shadow-brutal rounded-xl;
+    @apply bg-white border border-ink/15 shadow-brutal rounded-lg;
   }
   .brutal-card-hover {
-    @apply transition-all duration-150 hover:-translate-y-0.5 hover:shadow-brutal-lg;
+    @apply transition-all duration-150 hover:border-navy/40 hover:shadow-brutal-lg;
   }
   .brutal-btn {
-    @apply inline-flex items-center justify-center gap-2 font-display font-bold
-      border-2 border-ink rounded-lg px-5 py-2.5 shadow-brutal-sm
+    @apply inline-flex items-center justify-center gap-2 font-display font-semibold
+      border border-ink/20 rounded-lg px-5 py-2.5 shadow-brutal-sm
       transition-all duration-150
-      hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-none
-      active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-none
+      hover:bg-ink/5
+      active:translate-y-px
       disabled:opacity-50 disabled:pointer-events-none
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2;
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2;
   }
   .brutal-input {
-    @apply w-full border-2 border-ink rounded-lg px-4 py-2.5 bg-white
+    @apply w-full border border-ink/20 rounded-lg px-4 py-2.5 bg-white
       font-body placeholder:text-ink/40
-      focus:outline-none focus:ring-2 focus:ring-accent focus:border-ink;
+      focus:outline-none focus:ring-2 focus:ring-navy/30 focus:border-navy;
   }
   .brutal-badge {
-    @apply inline-flex items-center font-display font-bold text-xs uppercase tracking-wide
-      border-2 border-ink rounded-full px-3 py-1;
+    @apply inline-flex items-center font-display font-semibold text-xs uppercase tracking-wide
+      border border-ink/15 rounded-full px-3 py-1;
   }
   .brutal-nav-link {
-    @apply font-display font-bold border-2 border-transparent rounded-lg px-4 py-2
-      hover:border-ink hover:bg-primary hover:shadow-brutal-sm transition-all;
+    @apply font-display font-semibold border border-transparent rounded-lg px-4 py-2
+      hover:border-ink/15 hover:bg-muted transition-all;
   }
   .brutal-alert {
-    @apply border-2 border-ink rounded-lg px-4 py-2.5 text-sm font-bold;
+    @apply border border-ink/15 rounded-lg px-4 py-2.5 text-sm font-semibold;
   }
   .brutal-table {
     @apply w-full text-sm;
   }
   .brutal-table th {
-    @apply font-display text-xs font-black uppercase tracking-wide text-left px-4 py-2.5 border-b-2 border-ink bg-muted;
+    @apply font-display text-xs font-bold uppercase tracking-wide text-left px-4 py-2.5 border-b-2 border-ink/20 bg-muted;
   }
   .brutal-table td {
-    @apply px-4 py-3 border-b-2 border-ink/10;
+    @apply px-4 py-3 border-b border-ink/10;
   }
   .brutal-table tr:last-child td {
     @apply border-b-0;
   }
   .ticker-track {
     @apply flex items-center gap-8 whitespace-nowrap;
-    animation: ticker 28s linear infinite;
   }
   .skeleton {
-    @apply animate-pulse bg-muted border-2 border-ink/10 rounded-lg;
+    @apply animate-pulse bg-muted border border-ink/10 rounded-lg;
   }
 }
 

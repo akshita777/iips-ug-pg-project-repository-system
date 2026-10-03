@@ -7,21 +7,18 @@ const features = [
     title: "Project Repository",
     desc: "Submit and track BCA and MCA final projects with full version history.",
     bg: "bg-primary",
-    tilt: "-rotate-1",
   },
   {
     icon: Users,
     title: "Guide Allocation",
     desc: "Preference based allocation with coordinator review and approval.",
     bg: "bg-secondary",
-    tilt: "rotate-1",
   },
   {
     icon: GitBranch,
     title: "Version Control",
     desc: "Link GitHub repos, track commits, branches and code reviews.",
     bg: "bg-accent",
-    tilt: "-rotate-1",
   },
 ];
 
@@ -29,12 +26,6 @@ export default function Home() {
   return (
     <div className="space-y-10">
       <section className="brutal-card relative overflow-hidden bg-primary p-8 md:p-12 text-center">
-        <div className="absolute -left-6 top-6 -rotate-12 brutal-badge bg-secondary hidden md:inline-flex">
-          BCA plus MCA
-        </div>
-        <div className="absolute -right-6 top-6 rotate-12 brutal-badge bg-accent hidden md:inline-flex">
-          Sem 1 to 10
-        </div>
         <span className="brutal-badge bg-white">
           <Sparkles size={14} className="mr-1" /> OOAD Lab Project
         </span>
@@ -59,7 +50,7 @@ export default function Home() {
 
       <section className="grid gap-5 md:grid-cols-3">
         {features.map((f) => (
-          <div key={f.title} className={`brutal-card brutal-card-hover p-6 ${f.tilt}`}>
+          <div key={f.title} className="brutal-card brutal-card-hover p-6">
             <div className={`inline-flex items-center justify-center border-2 border-ink rounded-lg p-2.5 ${f.bg}`}>
               <f.icon size={22} strokeWidth={2.5} />
             </div>
