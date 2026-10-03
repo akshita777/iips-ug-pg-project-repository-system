@@ -7,11 +7,16 @@ on:
     branches: [main]
 
 jobs:
-  mermaid:
+  dot:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate Mermaid diagrams
-        uses: mermaid-js/mermaid-cli-action@v1
-        with:
-          files: "docs/**/*.md"
+      - name: Install Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+      - name: Compile DOT diagrams
+        run: |
+          for f in docs/diagrams/*.dot; do
+            dot -Tsvg "$f" -o "${f%.dot}.svg";
+          done
+      - name: Check for uncommitted SVG changes
+        run: git diff --exit-code -- docs/diagrams/*.svg

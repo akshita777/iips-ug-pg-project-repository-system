@@ -2,49 +2,24 @@
 
 ## 11.1 Project Lifecycle
 
-```mermaid
-stateDiagram-v2
-    [*] --> DRAFT : Student creates project
-    DRAFT --> SUBMITTED : Student submits
-    SUBMITTED --> UNDER_REVIEW : Guide starts review
-    UNDER_REVIEW --> APPROVED : Guide approves
-    UNDER_REVIEW --> REJECTED : Guide rejects
-    REJECTED --> DRAFT : Student revises
-    APPROVED --> EVALUATION_PENDING : Assigned to evaluator
-    EVALUATION_PENDING --> EVALUATED : Evaluation complete
-    EVALUATED --> ARCHIVED : Semester ends
-    ARCHIVED --> [*]
-```
+![Project lifecycle](diagrams/11-state-project.svg)
+
+Source: [11-state-project.dot](diagrams/11-state-project.dot).
+
+States: Draft, Submitted, Under Review, Approved, Needs Changes, Awaiting Evaluation, Evaluated, Archived.
 
 ## 11.2 Student Record Lifecycle (Sem 1-10)
 
-```mermaid
-stateDiagram-v2
-    [*] --> SEM_1 : BCA Admission
-    SEM_1 --> SEM_2 : Promotion
-    SEM_2 --> SEM_3 : Promotion
-    SEM_3 --> SEM_4 : Promotion
-    SEM_4 --> SEM_5 : Promotion
-    SEM_5 --> SEM_6 : Promotion
-    SEM_6 --> BCA_COMPLETE : Final Project + Viva
-    BCA_COMPLETE --> SEM_7 : MCA Admission
-    SEM_7 --> SEM_8 : Promotion
-    SEM_8 --> SEM_9 : Promotion
-    SEM_9 --> SEM_10 : Promotion
-    SEM_10 --> MCA_COMPLETE : Final Project + Viva
-    MCA_COMPLETE --> [*]
-```
+![Student record lifecycle](diagrams/11-state-student.svg)
+
+Source: [11-state-student.dot](diagrams/11-state-student.dot).
+
+BCA semesters 1 to 5 build the profile. Semester 6 carries the BCA final project and viva. MCA semesters 7 to 9 build the profile again. Semester 10 carries the MCA final project and viva.
 
 ## 11.3 Guide Allocation States
 
-```mermaid
-stateDiagram-v2
-    [*] --> PENDING : Student submits preferences
-    PENDING --> SUGGESTED : System auto-allocates
-    SUGGESTED --> CONFIRMED : Coordinator confirms
-    SUGGESTED --> OVERRIDDEN : Coordinator overrides
-    OVERRIDDEN --> CONFIRMED : New allocation confirmed
-    CONFIRMED --> ACTIVE : Semester starts
-    ACTIVE --> COMPLETED : Semester ends
-    COMPLETED --> [*]
-```
+![Guide allocation states](diagrams/11-state-allocation.svg)
+
+Source: [11-state-allocation.dot](diagrams/11-state-allocation.dot).
+
+States: Pending, Suggested, Confirmed, Changed, Active, Completed.

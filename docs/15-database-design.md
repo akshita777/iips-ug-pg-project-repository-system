@@ -2,71 +2,9 @@
 
 ## 15.1 ER Diagram
 
-```mermaid
-erDiagram
-    USER ||--o{ PROJECT : submits
-    USER ||--o{ GUIDE_ALLOCATION : "is allocated"
-    PROJECT ||--o{ SUBMISSION_VERSION : has
-    PROJECT ||--o{ GUIDE_ALLOCATION : "allocated to"
-    PROJECT ||--o{ EVALUATION : evaluated
-    EVALUATION }o--|| RUBRIC : uses
-    USER ||--o{ EVALUATION : "evaluates"
-    
-    USER {
-        bigint id PK
-        varchar name
-        varchar email UK
-        varchar password
-        varchar role
-        timestamp created_at
-    }
-    
-    PROJECT {
-        bigint id PK
-        bigint student_id FK
-        varchar title
-        text abstract
-        varchar tech_stack
-        varchar status
-        timestamp created_at
-        timestamp updated_at
-    }
-    
-    SUBMISSION_VERSION {
-        bigint id PK
-        bigint project_id FK
-        int version_number
-        varchar file_path
-        text comments
-        timestamp uploaded_at
-    }
-    
-    GUIDE_ALLOCATION {
-        bigint id PK
-        bigint student_id FK
-        bigint faculty_id FK
-        bigint project_id FK
-        varchar status
-        timestamp allocated_at
-    }
-    
-    EVALUATION {
-        bigint id PK
-        bigint project_id FK
-        bigint evaluator_id FK
-        bigint rubric_id FK
-        decimal total_marks
-        text feedback
-        varchar status
-        timestamp evaluated_at
-    }
-    
-    RUBRIC {
-        bigint id PK
-        varchar name
-        jsonb criteria
-    }
-```
+![ER diagram](diagrams/15-er.svg)
+
+Source: [15-er.dot](diagrams/15-er.dot). Recompile with `dot -Tsvg 15-er.dot -o 15-er.svg`.
 
 ## 15.2 Relational Schema
 
@@ -86,7 +24,7 @@ erDiagram
 | id | BIGSERIAL | PK |
 | student_id | BIGINT | FK → users(id) |
 | title | VARCHAR(255) | NOT NULL |
-| abstract | TEXT | |
+| abstract_text | TEXT | |
 | tech_stack | VARCHAR(500) | |
 | status | VARCHAR(20) | DEFAULT 'DRAFT' |
 | created_at | TIMESTAMP | DEFAULT NOW() |

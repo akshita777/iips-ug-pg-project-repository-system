@@ -2,44 +2,9 @@
 
 ## 12.1 System Packages
 
-```mermaid
-graph TB
-    subgraph Frontend["Frontend (Next.js)"]
-        UI[ui-presentation]
-        AUTH[auth]
-        API[api-client]
-    end
-    
-    subgraph Backend["Backend (Spring Boot)"]
-        CTRL[controller]
-        SVC[service]
-        REPO[repository]
-        ENT[entity]
-        SEC[security]
-        DTO[dto]
-    end
-    
-    subgraph Database["Database (PostgreSQL)"]
-        DB[(postgres)]
-    end
-    
-    subgraph External["External Services"]
-        STORE[storage]
-        NOTIF[notification]
-    end
-    
-    UI --> AUTH
-    UI --> API
-    API -->|HTTP/REST| CTRL
-    CTRL --> SVC
-    SVC --> REPO
-    SVC --> SEC
-    SVC --> DTO
-    REPO --> ENT
-    ENT --> DB
-    SVC --> STORE
-    SVC --> NOTIF
-```
+![Package diagram](diagrams/12-package.svg)
+
+Source: [12-package.dot](diagrams/12-package.dot). Recompile with `dot -Tsvg 12-package.dot -o 12-package.svg`.
 
 ## 12.2 Backend Package Structure
 
@@ -65,7 +30,7 @@ frontend/
 │   ├── (dashboard)/ # Role-based dashboards
 │   └── api/        # API routes (proxy)
 ├── components/     # React components
-│   ├── ui/         # shadcn/ui
+│   ├── ui/         # Design system
 │   └── features/   # Feature components
 ├── lib/            # Utilities, API client
 └── types/          # TypeScript types
