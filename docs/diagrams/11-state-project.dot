@@ -29,5 +29,6 @@ digraph state_project {
   approved -> pending [label="assign evaluator"];
   pending -> evaluated [label="marks saved"];
   evaluated -> archived [label="term ends"];
+  evaluated -> draft [label="failed, rework same term"];
   archived -> end;
 }
