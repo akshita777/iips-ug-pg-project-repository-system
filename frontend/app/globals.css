@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --paper: #fffdf5;
-  --ink: #000000;
+  --paper: #fffef9;
+  --ink: #1c1b1a;
 }
 
 @layer base {
@@ -13,6 +13,8 @@
   }
   body {
     @apply bg-paper text-ink font-body;
+    background-image: radial-gradient(#1c1b1a14 1px, transparent 1px);
+    background-size: 22px 22px;
   }
   h1,
   h2,
@@ -20,11 +22,17 @@
   h4 {
     @apply font-display font-black tracking-tight;
   }
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-paper;
+  }
 }
 
 @layer components {
   .brutal-card {
     @apply bg-white border-2 border-ink shadow-brutal rounded-xl;
+  }
+  .brutal-card-hover {
+    @apply transition-all duration-150 hover:-translate-y-0.5 hover:shadow-brutal-lg;
   }
   .brutal-btn {
     @apply inline-flex items-center justify-center gap-2 font-display font-bold
@@ -32,7 +40,8 @@
       transition-all duration-150
       hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-none
       active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-none
-      disabled:opacity-50 disabled:pointer-events-none;
+      disabled:opacity-50 disabled:pointer-events-none
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2;
   }
   .brutal-input {
     @apply w-full border-2 border-ink rounded-lg px-4 py-2.5 bg-white
@@ -46,5 +55,36 @@
   .brutal-nav-link {
     @apply font-display font-bold border-2 border-transparent rounded-lg px-4 py-2
       hover:border-ink hover:bg-primary hover:shadow-brutal-sm transition-all;
+  }
+  .brutal-alert {
+    @apply border-2 border-ink rounded-lg px-4 py-2.5 text-sm font-bold;
+  }
+  .brutal-table {
+    @apply w-full text-sm;
+  }
+  .brutal-table th {
+    @apply font-display text-xs font-black uppercase tracking-wide text-left px-4 py-2.5 border-b-2 border-ink bg-muted;
+  }
+  .brutal-table td {
+    @apply px-4 py-3 border-b-2 border-ink/10;
+  }
+  .brutal-table tr:last-child td {
+    @apply border-b-0;
+  }
+  .ticker-track {
+    @apply flex items-center gap-8 whitespace-nowrap;
+    animation: ticker 28s linear infinite;
+  }
+  .skeleton {
+    @apply animate-pulse bg-muted border-2 border-ink/10 rounded-lg;
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
