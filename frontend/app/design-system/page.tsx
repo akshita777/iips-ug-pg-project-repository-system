@@ -9,35 +9,37 @@ import { Input } from "@/components/ui/input";
 
 export const metadata: Metadata = {
   title: "Design System | IIPS Project Portal",
-  description: "Soft pastel neobrutalism tokens and primitives preview",
+  description: "Institute formal tokens and primitives preview",
 };
 
 const swatches = [
-  ["primary", "#FFE99A", "bg-primary"],
-  ["secondary rose", "#FFC7E3", "bg-secondary"],
-  ["accent sky", "#BEE6FF", "bg-accent"],
-  ["success mint", "#BEF2C9", "bg-success"],
-  ["warn peach", "#FFD3AC", "bg-warn"],
-  ["lilac", "#D8CCFF", "bg-lilac"],
-  ["danger blush", "#FFC9C9", "bg-danger"],
-  ["muted sand", "#F4EFE6", "bg-muted"],
+  ["primary blue", "#DBEAFE", "bg-primary"],
+  ["secondary slate", "#E8EEF9", "bg-secondary"],
+  ["accent sky", "#EFF6FF", "bg-accent"],
+  ["success green", "#DCFCE7", "bg-success"],
+  ["warn amber", "#FEF3C7", "bg-warn"],
+  ["lilac muted", "#EEF2FF", "bg-lilac"],
+  ["danger blush", "#FEE2E2", "bg-danger"],
+  ["muted paper", "#F1F5F9", "bg-muted"],
+  ["navy", "#1E3A8A", "bg-navy"],
+  ["saffron", "#FF9933", "bg-saffron"],
 ];
 
 export default function DesignSystemPage() {
   return (
     <div className="space-y-8">
       <section className="brutal-card bg-primary p-6 md:p-8">
-        <span className="brutal-badge bg-white">Tokens first</span>
-        <h1 className="mt-3 text-3xl md:text-4xl font-black">Soft pastel system</h1>
+        <span className="brutal-badge bg-white">Institute formal</span>
+        <h1 className="mt-3 text-3xl md:text-4xl font-black">White paper with navy authority</h1>
         <p className="mt-2 max-w-2xl text-sm md:text-base">
-          Warm analogous fills with cool complements. Same lightness band, ink borders, hard shadows.
-          Ink text on every fill. Danger text uses dark red for contrast.
+          Sober university portal look. White paper, deep navy header bar, thin slate borders,
+          soft shadows, no marquee or tilted stickers. Saffron accent strip for institute identity.
         </p>
       </section>
 
       <section className="brutal-card bg-white p-6">
         <CardTitle>Palette</CardTitle>
-        <CardDescription>Paper #FFFEF9 plus ink #1C1B1A. Fills share lightness 85 to 90 percent.</CardDescription>
+        <CardDescription>White paper, slate ink, navy authority, saffron accent.</CardDescription>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {swatches.map(([label, hex, bg]) => (
             <div key={label} className={`border-2 border-ink rounded-lg p-3 ${bg}`}>
@@ -105,19 +107,14 @@ export default function DesignSystemPage() {
         </thead>
         <tbody>
           <tr>
-            <td className="font-bold">butter</td>
-            <td className="font-mono text-xs">#FFE99A</td>
-            <td>hero, primary actions</td>
+            <td className="font-bold">navy</td>
+            <td className="font-mono text-xs">#1E3A8A</td>
+            <td>header bar, authority, primary text</td>
           </tr>
           <tr>
-            <td className="font-bold">rose</td>
-            <td className="font-mono text-xs">#FFC7E3</td>
-            <td>coordinator, highlights</td>
-          </tr>
-          <tr>
-            <td className="font-bold">sky</td>
-            <td className="font-mono text-xs">#BEE6FF</td>
-            <td>info, focus rings</td>
+            <td className="font-bold">saffron</td>
+            <td className="font-mono text-xs">#FF9933</td>
+            <td>institute strip, identity accent</td>
           </tr>
         </tbody>
       </Table>

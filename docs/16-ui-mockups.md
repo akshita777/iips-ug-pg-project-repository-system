@@ -1,6 +1,6 @@
 # 16. UI Mockups and Screen Specifications
 
-This document describes what each screen looks like and how it behaves. Screens marked Live exist in `frontend/` today. Screens marked Planned are designed here and will be built in later issues. The visual language for all screens is soft pastel neobrutalism: thick soft-black borders, hard offset shadows, soft flat fills sharing one lightness band, and heavy display type.
+This document describes what each screen looks like and how it behaves. Screens marked Live exist in `frontend/` today. The visual language for all screens is institute formal: white paper, deep navy authority bar, thin slate borders, soft realistic shadows, saffron institute strip, no marquee and no tilted stickers.
 
 ---
 
@@ -10,25 +10,27 @@ All screens share one token set, defined in `frontend/tailwind.config.ts` and `f
 
 | Token | Value | Used for |
 |-------|-------|----------|
-| paper | #FFFEF9 | Page background, warm white with dotted texture |
-| ink | #1C1B1A | Borders, text, dark fills, softer than pure black |
-| primary butter | #FFE99A | Hero card, main actions |
-| secondary rose | #FFC7E3 | Highlights, coordinator accents |
-| accent sky | #BEE6FF | Info fills, links, focus rings |
-| success mint | #BEF2C9 | Approved and completed states |
-| danger blush | #FFC9C9 fill plus #B42318 text | Errors and rejected states, dark text for contrast |
-| warn peach | #FFD3AC | Pending and review states |
-| muted sand | #F4EFE6 | Inactive fills |
-| lilac | #D8CCFF | Admin, reports, fifth accent bridging warm and cool |
+| paper | #FFFFFF | Page background, pure white |
+| ink | #1A2233 | Borders, text, deep slate |
+| navy | #1E3A8A | Authority bar, primary text, key borders |
+| saffron | #FF9933 | Institute identity strip |
+| primary | #DBEAFE | Hero card, light institutional blue |
+| secondary slate | #E8EEF9 | Coordinator accents, highlights |
+| accent sky | #EFF6FF | Info fills, light focus background |
+| success | #DCFCE7 | Approved and completed states |
+| danger blush | #FEE2E2 fill plus #B91C1C text | Errors and rejected states, dark text for contrast |
+| warn amber | #FEF3C7 | Pending and review states |
+| muted paper | #F1F5F9 | Inactive fills |
+| lilac muted | #EEF2FF | Admin, reports, muted fourth accent |
 
 Shared building blocks live in `frontend/components/ui/`:
 
 | Component | File | Behavior |
 |-----------|------|----------|
-| Button | `button.tsx` | Brutal border and shadow. On hover it shifts 2 px and the shadow collapses. Variants for primary, rose, sky, dark, white, mint, peach, lilac, blush danger with dark red text. |
-| Card | `card.tsx` | White fill, 2 px border, hard shadow, rounded corners. Holds one idea per card. CardHover adds lift on hover. |
-| Input, Textarea | `input.tsx` | 2 px border, sky focus ring, inline error text in dark red. |
-| StatusBadge | `badge.tsx` | Pill with 2 px border. Color follows project or allocation status, so Submitted reads sky and Rejected reads blush with dark red text at a glance. |
+| Button | `button.tsx` | Thin border plus soft shadow. On hover the background lightens. Variants for primary, slate, sky, dark, white, success, warn, lilac, danger with dark red text. |
+| Card | `card.tsx` | White fill, thin slate border, soft shadow. Holds one idea per card. CardHover adds a subtle lift on hover. |
+| Input, Textarea | `input.tsx` | Thin border, navy focus ring, inline error text in dark red. |
+| StatusBadge | `badge.tsx` | Pill with thin border. Color follows project or allocation status, so Submitted reads sky and Rejected reads blush with dark red text at a glance. |
 | Alert | `alert.tsx` | Bordered message box with tones info, success, warn, danger, neutral, lilac. Used for form errors. |
 | Avatar | `avatar.tsx` | Initials circle cycling pastel fills. |
 | Tabs | `tabs.tsx` | Pill tab group for Files, Guide, Result sections. |
