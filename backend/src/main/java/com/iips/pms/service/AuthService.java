@@ -40,7 +40,15 @@ public class AuthService {
         String role = req.role().toUpperCase();
         User user;
         switch (role) {
-            case "STUDENT" -> user = new Student();
+            case "STUDENT" -> {
+                Student s = new Student();
+                RollNumber.Parsed parsed = RollNumber.parse(req.rollNumber());
+                s.setRollNumber(parsed.normalized());
+                s.setProgramCode(parsed.programCode());
+                s.setBatchYear(parsed.batchYear());
+                s.setSection(RollNumber.sectionFor(req.name(), req.section()));
+                user = s;
+            }
             case "FACULTY" -> user = new Faculty();
             case "COORDINATOR" -> user = new Coordinator();
             case "EVALUATOR" -> user = new Evaluator();
