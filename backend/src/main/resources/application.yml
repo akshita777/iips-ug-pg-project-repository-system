@@ -19,6 +19,13 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+    # Supabase ships a helper function into the public schema, so Flyway sees a
+    # non-empty schema on a brand new database and refuses to migrate without a
+    # history table. Baselining at 0 satisfies that check while still letting
+    # V1 onward run. Without this, Flyway would baseline at 1, skip the V1 that
+    # creates the users table, and fail on V2.
+    baseline-on-migrate: true
+    baseline-version: 0
   servlet:
     multipart:
       max-file-size: 100MB
