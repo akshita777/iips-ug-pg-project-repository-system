@@ -6,6 +6,7 @@ import com.iips.pms.entity.Rubric;
 import com.iips.pms.service.EvaluationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,20 @@ public class EvaluationController {
     @GetMapping("/rubrics")
     public ResponseEntity<List<Rubric>> rubrics() {
         return ResponseEntity.ok(evaluationService.rubrics());
+    }
+
+    @PostMapping("/rubrics")
+    @PreAuthorize("hasAnyRole('COORDINATOR', 'ADMIN')")
+    public ResponseEntity<Rubric> createRubric(
+            @Valid @RequestBody com.iips.pms.dto.RubricRequest req) {
+        return ResponseEntity.ok(evaluationService.createRubric(req.name(), req.criteria()));
+    }
+
+    @PutMapping("/rubrics/{id}")
+    @PreAuthorize("hasAnyRole('COORDINATOR', 'ADMIN')")
+    public ResponseEntity<Rubric> updateRubric(
+            @PathVariable Long id,
+            @Valid @RequestBody com.iips.pms.dto.RubricRequest req) {
+        return ResponseEntity.ok(evaluationService.updateRubric(id, req.name(), req.criteria()));
     }
 }

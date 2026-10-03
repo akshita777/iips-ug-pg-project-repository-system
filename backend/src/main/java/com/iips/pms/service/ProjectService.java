@@ -41,6 +41,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
+    public List<Project> showcase() {
+        return projectRepository.findByStatus(Project.ProjectStatus.EVALUATED);
+    }
+
     public Project findById(Long id) {
         return projectRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Project not found: " + id));

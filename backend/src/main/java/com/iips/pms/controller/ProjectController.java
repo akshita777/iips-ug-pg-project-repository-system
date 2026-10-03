@@ -4,7 +4,9 @@ import com.iips.pms.dto.ProjectRequest;
 import com.iips.pms.entity.Project;
 import com.iips.pms.entity.SubmissionVersion;
 import com.iips.pms.service.ArchiveService;
+import com.iips.pms.service.CopyCheckService;
 import com.iips.pms.service.ProjectService;
+import com.iips.pms.service.RepoAnalysisService;
 import com.iips.pms.service.VersionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -25,17 +27,27 @@ public class ProjectController {
     private final ProjectService projectService;
     private final VersionService versionService;
     private final ArchiveService archiveService;
+    private final RepoAnalysisService analysisService;
+    private final CopyCheckService copyCheckService;
 
     public ProjectController(ProjectService projectService, VersionService versionService,
-                             ArchiveService archiveService) {
+                             ArchiveService archiveService, RepoAnalysisService analysisService,
+                             CopyCheckService copyCheckService) {
         this.projectService = projectService;
         this.versionService = versionService;
         this.archiveService = archiveService;
+        this.analysisService = analysisService;
+        this.copyCheckService = copyCheckService;
     }
 
     @GetMapping
     public ResponseEntity<List<Project>> getAll() {
         return ResponseEntity.ok(projectService.findAll());
+    }
+
+    @GetMapping("/showcase")
+    public ResponseEntity<List<Project>> showcase() {
+        return ResponseEntity.ok(projectService.showcase());
     }
 
     @GetMapping("/{id}")
@@ -82,6 +94,17 @@ public class ProjectController {
                                                            @RequestParam(value = "comments", required = false)
                                                            String comments) throws IOException {
         return ResponseEntity.ok(versionService.upload(id, auth.getName(), file, comments));
+    }
+
+    @GetMapping("/{id}/analysis")
+    public ResponseEntity<java.util.Map<String, Object>> analysis(@PathVariable Long id,
+                                                                  Authentication auth) {
+        return ResponseEntity.ok(analysisService.analyze(id, auth.getName()));
+    }
+
+    @GetMapping("/{id}/similarity")
+    public ResponseEntity<List<java.util.Map<String, Object>>> similarity(@PathVariable Long id) {
+        return ResponseEntity.ok(copyCheckService.similarTo(id));
     }
 
     @GetMapping("/{id}/export")

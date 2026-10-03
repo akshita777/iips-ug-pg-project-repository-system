@@ -42,6 +42,30 @@ public class EvaluationService {
         return rubricRepository.findAll();
     }
 
+    @Transactional
+    public Rubric createRubric(String name, java.util.Map<String, Object> criteria) {
+        if (criteria == null || criteria.isEmpty()) {
+            throw new IllegalArgumentException("Rubric criteria cannot be empty");
+        }
+        Rubric rubric = new Rubric();
+        rubric.setName(name);
+        rubric.setCriteria(criteria);
+        return rubricRepository.save(rubric);
+    }
+
+    @Transactional
+    public Rubric updateRubric(Long id, String name, java.util.Map<String, Object> criteria) {
+        Rubric rubric = rubricRepository.findById(id).orElseThrow(
+                () -> new com.iips.pms.exception.ResourceNotFoundException("Rubric not found: " + id));
+        if (name != null && !name.isBlank()) {
+            rubric.setName(name);
+        }
+        if (criteria != null && !criteria.isEmpty()) {
+            rubric.setCriteria(criteria);
+        }
+        return rubricRepository.save(rubric);
+    }
+
     public List<Evaluation> assignedTo(String evaluatorEmail) {
         User evaluator = userRepository.findByEmail(evaluatorEmail).orElseThrow(() -> new ResourceNotFoundException("Record not found"));
         return evaluationRepository.findByEvaluatorId(evaluator.getId());
