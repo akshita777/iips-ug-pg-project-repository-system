@@ -21,7 +21,7 @@ export function SelectField({
   const id = name ?? label;
   return (
     <div className="space-y-1.5">
-      <label htmlFor={id} className="font-display text-sm font-bold uppercase tracking-wide">
+      <label htmlFor={id} className="ctl-label">
         {label}
       </label>
       <select
@@ -29,7 +29,7 @@ export function SelectField({
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={cn("brutal-input", error && "border-dangerInk")}
+        className={cn("ctl-input", error && "border-bad")}
       >
         {placeholder && <option value="">{placeholder}</option>}
         {options.map((o) => (
@@ -38,7 +38,7 @@ export function SelectField({
           </option>
         ))}
       </select>
-      {error && <p className="text-sm font-bold text-dangerInk">{error}</p>}
+      {error && <p className="text-sm font-semibold text-bad">{error}</p>}
     </div>
   );
 }

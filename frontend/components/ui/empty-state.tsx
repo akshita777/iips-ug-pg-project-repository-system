@@ -12,11 +12,11 @@ export function EmptyState({
   actionLabel?: string;
 }) {
   return (
-    <div className="brutal-card border-dashed p-8 text-center">
-      <p className="font-display text-lg font-black">{title}</p>
-      <p className="mx-auto mt-1 max-w-sm text-sm text-ink/70">{desc}</p>
+    <div className="card text-center">
+      <p className="text-lg font-bold text-navy">{title}</p>
+      <p className="mx-auto mt-1 max-w-md text-[0.95rem] muted">{desc}</p>
       {actionHref && actionLabel && (
-        <Link href={actionHref} className="brutal-btn bg-white text-sm mt-4">
+        <Link href={actionHref} className="btn btn-outline btn-small mt-4">
           {actionLabel}
         </Link>
       )}

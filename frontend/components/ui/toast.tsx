@@ -14,9 +14,9 @@ const ToastContext = React.createContext<{ push: (message: string, tone?: Toast[
 let nextId = 1;
 
 const toneStyles: Record<Toast["tone"], string> = {
-  success: "bg-success",
-  danger: "bg-danger text-dangerInk",
-  info: "bg-accent",
+  success: "bg-good-soft text-good border-good/20",
+  danger: "bg-bad-soft text-bad border-bad/20",
+  info: "bg-blue-soft text-navy border-blue/20",
 };
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
       <div aria-live="polite" className="fixed bottom-4 right-4 z-50 flex w-72 flex-col gap-2">
         {toasts.map((t) => (
-          <div key={t.id} className={cn("brutal-alert shadow-brutal", toneStyles[t.tone])}>
+          <div key={t.id} className={cn("rounded-card border bg-paper px-4 py-2.5 text-sm font-semibold shadow-card", toneStyles[t.tone])}>
             {t.message}
           </div>
         ))}

@@ -27,23 +27,23 @@ export function Dialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/50 p-4"
       role="dialog"
       aria-modal="true"
       aria-label={title}
       onClick={onClose}
     >
       <div
-        className={cn("brutal-card w-full max-w-lg bg-white p-6")}
+        className={cn("card w-full max-w-lg")}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-3">
-          <h3 className="font-display text-xl font-black">{title}</h3>
+          <h3 className="text-xl font-bold text-navy">{title}</h3>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="brutal-badge cursor-pointer bg-muted"
+            className="chip cursor-pointer bg-band text-ink-2"
           >
             Esc
           </button>

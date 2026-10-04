@@ -1,26 +1,38 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "accent" | "dark" | "white" | "success" | "danger" | "warn" | "lilac" | "navy";
+type Variant =
+  | "primary"
+  | "secondary"
+  | "accent"
+  | "dark"
+  | "white"
+  | "success"
+  | "danger"
+  | "warn"
+  | "lilac"
+  | "navy"
+  | "amber";
 type Size = "sm" | "md" | "lg";
 
 const variantStyles: Record<Variant, string> = {
-  primary: "bg-primary text-white",
-  secondary: "bg-secondary text-ink",
-  accent: "bg-accent text-ink",
-  dark: "bg-ink text-white",
-  white: "bg-white text-ink",
-  success: "bg-success text-ink",
-  danger: "bg-danger text-dangerInk",
-  warn: "bg-warn text-ink",
-  lilac: "bg-lilac text-ink",
-  navy: "bg-navy text-white",
+  primary: "btn",
+  navy: "btn",
+  dark: "btn",
+  amber: "btn btn-amber",
+  secondary: "btn bg-blue-soft border-blue-soft text-navy",
+  accent: "btn btn-outline",
+  white: "btn btn-outline",
+  success: "btn bg-good-soft border-good-soft text-good",
+  danger: "btn bg-bad-soft border-bad-soft text-bad",
+  warn: "btn bg-warn-soft border-warn-soft text-warn",
+  lilac: "btn bg-band border-line text-ink",
 };
 
 const sizeStyles: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-5 py-2.5 text-base",
-  lg: "px-6 py-3 text-lg",
+  sm: "btn-small",
+  md: "",
+  lg: "min-h-[52px] px-7 text-[1rem]",
 };
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,10 +41,5 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export function Button({ variant = "primary", size = "md", className, ...props }: ButtonProps) {
-  return (
-    <button
-      className={cn("brutal-btn", variantStyles[variant], sizeStyles[size], className)}
-      {...props}
-    />
-  );
+  return <button className={cn(variantStyles[variant], sizeStyles[size], className)} {...props} />;
 }

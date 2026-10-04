@@ -170,6 +170,9 @@
   .skeleton {
     @apply animate-pulse bg-band border border-line rounded-card;
   }
+  .grade {
+    @apply inline-grid place-items-center min-w-[2.4em] h-[2.1em] px-1.5 rounded-ctl font-extrabold text-[0.9rem] border;
+  }
   .sr-only {
     position: absolute !important;
     width: 1px;

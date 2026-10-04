@@ -1,25 +1,21 @@
 import { cn } from "@/lib/utils";
 
-const statusColors: Record<string, string> = {
-  DRAFT: "bg-muted",
-  SUBMITTED: "bg-accent",
-  UNDER_REVIEW: "bg-warn",
-  APPROVED: "bg-success",
-  REJECTED: "bg-danger text-dangerInk",
-  EVALUATION_PENDING: "bg-secondary",
-  EVALUATED: "bg-primary text-white",
-  ARCHIVED: "bg-muted",
-  PENDING: "bg-warn",
-  CONFIRMED: "bg-success",
-  ACTIVE: "bg-accent",
-  COMPLETED: "bg-primary text-white",
+const statusTones: Record<string, string> = {
+  DRAFT: "bg-band text-ink-2",
+  SUBMITTED: "bg-blue-soft text-navy",
+  UNDER_REVIEW: "bg-warn-soft text-warn",
+  APPROVED: "bg-good-soft text-good",
+  REJECTED: "bg-bad-soft text-bad",
+  EVALUATION_PENDING: "bg-warn-soft text-warn",
+  EVALUATED: "bg-good-soft text-good",
+  ARCHIVED: "bg-band text-ink-2",
+  PENDING: "bg-warn-soft text-warn",
+  CONFIRMED: "bg-good-soft text-good",
+  ACTIVE: "bg-blue-soft text-navy",
+  COMPLETED: "bg-good-soft text-good",
 };
 
 export function StatusBadge({ status, className }: { status: string; className?: string }) {
   const label = status.replace(/_/g, " ");
-  return (
-    <span className={cn("brutal-badge", statusColors[status] ?? "bg-white", className)}>
-      {label}
-    </span>
-  );
+  return <span className={cn("chip", statusTones[status] ?? "bg-band text-ink-2", className)}>{label}</span>;
 }

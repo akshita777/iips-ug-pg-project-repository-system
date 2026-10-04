@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 
 export function Table({ className, ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
   return (
-    <div className={cn("brutal-card overflow-x-auto !p-0", className)}>
-      <table className="brutal-table" {...props} />
+    <div className={cn("data-wrap", className)}>
+      <table className="data" {...props} />
     </div>
   );
 }

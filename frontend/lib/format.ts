@@ -28,6 +28,23 @@ export function formatRelative(value?: string): string {
 
 export const MAX_UPLOAD_MB = 50;
 
+/** Indian digit grouping for counts, mirroring the reference `n()` helper. */
+export function n(value: number | null | undefined): string {
+  if (value === null || value === undefined) return "—";
+  return value.toLocaleString("en-IN");
+}
+
+/** Long date for stamps like data-check lines, e.g. "4 October 2026". */
+export function longDate(value?: string): string {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 export function validateUpload(file: File | null): string | null {
   if (!file) return "Pick a file first.";
   if (file.size === 0) return "File is empty.";
