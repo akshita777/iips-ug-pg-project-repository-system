@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const swatches = [
-  ["primary blue", "#DBEAFE", "bg-primary"],
+  ["primary blue", "#2F7AC5", "bg-primary text-white"],
   ["secondary slate", "#E8EEF9", "bg-secondary"],
   ["accent sky", "#EFF6FF", "bg-accent"],
   ["success green", "#DCFCE7", "bg-success"],
@@ -21,19 +21,19 @@ const swatches = [
   ["lilac muted", "#EEF2FF", "bg-lilac"],
   ["danger blush", "#FEE2E2", "bg-danger"],
   ["muted paper", "#F1F5F9", "bg-muted"],
-  ["navy", "#1E3A8A", "bg-navy"],
+  ["navy", "#1E3A8A", "bg-navy text-white"],
   ["saffron", "#FF9933", "bg-saffron"],
 ];
 
 export default function DesignSystemPage() {
   return (
     <div className="space-y-8">
-      <section className="brutal-card bg-primary p-6 md:p-8">
+      <section className="brutal-card bg-primary p-6 md:p-8 text-white">
         <span className="brutal-badge bg-white">Institute formal</span>
-        <h1 className="mt-3 text-3xl md:text-4xl font-black">White paper with navy authority</h1>
-        <p className="mt-2 max-w-2xl text-sm md:text-base">
-          Sober university portal look. White paper, deep navy header bar, thin slate borders,
-          soft shadows, no marquee or tilted stickers. Saffron accent strip for institute identity.
+        <h1 className="mt-3 text-3xl md:text-4xl font-black">Blue lead with navy authority</h1>
+        <p className="mt-2 max-w-2xl text-sm md:text-base text-white/85">
+          Sober university portal look. Muted academic blue for actions, deep navy header bar,
+          white paper, thin slate borders, soft shadows. Saffron accent strip for institute identity.
         </p>
       </section>
 
@@ -55,11 +55,12 @@ export default function DesignSystemPage() {
           <CardTitle>Buttons</CardTitle>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button variant="primary" size="sm">Primary</Button>
-            <Button variant="secondary" size="sm">Rose</Button>
+            <Button variant="secondary" size="sm">Slate</Button>
             <Button variant="accent" size="sm">Sky</Button>
-            <Button variant="success" size="sm">Mint</Button>
-            <Button variant="warn" size="sm">Peach</Button>
+            <Button variant="success" size="sm">Green</Button>
+            <Button variant="warn" size="sm">Amber</Button>
             <Button variant="lilac" size="sm">Lilac</Button>
+            <Button variant="navy" size="sm">Navy</Button>
             <Button variant="dark" size="sm">Dark</Button>
             <Button variant="danger" size="sm">Danger</Button>
           </div>
@@ -106,6 +107,11 @@ export default function DesignSystemPage() {
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td className="font-bold">primary</td>
+            <td className="font-mono text-xs">#2F7AC5</td>
+            <td>hero cards, primary actions, white text</td>
+          </tr>
           <tr>
             <td className="font-bold">navy</td>
             <td className="font-mono text-xs">#1E3A8A</td>

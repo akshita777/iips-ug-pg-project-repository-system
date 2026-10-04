@@ -14,7 +14,7 @@ All screens share one token set, defined in `frontend/tailwind.config.ts` and `f
 | ink | #1A2233 | Borders, text, deep slate |
 | navy | #1E3A8A | Authority bar, primary text, key borders |
 | saffron | #FF9933 | Institute identity strip |
-| primary | #DBEAFE | Hero card, light institutional blue |
+| primary | #2F7AC5, always with white text | Hero cards, primary actions, active states |
 | secondary slate | #E8EEF9 | Coordinator accents, highlights |
 | accent sky | #EFF6FF | Info fills, light focus background |
 | success | #DCFCE7 | Approved and completed states |

@@ -7,12 +7,12 @@ const statusColors: Record<string, string> = {
   APPROVED: "bg-success",
   REJECTED: "bg-danger text-dangerInk",
   EVALUATION_PENDING: "bg-secondary",
-  EVALUATED: "bg-primary",
+  EVALUATED: "bg-primary text-white",
   ARCHIVED: "bg-muted",
   PENDING: "bg-warn",
   CONFIRMED: "bg-success",
   ACTIVE: "bg-accent",
-  COMPLETED: "bg-primary",
+  COMPLETED: "bg-primary text-white",
 };
 
 export function StatusBadge({ status, className }: { status: string; className?: string }) {

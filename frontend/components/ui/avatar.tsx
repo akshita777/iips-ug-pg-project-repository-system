@@ -1,6 +1,13 @@
 import { cn } from "@/lib/utils";
 
-const fills = ["bg-primary", "bg-secondary", "bg-accent", "bg-success", "bg-warn", "bg-lilac"];
+const fills = [
+  "bg-primary text-white",
+  "bg-secondary",
+  "bg-accent",
+  "bg-success",
+  "bg-warn",
+  "bg-lilac",
+];
 
 export function Avatar({ name, index = 0, className }: { name: string; index?: number; className?: string }) {
   const initials = name

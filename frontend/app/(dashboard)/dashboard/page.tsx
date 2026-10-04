@@ -51,9 +51,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">
-          <Card className="bg-primary brutal-card-hover">
+          <Card className="bg-primary brutal-card-hover text-white">
             <CardTitle>{projects.length} projects</CardTitle>
-            <CardDescription className="!text-ink/70">Live from GET /projects.</CardDescription>
+            <CardDescription className="!text-white/80">Live from GET /projects.</CardDescription>
             <Link href="/projects" className="brutal-btn bg-white text-sm mt-3">
               Open projects
             </Link>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
         <div className="brutal-card bg-white p-4 flex flex-wrap items-center gap-2 text-sm">
           <span className="font-display font-bold">Workflows:</span>
-          <Link href="/projects/new" className="brutal-badge bg-primary">Submit</Link>
+          <Link href="/projects/new" className="brutal-badge bg-primary text-white">Submit</Link>
           <Link href="/coordinator/allocation" className="brutal-badge bg-lilac">Allocation</Link>
           <Link href="/evaluator/assigned" className="brutal-badge bg-accent">Evaluate</Link>
           <Link href="/admin/users" className="brutal-badge bg-secondary">Admin</Link>

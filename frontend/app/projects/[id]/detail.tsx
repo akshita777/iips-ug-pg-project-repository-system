@@ -291,7 +291,7 @@ export function ProjectDetail({ id }: { id: string }) {
             {active === "files" && (
               <div className="space-y-4">
                 {role === "STUDENT" && (
-                  <div className="brutal-card bg-primary p-5 space-y-3">
+                  <div className="brutal-card bg-primary p-5 space-y-3 text-white">
                     <p className="font-display font-bold">Upload a new version</p>
                     <input
                       type="file"

@@ -40,7 +40,7 @@ export function AnalyticsView() {
         ) : (
           <>
             <div className="grid gap-5 md:grid-cols-3">
-              <Card className="bg-primary">
+              <Card className="bg-primary text-white">
                 <CardTitle>{String(summary.totalProjects ?? 0)} projects</CardTitle>
               </Card>
               <Card className="bg-success">

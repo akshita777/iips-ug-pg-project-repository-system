@@ -29,12 +29,12 @@ export default function Home() {
         <span className="brutal-badge bg-white">
           <Sparkles size={14} className="mr-1" /> OOAD Lab Project
         </span>
-        <h1 className="mt-4 text-4xl md:text-6xl font-black leading-tight">
+        <h1 className="mt-4 text-4xl md:text-6xl font-black leading-tight text-white">
           IIPS Project
           <br />
           Portal
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base md:text-lg font-body">
+        <p className="mx-auto mt-4 max-w-xl text-base md:text-lg font-body text-white/85">
           Academic project repository and record management for BCA Sem 1-6 and MCA Sem 7-10.
           Submit projects, get guides allocated, track versions, and get evaluated.
         </p>
@@ -51,7 +51,7 @@ export default function Home() {
       <section className="grid gap-5 md:grid-cols-3">
         {features.map((f) => (
           <div key={f.title} className="brutal-card brutal-card-hover p-6">
-            <div className={`inline-flex items-center justify-center border-2 border-ink rounded-lg p-2.5 ${f.bg}`}>
+            <div className={`inline-flex items-center justify-center border-2 border-ink rounded-lg p-2.5 ${f.bg} ${f.bg === "bg-primary" ? "text-white" : ""}`}>
               <f.icon size={22} strokeWidth={2.5} />
             </div>
             <h2 className="mt-4 text-xl font-black">{f.title}</h2>
@@ -74,10 +74,13 @@ export default function Home() {
             ["3", "Review", "Guide reviews and approves your work.", "bg-secondary"],
             ["4", "Evaluate", "Evaluators grade using a rubric.", "bg-success"],
           ].map(([n, title, desc, bg]) => (
-            <li key={n} className={`border-2 border-ink rounded-lg p-4 ${bg}`}>
+            <li
+              key={n}
+              className={`border-2 border-ink rounded-lg p-4 ${bg} ${bg === "bg-primary" ? "text-white" : ""}`}
+            >
               <span className="brutal-badge bg-ink text-white">{n}</span>
               <p className="mt-2 font-display font-bold">{title}</p>
-              <p className="mt-1 text-ink/70">{desc}</p>
+              <p className={`mt-1 ${bg === "bg-primary" ? "text-white/80" : "text-ink/70"}`}>{desc}</p>
             </li>
           ))}
         </ol>

@@ -35,9 +35,9 @@ export default function NotificationsPage() {
   return (
     <Protected>
       <div className="space-y-5">
-        <div className="brutal-card bg-primary p-6">
+        <div className="brutal-card bg-primary p-6 text-white">
           <h1 className="text-2xl md:text-3xl font-black">Notifications</h1>
-          <p className="mt-1 text-sm text-ink/70">Status changes, allocation news, and evaluation updates.</p>
+          <p className="mt-1 text-sm text-white/80">Status changes, allocation news, and evaluation updates.</p>
         </div>
         {error && <Alert tone="danger">{error}</Alert>}
         {loading ? (

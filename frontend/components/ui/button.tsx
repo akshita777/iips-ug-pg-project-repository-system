@@ -5,7 +5,7 @@ type Variant = "primary" | "secondary" | "accent" | "dark" | "white" | "success"
 type Size = "sm" | "md" | "lg";
 
 const variantStyles: Record<Variant, string> = {
-  primary: "bg-primary text-ink",
+  primary: "bg-primary text-white",
   secondary: "bg-secondary text-ink",
   accent: "bg-accent text-ink",
   dark: "bg-ink text-white",

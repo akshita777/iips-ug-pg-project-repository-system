@@ -1,0 +1,6 @@
+# Build scripts approved by pnpm 10 allowlist.
+# sharp: native image optimization used by next/image in production builds.
+# unrs-resolver: fast resolver backend for eslint-plugin-import.
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver

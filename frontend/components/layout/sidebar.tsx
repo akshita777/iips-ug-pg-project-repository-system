@@ -53,7 +53,7 @@ export function Sidebar({ role }: { role: Role }) {
               aria-current={active ? "page" : undefined}
               className={cn(
                 "brutal-badge whitespace-nowrap",
-                active ? "bg-ink text-white" : "bg-white hover:bg-primary"
+                active ? "bg-ink text-white" : "bg-white hover:bg-primary hover:text-white"
               )}
             >
               {link.label}
