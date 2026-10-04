@@ -2,74 +2,201 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --paper: #ffffff;
-  --ink: #1a2233;
-}
-
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-paper text-ink font-body;
+    @apply bg-paper text-ink font-sans;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    overflow-x: hidden;
   }
   h1,
   h2,
-  h3,
-  h4 {
-    @apply font-display font-black tracking-tight;
+  h3 {
+    @apply text-navy;
+    line-height: 1.25;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  h1 {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 800;
+  }
+  h2 {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    font-weight: 750;
+  }
+  h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+  p {
+    margin: 0 0 12px;
+  }
+  a {
+    @apply text-blue;
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    @apply text-navy-deep;
+  }
+  img {
+    max-width: 100%;
   }
   :focus-visible {
-    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-paper;
+    outline: 3px solid #b45309;
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: #e6f0f7;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
-  .brutal-card {
-    @apply bg-white border border-ink/15 shadow-brutal rounded-lg;
+  .wrap {
+    @apply w-full max-w-wrap mx-auto;
+    padding-left: clamp(16px, 4vw, 40px);
+    padding-right: clamp(16px, 4vw, 40px);
   }
-  .brutal-card-hover {
-    @apply transition-all duration-150 hover:border-navy/40 hover:shadow-brutal-lg;
+  .section {
+    padding: clamp(40px, 6vw, 72px) 0;
   }
-  .brutal-btn {
-    @apply inline-flex items-center justify-center gap-2 font-display font-semibold
-      border border-ink/20 rounded-lg px-5 py-2.5 shadow-brutal-sm
-      transition-all duration-150
-      hover:bg-ink/5
-      active:translate-y-px
-      disabled:opacity-50 disabled:pointer-events-none
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2;
+  .section-band {
+    @apply bg-band border-y border-line;
   }
-  .brutal-input {
-    @apply w-full border border-ink/20 rounded-lg px-4 py-2.5 bg-white
-      font-body placeholder:text-ink/40
-      focus:outline-none focus:ring-2 focus:ring-navy/30 focus:border-navy;
+  .section-head {
+    @apply mb-7;
   }
-  .brutal-badge {
-    @apply inline-flex items-center font-display font-semibold text-xs uppercase tracking-wide
-      border border-ink/15 rounded-full px-3 py-1;
+  .section-head-center {
+    @apply text-center;
   }
-  .brutal-nav-link {
-    @apply font-display font-semibold border border-transparent rounded-lg px-4 py-2
-      hover:border-ink/15 hover:bg-muted transition-all;
+  .kicker {
+    @apply block text-blue text-[0.78rem] font-bold uppercase mb-2;
+    letter-spacing: 0.08em;
   }
-  .brutal-alert {
-    @apply border border-ink/15 rounded-lg px-4 py-2.5 text-sm font-semibold;
+  .lead {
+    @apply text-ink-2 max-w-[60ch];
   }
-  .brutal-table {
-    @apply w-full text-sm;
+  .card {
+    @apply bg-paper border border-line rounded-card shadow-card p-[22px];
   }
-  .brutal-table th {
-    @apply font-display text-xs font-bold uppercase tracking-wide text-left px-4 py-2.5 border-b-2 border-ink/20 bg-muted;
+  .card-title {
+    @apply text-navy font-bold text-[1.05rem] pb-3 mb-3 border-b border-line;
   }
-  .brutal-table td {
-    @apply px-4 py-3 border-b border-ink/10;
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 min-h-[44px] px-5 rounded-ctl
+      border border-navy bg-navy text-white no-underline cursor-pointer whitespace-nowrap
+      text-[0.92rem] font-bold uppercase;
+    letter-spacing: 0.04em;
   }
-  .brutal-table tr:last-child td {
+  .btn:hover {
+    @apply bg-navy-deep text-white;
+  }
+  .btn-outline {
+    @apply bg-paper text-navy;
+  }
+  .btn-outline:hover {
+    @apply bg-blue-soft text-navy-deep;
+  }
+  .btn-amber {
+    @apply bg-amber border-amber;
+  }
+  .btn-amber:hover {
+    background: #92400e;
+    @apply text-white;
+  }
+  .btn-small {
+    @apply min-h-[36px] px-3 py-1.5 text-[0.8rem];
+  }
+  .btn:disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+  .chip {
+    @apply inline-block px-2.5 py-[3px] rounded-full bg-blue-soft text-navy text-[0.85rem] font-medium;
+  }
+  .ctl-input {
+    @apply w-full min-h-[44px] px-3 py-2 border border-line-strong rounded-ctl bg-paper text-ink text-base;
+  }
+  .ctl-input::placeholder {
+    @apply text-muted;
+  }
+  .ctl-input:focus {
+    @apply outline-none border-blue;
+  }
+  .ctl-label {
+    @apply block text-sm font-bold uppercase mb-1.5;
+    letter-spacing: 0.04em;
+  }
+  .seg {
+    @apply inline-flex flex-wrap border border-line-strong rounded-ctl overflow-hidden bg-paper;
+  }
+  .seg-btn {
+    @apply min-h-[42px] px-4 border-0 border-r border-line-strong bg-transparent text-ink-2 text-[0.92rem] font-semibold cursor-pointer;
+  }
+  .seg-btn:last-child {
+    @apply border-r-0;
+  }
+  .seg-btn[aria-pressed="true"] {
+    @apply bg-navy text-white;
+  }
+  .data-wrap {
+    @apply overflow-x-auto border border-line rounded-card bg-paper;
+  }
+  table.data {
+    @apply w-full text-[0.95rem];
+    border-collapse: collapse;
+  }
+  table.data th,
+  table.data td {
+    @apply px-3.5 py-3 text-left align-top border-b border-line;
+  }
+  table.data th {
+    @apply bg-band text-navy text-[0.78rem] font-bold uppercase whitespace-nowrap;
+    letter-spacing: 0.06em;
+  }
+  table.data tr:last-child td {
     @apply border-b-0;
   }
+  table.data td.n,
+  table.data th.n {
+    @apply text-right num;
+  }
   .skeleton {
-    @apply animate-pulse bg-muted border border-ink/10 rounded-lg;
+    @apply animate-pulse bg-band border border-line rounded-card;
+  }
+  .sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
   }
 }
