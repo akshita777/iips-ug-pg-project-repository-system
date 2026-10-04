@@ -1,6 +1,6 @@
 # 16. UI Mockups and Screen Specifications
 
-This document describes what each screen looks like and how it behaves. Screens marked Live exist in `frontend/` today. The visual language for all screens is institute formal: white paper, deep navy authority bar, thin slate borders, soft realistic shadows, saffron institute strip, no marquee and no tilted stickers.
+This document describes what each screen looks like and how it behaves. Screens marked Live exist in `frontend/` today. The visual language for all screens is the institutional CoMET system ported from the IIPS Research Portal: white paper, navy authority, IEEE blue actions, amber highlights, Inter type, 1px borders, 6px cards, plain data tables, masthead with DAVV/IIPS crests, blue navbar, PageBand heroes, 4-column footer.
 
 ---
 
@@ -11,31 +11,40 @@ All screens share one token set, defined in `frontend/tailwind.config.ts` and `f
 | Token | Value | Used for |
 |-------|-------|----------|
 | paper | #FFFFFF | Page background, pure white |
-| ink | #1A2233 | Borders, text, deep slate |
-| navy | #1E3A8A | Authority bar, primary text, key borders |
-| saffron | #FF9933 | Institute identity strip |
-| primary | #2B6CB0, always with solid white text | Hero cards, primary actions, active states |
-| secondary slate | #E8EEF9 | Coordinator accents, highlights |
-| accent sky | #EFF6FF | Info fills, light focus background |
-| success | #DCFCE7 | Approved and completed states |
-| danger blush | #FEE2E2 fill plus #B91C1C text | Errors and rejected states, dark text for contrast |
-| warn amber | #FEF3C7 | Pending and review states |
-| muted paper | #F1F5F9 | Inactive fills |
-| lilac muted | #EEF2FF | Admin, reports, muted fourth accent |
+| navy | #004b76 | Headings, masthead, navbar active, primary buttons, footer titles |
+| navy-deep | #00395a | Button and link hover |
+| blue | #00629b | Links, meters, navbar |
+| blue-soft | #e6f0f7 | Chips, outline hover, info fills |
+| amber | #b45309 | Primary CTA, notice text, focus ring (AA-safe with white text) |
+| amber-text | #92400e | Text on cream |
+| cream | #fffbeb | Notice strip background |
+| band | #f8fafc | Banded sections, table headers |
+| line | #e2e8f0 | Borders |
+| line-strong | #cbd5e1 | Control borders |
+| ink | #1e293b | Body text |
+| ink-2 | #475569 | Secondary text |
+| muted | #526070 | Captions |
+| success | #DCFCE7 fill + #166534 text | Approved and completed states |
+| warn | #FEF3C7 fill + #92400e text | Pending and review states |
+| danger | #FEE2E2 fill + #991b1b text | Errors and rejected states |
 
 Shared building blocks live in `frontend/components/ui/`:
 
 | Component | File | Behavior |
 |-----------|------|----------|
-| Button | `button.tsx` | Thin border plus soft shadow. On hover the background lightens. Variants for primary, slate, sky, dark, white, success, warn, lilac, danger with dark red text. |
-| Card | `card.tsx` | White fill, thin slate border, soft shadow. Holds one idea per card. CardHover adds a subtle lift on hover. |
-| Input, Textarea | `input.tsx` | Thin border, navy focus ring, inline error text in dark red. |
-| StatusBadge | `badge.tsx` | Pill with thin border. Color follows project or allocation status, so Submitted reads sky and Rejected reads blush with dark red text at a glance. |
-| Alert | `alert.tsx` | Bordered message box with tones info, success, warn, danger, neutral, lilac. Used for form errors. |
-| Avatar | `avatar.tsx` | Initials circle cycling pastel fills. |
-| Tabs | `tabs.tsx` | Pill tab group for Files, Guide, Result sections. |
-| Table | `table.tsx` | Card wrapped table with sand header row plus skeleton rows for loading. |
-| EmptyState | `empty-state.tsx` | Dashed card with title, hint, and optional action for not yet states. |
+| Button | `button.tsx` | Navy solid lead, outline, amber CTA, soft status tones. Uppercase 700 labels, 44px targets. |
+| Card | `card.tsx` | White fill, 1px line border, soft shadow, 6px radius. Title gets navy plus a bottom rule. |
+| Input, Textarea, SelectField | `input.tsx`, `select.tsx` | 44px controls, strong-line borders, blue focus border, dark-red error text. |
+| StatusBadge | `badge.tsx` | Pill chips: blue-soft info, warn-soft pending, good-soft approved, bad-soft rejected. |
+| Grade | `grade.tsx` | Letter pill from marks: A green, B blue, C amber, D slate, Pending dashed. |
+| Meter | `meter.tsx` | Label plus points/max plus blue progress track for analytics and rubric splits. |
+| Alert | `alert.tsx` | Soft fills with dark text per tone. Errors name the problem and the recovery. |
+| Avatar | `avatar.tsx` | Initials circle on soft fills, photo mode ready. |
+| Tabs | `tabs.tsx` | Segmented control with `aria-pressed` navy active state. |
+| Table | `table.tsx` | Bordered wrapper, uppercase navy headers on band background, tabular numerals. |
+| EmptyState | `empty-state.tsx` | Centered card with title, hint, and outline action link. |
+| PageBand | `layout/page-band.tsx` | Breadcrumb plus kicker plus title plus lead over the campus photo wash. |
+| ErrorCard | `ui/error-card.tsx` | Shared kicker-headed error card with retry, one title per route. |
 
 Type uses Archivo for headings and Space Grotesk for body, loaded in `frontend/app/layout.tsx`.
 
