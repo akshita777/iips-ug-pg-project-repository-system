@@ -59,9 +59,24 @@ export default function UsersPage() {
           {summary && (
             <Card>
               <CardTitle>Department summary</CardTitle>
-              <pre className="mt-2 overflow-x-auto font-mono text-xs bg-band border border-line rounded-card p-3">
-                {JSON.stringify(summary, null, 2)}
-              </pre>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th className="n">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(summary).map(([key, value]) => (
+                    <tr key={key}>
+                      <td className="font-bold capitalize">{key.replace(/([A-Z])/g, " $1")}</td>
+                      <td className="font-mono text-xs n break-all">
+                        {typeof value === "object" ? JSON.stringify(value) : String(value)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Card>
           )}
 
