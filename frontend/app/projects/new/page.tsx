@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NewProjectForm } from "./form";
+import { SubmitGate } from "./gate";
 import { PageBand } from "@/components/layout/page-band";
+
+import { Protected } from "@/components/layout/protected";
 
 export const metadata: Metadata = {
   title: "Submit project | IIPS Project Portal",
@@ -10,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function NewProjectPage() {
   return (
-    <>
+    <Protected allowed={["STUDENT"]}>
       <PageBand
         kicker="Submission"
         title="Submit project"
@@ -19,7 +22,9 @@ export default function NewProjectPage() {
       />
       <div className="section">
         <div className="wrap mx-auto max-w-2xl space-y-5">
-          <NewProjectForm />
+          <SubmitGate>
+            <NewProjectForm />
+          </SubmitGate>
           <p className="text-sm text-center">
             <Link href="/dashboard" className="font-semibold">
               Back to dashboard
@@ -27,6 +32,6 @@ export default function NewProjectPage() {
           </p>
         </div>
       </div>
-    </>
+    </Protected>
   );
 }

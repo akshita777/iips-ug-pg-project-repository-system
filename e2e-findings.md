@@ -17,7 +17,6 @@
 All 3 failures are the same bug on 3 engines (finding F1). Everything else that could run without writes passes on every browser.
 
 ## Write-run results (E2E_WRITE=1, approved 2026-10-04)
-
 | Suite | Passed | Failed |
 |-------|--------|--------|
 | Chromium lifecycle (21 steps) | 21 | 0 |
@@ -39,6 +38,20 @@ the 48-minute-old `spring-boot:run`, not an app bug). Restarted clean in 6.7s
 with schema up to date. Local runs should use `mvn spring-boot:run` with
 adequate memory or a process supervisor; this is an environment note, not a
 finding against the code.
+
+## OAuth and profile-gate results (2026-10-04)
+
+GitHub login resolves to register-or-dashboard correctly at the seams that
+can run without a live GitHub grant: unknown GitHub email gets
+`needsRegistration` with role `INCOMPLETE` (backend, verified by code read);
+the callback routes that to `/auth/complete-profile` (existing behavior).
+`GET /users/me` and `PATCH /users/me` verified live (student profile with
+roll data, 400 on bad roll, 400 for faculty semester, 403 anonymous).
+Submit gate verified in all runs: a student without a roll number sees
+"Complete your profile first" with a working button instead of the form;
+update mode prefills, saves, and lands on `/projects/new`.
+Still needs a human once: enable the GitHub provider in the Supabase
+dashboard and whitelist `/auth/callback`, or the button cannot start.
 
 ## Environment problems hit during the run
 

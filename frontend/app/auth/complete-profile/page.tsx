@@ -10,9 +10,11 @@ import { useAuth } from "@/lib/auth";
 
 const roles = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR"] as const;
 
+type Mode = "register" | "update";
+
 export default function CompleteProfilePage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, token, ready } = useAuth();
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,22 +26,42 @@ export default function CompleteProfilePage() {
   
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<Mode | null>(null);
   
   useEffect(() => {
-    // Load from sessionStorage
+    if (!ready) return;
+    // GitHub first-timers arrive with session data and register a new account.
     const storedEmail = sessionStorage.getItem("githubEmail");
-    const storedName = sessionStorage.getItem("githubName");
     const storedToken = sessionStorage.getItem("githubToken");
-    
-    if (!storedEmail || !storedToken) {
-      router.push("/login?error=missing_github_data");
+
+    if (storedEmail && storedToken) {
+      setEmail(storedEmail);
+      setMode("register");
       return;
     }
-    
-    setEmail(storedEmail);
-    // Note: We deliberately do NOT pre-fill the name from GitHub,
-    // so the user is forced to enter their official academic registered name.
-  }, [router]);
+
+    // Logged-in users with gaps (no roll number yet) update their profile.
+    if (token) {
+      api
+        .get<{ name: string; role: string; rollNumber?: string | null; semester?: number | null }>(
+          "/users/me"
+        )
+        .then((res) => {
+          setEmail("");
+          setName(res.data.name ?? "");
+          if ((roles as readonly string[]).includes(res.data.role)) {
+            setRole(res.data.role as (typeof roles)[number]);
+          }
+          setRollNumber(res.data.rollNumber ?? "");
+          setSemester(res.data.semester ? String(res.data.semester) : "");
+          setMode("update");
+        })
+        .catch(() => router.push("/login?error=profile_failed"));
+      return;
+    }
+
+    router.push("/login?error=missing_github_data");
+  }, [router, ready, token]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,6 +85,17 @@ export default function CompleteProfilePage() {
     
     setLoading(true);
     try {
+      if (mode === "update") {
+        const payload: { name?: string; rollNumber?: string; semester?: number } = {};
+        if (name.trim()) payload.name = name.trim();
+        if (role === "STUDENT") {
+          if (rollNumber.trim()) payload.rollNumber = rollNumber.toUpperCase();
+          if (semester) payload.semester = Number(semester);
+        }
+        await api.patch("/users/me", payload);
+        router.push("/projects/new");
+        return;
+      }
       // Generate a secure random password since they will use GitHub to login
       const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10) + "Aa1!";
       
@@ -94,23 +127,41 @@ export default function CompleteProfilePage() {
     }
   }
 
+  if (!mode) {
+    return (
+      <div className="section">
+        <div className="wrap">
+          <div className="mx-auto max-w-md card" aria-busy="true" aria-label="Loading">
+            <div className="skeleton h-40 w-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="section">
       <div className="wrap">
         <div className="mx-auto max-w-md card">
           <span className="kicker">IIPS Project Portal</span>
-          <h1>Complete Profile</h1>
-          <p className="muted">We just need a few more details to set up your IIPS account.</p>
+          <h1>{mode === "update" ? "Update profile" : "Complete Profile"}</h1>
+          <p className="muted">
+            {mode === "update"
+              ? "Fill in the missing details to unlock project submission."
+              : "We just need a few more details to set up your IIPS account."}
+          </p>
           
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
-            <Input 
-              label="Email" 
-              type="email" 
-              name="email" 
-              value={email} 
-              disabled 
-              className="bg-muted cursor-not-allowed text-ink-2" 
-            />
+            {mode === "register" && (
+              <Input 
+                label="Email" 
+                type="email" 
+                name="email" 
+                value={email} 
+                disabled 
+                className="bg-muted cursor-not-allowed text-ink-2" 
+              />
+            )}
             
             <Input 
               label="Full name" 
@@ -162,7 +213,7 @@ export default function CompleteProfilePage() {
             {error && <Alert tone="danger">{error}</Alert>}
             
             <Button type="submit" className="w-full mt-6" disabled={loading}>
-              {loading ? "Saving..." : "Complete Registration"}
+              {loading ? "Saving..." : mode === "update" ? "Save and continue" : "Complete Registration"}
             </Button>
           </form>
         </div>
