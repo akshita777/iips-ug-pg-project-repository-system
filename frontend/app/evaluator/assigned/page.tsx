@@ -5,6 +5,8 @@ import api from "@/lib/api";
 import { apiErrorMessage, type Evaluation, type Rubric } from "@/lib/types";
 import { useToast } from "@/components/ui/toast";
 import { Protected } from "@/components/layout/protected";
+import { PageBand } from "@/components/layout/page-band";
+import { Grade } from "@/components/ui/grade";
 import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
@@ -82,77 +84,84 @@ export default function AssignedPage() {
 
   return (
     <Protected allowed={["EVALUATOR", "COORDINATOR", "ADMIN"]}>
-      <div className="space-y-5">
-        <div className="brutal-card bg-accent p-6">
-          <h1 className="text-2xl md:text-3xl font-black">Assigned evaluations</h1>
-          <p className="mt-1 text-sm text-ink/70">Rubric based marks. Project must be approved first.</p>
-        </div>
+      <PageBand
+        kicker="Evaluation"
+        title="Assigned evaluations"
+        lead="Rubric based marks. Project must be approved first."
+        crumbs={[{ label: "Assigned" }]}
+      />
+      <div className="section">
+        <div className="wrap space-y-5">
+          {error && <Alert tone="danger">{error}</Alert>}
 
-        {error && <Alert tone="danger">{error}</Alert>}
-
-        <div className="brutal-card bg-white p-5 space-y-3">
-          <p className="font-display font-bold">Submit marks</p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Input label="Project ID" name="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} placeholder="e.g. 1" />
-            <Input label="Total marks" name="marks" value={marks} onChange={(e) => setMarks(e.target.value)} placeholder="e.g. 85" />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {rubrics.map((r) => (
-              <button
-                key={r.id}
-                type="button"
-                onClick={() => setRubricId(String(r.id))}
-                className={`brutal-badge cursor-pointer ${rubricId === String(r.id) ? "bg-ink text-white" : "bg-white"}`}
-              >
-                {r.name}
-              </button>
-            ))}
+          <div className="card space-y-3">
+            <h2 className="card-title">Submit marks</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Input label="Project ID" name="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} placeholder="e.g. 1" />
+              <Input label="Total marks" name="marks" value={marks} onChange={(e) => setMarks(e.target.value)} placeholder="e.g. 85" />
+            </div>
+            <div className="seg" role="group" aria-label="Rubric">
+              {rubrics.map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  aria-pressed={rubricId === String(r.id)}
+                  onClick={() => setRubricId(String(r.id))}
+                  className="seg-btn"
+                >
+                  {r.name}
+                </button>
+              ))}
+              {rubrics.length === 0 && (
+                <span className="text-sm muted px-4 inline-flex items-center min-h-[42px]">No rubrics seeded yet.</span>
+              )}
+            </div>
             {rubrics.length === 0 && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-ink/60">No rubrics seeded yet.</span>
+              <>
+                <Input label="Rubric ID" name="rubricId" value={rubricId} onChange={(e) => setRubricId(e.target.value)} placeholder="e.g. 1" />
                 <Button variant="white" size="sm" type="button" onClick={addRubric}>
                   Create standard rubric
                 </Button>
-              </div>
+              </>
             )}
+            <Textarea label="Feedback" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="Strengths, gaps, viva notes." />
+            <Button size="sm" type="button" onClick={submit}>
+              Submit evaluation
+            </Button>
           </div>
-          {!rubrics.length && (
-            <Input label="Rubric ID" name="rubricId" value={rubricId} onChange={(e) => setRubricId(e.target.value)} placeholder="e.g. 1" />
-          )}
-          <Textarea label="Feedback" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="Strengths, gaps, viva notes." />
-          <Button variant="dark" size="sm" type="button" onClick={submit}>
-            Submit evaluation
-          </Button>
-        </div>
 
-        {loading ? (
-          <div className="brutal-card bg-white">
-            <TableSkeleton rows={3} />
-          </div>
-        ) : assigned.length === 0 ? (
-          <EmptyState title="Nothing assigned" desc="Evaluations assigned to you appear here." />
-        ) : (
-          <Table>
-            <thead>
-              <tr>
-                <th>Project</th>
-                <th>Marks</th>
-                <th>Feedback</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assigned.map((e) => (
-                <tr key={e.id}>
-                  <td className="font-bold">
-                    {e.projectTitle || `#${e.projectId}`} <StatusBadge status="EVALUATED" className="ml-2" />
-                  </td>
-                  <td className="font-mono font-bold">{e.totalMarks ?? "—"}</td>
-                  <td className="text-ink/70">{e.feedback || "—"}</td>
+          {loading ? (
+            <div className="card">
+              <TableSkeleton rows={3} />
+            </div>
+          ) : assigned.length === 0 ? (
+            <EmptyState title="Nothing assigned" desc="Evaluations assigned to you appear here." />
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Project</th>
+                  <th className="n">Marks</th>
+                  <th>Feedback</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+              </thead>
+              <tbody>
+                {assigned.map((e) => (
+                  <tr key={e.id}>
+                    <td className="font-bold">
+                      {e.projectTitle || `#${e.projectId}`} <StatusBadge status="EVALUATED" className="ml-2" />
+                    </td>
+                    <td className="font-mono font-bold n">
+                      <Grade marks={e.totalMarks !== undefined && e.totalMarks !== null ? Number(e.totalMarks) : null} />{" "}
+                      {e.totalMarks ?? "—"}
+                    </td>
+                    <td className="muted">{e.feedback || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </div>
       </div>
     </Protected>
   );

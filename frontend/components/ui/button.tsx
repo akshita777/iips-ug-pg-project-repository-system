@@ -12,7 +12,8 @@ type Variant =
   | "warn"
   | "lilac"
   | "navy"
-  | "amber";
+  | "amber"
+  | "outline";
 type Size = "sm" | "md" | "lg";
 
 const variantStyles: Record<Variant, string> = {
@@ -27,6 +28,7 @@ const variantStyles: Record<Variant, string> = {
   danger: "btn bg-bad-soft border-bad-soft text-bad",
   warn: "btn bg-warn-soft border-warn-soft text-warn",
   lilac: "btn bg-band border-line text-ink",
+  outline: "btn btn-outline",
 };
 
 const sizeStyles: Record<Size, string> = {

@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import { apiErrorMessage, type UserRow, type Role } from "@/lib/types";
 import { useToast } from "@/components/ui/toast";
 import { Protected } from "@/components/layout/protected";
+import { PageBand } from "@/components/layout/page-band";
 import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
@@ -45,63 +46,66 @@ export default function UsersPage() {
 
   return (
     <Protected allowed={["ADMIN"]}>
-      <div className="space-y-5">
-        <div className="brutal-card bg-secondary p-6">
-          <h1 className="text-2xl md:text-3xl font-black">Users and system</h1>
-          <p className="mt-1 text-sm text-ink/70">Manage accounts, assign roles, view department summary.</p>
-        </div>
+      <PageBand
+        kicker="Administration"
+        title="Users and system"
+        lead="Manage accounts, assign roles, view department summary."
+        crumbs={[{ label: "Users" }]}
+      />
+      <div className="section">
+        <div className="wrap space-y-5">
+          {error && <Alert tone="danger">{error}</Alert>}
 
-        {error && <Alert tone="danger">{error}</Alert>}
+          {summary && (
+            <Card>
+              <CardTitle>Department summary</CardTitle>
+              <pre className="mt-2 overflow-x-auto font-mono text-xs bg-band border border-line rounded-card p-3">
+                {JSON.stringify(summary, null, 2)}
+              </pre>
+            </Card>
+          )}
 
-        {summary && (
-          <Card className="bg-white">
-            <CardTitle>Department summary</CardTitle>
-            <pre className="mt-2 overflow-x-auto font-mono text-xs bg-muted border-2 border-ink rounded-lg p-3">
-              {JSON.stringify(summary, null, 2)}
-            </pre>
-          </Card>
-        )}
-
-        {loading ? (
-          <div className="brutal-card bg-white">
-            <TableSkeleton rows={4} />
-          </div>
-        ) : users.length === 0 ? (
-          <EmptyState title="No users" desc="Registered accounts appear here." />
-        ) : (
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id}>
-                  <td className="font-bold">{u.name}</td>
-                  <td className="font-mono text-xs">{u.email}</td>
-                  <td>
-                    <span className="brutal-badge bg-ink text-white">{u.role}</span>
-                  </td>
-                  <td>
-                    <div className="flex flex-wrap gap-1.5">
-                      {roles
-                        .filter((r) => r !== u.role)
-                        .map((r) => (
-                          <Button key={r} variant="white" size="sm" type="button" onClick={() => changeRole(u.id, r)}>
-                            {r}
-                          </Button>
-                        ))}
-                    </div>
-                  </td>
+          {loading ? (
+            <div className="card">
+              <TableSkeleton rows={4} />
+            </div>
+          ) : users.length === 0 ? (
+            <EmptyState title="No users" desc="Registered accounts appear here." />
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Change</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.id}>
+                    <td className="font-bold">{u.name}</td>
+                    <td className="font-mono text-xs">{u.email}</td>
+                    <td>
+                      <span className="chip bg-navy text-white">{u.role}</span>
+                    </td>
+                    <td>
+                      <div className="flex flex-wrap gap-1.5">
+                        {roles
+                          .filter((r) => r !== u.role)
+                          .map((r) => (
+                            <Button key={r} variant="white" size="sm" type="button" onClick={() => changeRole(u.id, r)}>
+                              {r}
+                            </Button>
+                          ))}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </div>
       </div>
     </Protected>
   );

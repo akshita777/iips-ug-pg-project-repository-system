@@ -17,7 +17,7 @@ export default function AuthCallback() {
       let session = null;
       try {
         const supabase = getSupabase();
-        const { data } = await supabase.auth.getSession();
+        const { data } = await getSupabase().auth.getSession();
         session = data.session;
       } catch {
         router.push("/login?error=no_session");
@@ -46,7 +46,7 @@ export default function AuthCallback() {
   return (
     <div className="flex h-screen items-center justify-center bg-paper">
       <div className="text-center space-y-4">
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-navy font-display text-lg font-black text-white animate-pulse">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-navy text-lg font-extrabold text-white animate-pulse">
           IP
         </div>
         <p className="font-mono text-xs font-bold uppercase tracking-widest text-ink">

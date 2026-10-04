@@ -6,6 +6,7 @@ import { apiErrorMessage, type GuideAllocation } from "@/lib/types";
 import { parseFacultyIds } from "@/lib/filters";
 import { useToast } from "@/components/ui/toast";
 import { Protected } from "@/components/layout/protected";
+import { PageBand } from "@/components/layout/page-band";
 import { Table } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
