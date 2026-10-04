@@ -39,6 +39,7 @@ export default function Home() {
             <Link href="/register" className="btn btn-outline">
               Get Started
             </Link>
+            <GithubButton />
           </div>
           <dl className="grid gap-5 mt-10 grid-cols-2 md:grid-cols-4 max-w-3xl">
             {[
@@ -64,7 +65,7 @@ export default function Home() {
             {
               icon: BookOpen,
               title: "Project Repository",
-              desc: "Submit BCA and MCA final projects with full version history. Every upload becomes a numbered version.",
+              desc: "Submit MCA (5 Years) Integrated final projects with full version history. Every upload becomes a numbered version.",
               href: "/projects",
             },
             {
