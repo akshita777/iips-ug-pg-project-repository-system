@@ -62,7 +62,7 @@ export interface Rubric {
   id: number;
   name: string;
   maxMarks?: number;
-  criteria?: string;
+  criteria?: Record<string, number>;
 }
 
 export interface CodeReview {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen, Users, GitBranch } from "lucide-react";
+import { GithubButton } from "@/components/auth/github-button";
 
 export default function Home() {
   return (

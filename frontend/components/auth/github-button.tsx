@@ -1,6 +1,7 @@
 "use client";
 
 import { getSupabase } from "@/lib/supabase";
+import { Github } from "lucide-react";
 
 export function GithubButton({ className, text = "Continue with GitHub" }: { className?: string, text?: string }) {
   const handleGithubLogin = async () => {
@@ -16,8 +17,9 @@ export function GithubButton({ className, text = "Continue with GitHub" }: { cla
     <button
       type="button"
       onClick={handleGithubLogin}
-      className={`btn btn-outline w-full ${className || ""}`}
+      className={`btn btn-outline ${className || ""}`}
     >
+      <Github size={18} />
       {text}
     </button>
   );

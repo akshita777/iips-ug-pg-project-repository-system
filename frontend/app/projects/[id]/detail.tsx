@@ -24,12 +24,142 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
-import { formatRelative, validateUpload } from "@/lib/format";
+import { formatRelative, validateUpload, n } from "@/lib/format";
+
+function AnalysisTab({ id }: { id: string }) {
+  const [report, setReport] = React.useState<Record<string, unknown> | null>(null);
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    api
+      .get<Record<string, unknown>>(`/projects/${id}/analysis`)
+      .then((res) => setReport(res.data))
+      .catch((e) => setError(apiErrorMessage(e, "Could not load analysis.")))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="card">
+        <TableSkeleton rows={3} />
+      </div>
+    );
+  }
+  if (error || !report) {
+    return <Alert tone="danger">{error || "No analysis available."}</Alert>;
+  }
+
+  const stat = (label: string, value: React.ReactNode) => (
+    <div className="card" key={label}>
+      <p className="num text-3xl font-extrabold text-navy m-0">{value}</p>
+      <p className="muted small m-0">{label}</p>
+    </div>
+  );
+
+  const languages = (report.languages ?? {}) as Record<string, number>;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-3">
+        {stat("Commits", n(Number(report.commitCount ?? 0)))}
+        {stat("Active days", n(Number(report.activeDays ?? 0)))}
+        {stat("Commits per week", String(report.commitsPerWeek ?? 0))}
+      </div>
+      <div className="grid grid-3">
+        {stat("Versions uploaded", n(Number(report.uploadedVersions ?? 0)))}
+        {stat("Repo linked", report.repoLinked ? "Yes" : "No")}
+        {stat("Has README", report.hasReadme ? "Yes" : "No")}
+      </div>
+      {Object.keys(languages).length > 0 && (
+        <div className="card">
+          <h2 className="card-title">Languages</h2>
+          <ul className="chips">
+            {Object.entries(languages).map(([lang, bytes]) => (
+              <li key={lang} className="chip">
+                {lang} <span className="num">{n(Number(bytes))}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {Array.isArray(report.authors) && report.authors.length > 0 && (
+        <div className="card">
+          <h2 className="card-title">Commit authors</h2>
+          <ul className="chips">
+            {(report.authors as string[]).map((a) => (
+              <li key={a} className="chip">
+                {a}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SimilarityTab({ id }: { id: string }) {
+  const [flags, setFlags] = React.useState<Record<string, unknown>[]>([]);
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    api
+      .get<Record<string, unknown>[]>(`/projects/${id}/similarity`)
+      .then((res) => setFlags(res.data))
+      .catch((e) => setError(apiErrorMessage(e, "Could not load similarity report.")))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="card">
+        <TableSkeleton rows={3} />
+      </div>
+    );
+  }
+  if (error) {
+    return <Alert tone="danger">{error}</Alert>;
+  }
+  if (flags.length === 0) {
+    return (
+      <EmptyState
+        title="No overlaps flagged"
+        desc="Nothing in the repository crosses the similarity threshold with this project's title or abstract."
+      />
+    );
+  }
+  return (
+    <Table>
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th className="n">Similarity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {flags.map((f) => (
+          <tr key={String(f.projectId)}>
+            <td className="font-bold">
+              <a href={`/projects/${f.projectId}`} className="no-underline hover:underline">
+                {String(f.title ?? `#${f.projectId}`)}
+              </a>
+            </td>
+            <td className="font-mono n">{Math.round(Number(f.score ?? 0) * 100)}%</td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+}
 
 const tabs = [
   { id: "files", label: "Files" },
   { id: "reviews", label: "Reviews" },
   { id: "repo", label: "Repository" },
+  { id: "analysis", label: "Analysis" },
+  { id: "similarity", label: "Similarity" },
   { id: "team", label: "Team" },
   { id: "wiki", label: "Wiki" },
   { id: "result", label: "Result" },
@@ -462,6 +592,14 @@ export function ProjectDetail({ id }: { id: string }) {
                     </Table>
                   )}
                 </div>
+              )}
+
+              {active === "analysis" && (
+                <AnalysisTab id={id} />
+              )}
+
+              {active === "similarity" && (
+                <SimilarityTab id={id} />
               )}
 
               {active === "team" && (

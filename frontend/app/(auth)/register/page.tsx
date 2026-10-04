@@ -11,7 +11,7 @@ import { GithubButton } from "@/components/auth/github-button";
 import { useAuth } from "@/lib/auth";
 import api from "@/lib/api";
 
-const roles = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN"] as const;
+const roles = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR"] as const;
 
 const schema = z.object({
   name: z.string().min(2, "Enter your full name"),
@@ -22,7 +22,7 @@ const schema = z.object({
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { token, ready } = useAuth();
+  const { token, ready, login } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,10 +45,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const { data } = await api.post("/auth/register", { name, email, password, role });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("email", data.email ?? email);
+      login(data.token, data.refreshToken, data.role, data.email ?? email);
       router.push("/dashboard");
     } catch {
       setError("Registration failed. This email may already be used.");
@@ -64,8 +61,15 @@ export default function RegisterPage() {
           <span className="kicker">IIPS Project Portal</span>
           <h1>Create account</h1>
           <p className="muted">Join the IIPS project portal.</p>
-          <GithubButton />
-          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          <GithubButton className="w-full mt-4" text="Sign up with GitHub" />
+          
+          <div className="flex items-center gap-3 my-6">
+            <hr className="flex-1 border-line" />
+            <span className="text-xs uppercase font-bold text-muted" style={{ letterSpacing: "0.06em" }}>Or</span>
+            <hr className="flex-1 border-line" />
+          </div>
+
+          <form onSubmit={onSubmit} className="space-y-4">
             <Input label="Full name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Aarav Sharma" />
             <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
             <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 characters" />

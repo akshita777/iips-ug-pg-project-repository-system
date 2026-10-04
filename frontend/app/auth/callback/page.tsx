@@ -30,6 +30,14 @@ export default function AuthCallback() {
             access_token: session.access_token,
           });
 
+          if (data.needsRegistration) {
+            sessionStorage.setItem("githubEmail", data.email);
+            sessionStorage.setItem("githubName", data.name || "");
+            sessionStorage.setItem("githubToken", session.access_token);
+            router.push("/auth/complete-profile");
+            return;
+          }
+
           // Log into your custom auth context
           login(data.token, data.refreshToken, data.role, data.email);
           router.push("/dashboard");
@@ -44,7 +52,7 @@ export default function AuthCallback() {
   }, [router, login]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-paper">
+    <div className="flex min-h-[60vh] items-center justify-center bg-paper">
       <div className="text-center space-y-4">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-navy text-lg font-extrabold text-white animate-pulse">
           IP

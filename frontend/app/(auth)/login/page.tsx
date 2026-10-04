@@ -18,7 +18,7 @@ const schema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
-  const { token, ready } = useAuth();
+  const { token, ready, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,10 +39,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data } = await api.post("/auth/login", { email, password });
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("email", data.email ?? email);
+      login(data.token, data.refreshToken, data.role, data.email ?? email);
       router.push("/dashboard");
     } catch {
       setError("Login failed. Check your email and password.");
@@ -58,8 +55,15 @@ export default function LoginPage() {
           <span className="kicker">IIPS Project Portal</span>
           <h1>Welcome back</h1>
           <p className="muted">Login to your IIPS project account.</p>
-          <GithubButton />
-          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          <GithubButton className="w-full mt-4" />
+          
+          <div className="flex items-center gap-3 my-6">
+            <hr className="flex-1 border-line" />
+            <span className="text-xs uppercase font-bold text-muted" style={{ letterSpacing: "0.06em" }}>Or</span>
+            <hr className="flex-1 border-line" />
+          </div>
+
+          <form onSubmit={onSubmit} className="space-y-4">
             <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
             <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" />
             {error && <Alert tone="danger">{error}</Alert>}
