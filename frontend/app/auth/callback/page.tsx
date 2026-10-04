@@ -42,7 +42,7 @@ export default function AuthCallback() {
           login(data.token, data.refreshToken, data.role, data.email);
           router.push("/dashboard");
         } catch (error) {
-          console.error("Backend auth failed", error);
+          console.error("Backend auth failed", error instanceof Error ? error.message : error);
           router.push("/login?error=auth_failed");
         }
       } else {

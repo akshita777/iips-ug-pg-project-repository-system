@@ -11,6 +11,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog } from "@/components/ui/dialog";
 import { usePageTitle } from "@/lib/use-title";
 
 export default function AllocationPage() {
@@ -21,6 +22,9 @@ export default function AllocationPage() {
   const [error, setError] = React.useState("");
   const [facultyId, setFacultyId] = React.useState<Record<number, string>>({});
   const [working, setWorking] = React.useState(false);
+  const [pendingAction, setPendingAction] = React.useState<
+    { kind: "confirm" | "override"; id: number; facultyId?: number } | null
+  >(null);
 
   const load = React.useCallback(async () => {
     setLoading(true);
@@ -53,13 +57,7 @@ export default function AllocationPage() {
   }
 
   async function confirm(allocationId: number) {
-    try {
-      await api.post("/allocations/confirm", { allocationId });
-      push("Allocation confirmed.", "success");
-      load();
-    } catch (e) {
-      push(apiErrorMessage(e, "Confirm failed."), "danger");
-    }
+    setPendingAction({ kind: "confirm", id: allocationId });
   }
 
   async function override(allocationId: number) {
@@ -68,12 +66,24 @@ export default function AllocationPage() {
       push("Enter a faculty user id to override.", "danger");
       return;
     }
+    setPendingAction({ kind: "override", id: allocationId, facultyId: fid });
+  }
+
+  async function runPending() {
+    if (!pendingAction) return;
     try {
-      await api.post("/allocations/override", { allocationId, facultyId: fid });
-      push("Allocation overridden.", "success");
+      if (pendingAction.kind === "confirm") {
+        await api.post("/allocations/confirm", { allocationId: pendingAction.id });
+        push("Allocation confirmed.", "success");
+      } else {
+        await api.post("/allocations/override", { allocationId: pendingAction.id, facultyId: pendingAction.facultyId });
+        push("Allocation overridden.", "success");
+      }
       load();
     } catch (e) {
-      push(apiErrorMessage(e, "Override failed."), "danger");
+      push(apiErrorMessage(e, "Action failed."), "danger");
+    } finally {
+      setPendingAction(null);
     }
   }
 
@@ -146,6 +156,25 @@ export default function AllocationPage() {
           )}
         </div>
       </div>
+      <Dialog
+        open={pendingAction !== null}
+        onClose={() => setPendingAction(null)}
+        title={pendingAction?.kind === "override" ? "Override allocation?" : "Confirm allocation?"}
+      >
+        <p className="muted">
+          {pendingAction?.kind === "override"
+            ? `Move allocation #${pendingAction?.id} to faculty #${pendingAction?.facultyId}? This notifies both sides.`
+            : `Confirm allocation #${pendingAction?.id}? This notifies the student and guide.`}
+        </p>
+        <div className="flex flex-wrap gap-2 mt-4">
+          <Button size="sm" type="button" onClick={runPending}>
+            Confirm action
+          </Button>
+          <Button variant="white" size="sm" type="button" onClick={() => setPendingAction(null)}>
+            Cancel
+          </Button>
+        </div>
+      </Dialog>
     </Protected>
   );
 }

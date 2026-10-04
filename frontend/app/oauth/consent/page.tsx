@@ -15,14 +15,12 @@ function ConsentForm() {
   const redirectUri = searchParams.get("redirect_uri") || "/";
 
   const handleAllow = () => {
-    // In a real implementation, this would send an API request to the authorization server
-    // to grant the authorization code, and then redirect to the redirect_uri.
-    console.log("Allowed access for", clientId);
-    router.push(redirectUri);
+    // Authorization codes are minted by the real provider, not this stub.
+    // Surface that instead of silently pretending consent succeeded.
+    router.push(redirectUri + "?error=oauth_not_configured");
   };
 
   const handleDeny = () => {
-    console.log("Denied access for", clientId);
     router.push(redirectUri + "?error=access_denied");
   };
 

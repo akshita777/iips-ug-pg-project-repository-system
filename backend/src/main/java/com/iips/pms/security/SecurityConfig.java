@@ -80,7 +80,17 @@ public class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/v1/allocations").authenticated()
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/v1/allocations",
+                        "/api/v1/evaluations/assigned",
+                        "/api/v1/evaluations/rubrics",
+                        "/api/v1/notifications",
+                        "/api/v1/notifications/unread-count",
+                        "/api/v1/analytics/summary"
+                ).authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/v1/projects/*/analysis").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/v1/projects/*/similarity").hasAnyRole("FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN")
                 .requestMatchers("/api/v1/allocations/suggest",
                         "/api/v1/allocations/confirm",
                         "/api/v1/allocations/override").hasAnyRole("COORDINATOR", "ADMIN")
