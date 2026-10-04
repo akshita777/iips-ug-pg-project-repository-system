@@ -53,7 +53,7 @@ export default function DashboardPage() {
         <div className="grid gap-5 md:grid-cols-3">
           <Card className="bg-primary brutal-card-hover text-white">
             <CardTitle>{projects.length} projects</CardTitle>
-            <CardDescription className="!text-white/80">Live from GET /projects.</CardDescription>
+            <CardDescription className="!text-white">Live from GET /projects.</CardDescription>
             <Link href="/projects" className="brutal-btn bg-white text-sm mt-3">
               Open projects
             </Link>

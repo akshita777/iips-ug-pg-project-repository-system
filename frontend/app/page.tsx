@@ -34,7 +34,7 @@ export default function Home() {
           <br />
           Portal
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base md:text-lg font-body text-white/85">
+        <p className="mx-auto mt-4 max-w-xl text-base md:text-lg font-body text-white">
           Academic project repository and record management for BCA Sem 1-6 and MCA Sem 7-10.
           Submit projects, get guides allocated, track versions, and get evaluated.
         </p>
@@ -80,7 +80,7 @@ export default function Home() {
             >
               <span className="brutal-badge bg-ink text-white">{n}</span>
               <p className="mt-2 font-display font-bold">{title}</p>
-              <p className={`mt-1 ${bg === "bg-primary" ? "text-white/80" : "text-ink/70"}`}>{desc}</p>
+              <p className={`mt-1 ${bg === "bg-primary" ? "text-white" : "text-ink/70"}`}>{desc}</p>
             </li>
           ))}
         </ol>

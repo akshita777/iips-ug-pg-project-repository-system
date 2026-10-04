@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         ink: "#1A2233",
         paper: "#FFFFFF",
-        primary: "#2F7AC5",
+        primary: "#2B6CB0",
         secondary: "#E8EEF9",
         accent: "#EFF6FF",
         success: "#DCFCE7",

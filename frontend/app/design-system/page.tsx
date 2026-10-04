@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 const swatches = [
-  ["primary blue", "#2F7AC5", "bg-primary text-white"],
+  ["primary blue", "#2B6CB0", "bg-primary text-white"],
   ["secondary slate", "#E8EEF9", "bg-secondary"],
   ["accent sky", "#EFF6FF", "bg-accent"],
   ["success green", "#DCFCE7", "bg-success"],
@@ -31,7 +31,7 @@ export default function DesignSystemPage() {
       <section className="brutal-card bg-primary p-6 md:p-8 text-white">
         <span className="brutal-badge bg-white">Institute formal</span>
         <h1 className="mt-3 text-3xl md:text-4xl font-black">Blue lead with navy authority</h1>
-        <p className="mt-2 max-w-2xl text-sm md:text-base text-white/85">
+        <p className="mt-2 max-w-2xl text-sm md:text-base text-white">
           Sober university portal look. Muted academic blue for actions, deep navy header bar,
           white paper, thin slate borders, soft shadows. Saffron accent strip for institute identity.
         </p>
@@ -109,7 +109,7 @@ export default function DesignSystemPage() {
         <tbody>
           <tr>
             <td className="font-bold">primary</td>
-            <td className="font-mono text-xs">#2F7AC5</td>
+            <td className="font-mono text-xs">#2B6CB0</td>
             <td>hero cards, primary actions, white text</td>
           </tr>
           <tr>

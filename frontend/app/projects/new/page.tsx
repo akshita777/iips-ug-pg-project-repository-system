@@ -13,7 +13,7 @@ export default function NewProjectPage() {
       <div className="brutal-card bg-primary p-6 text-white">
         <span className="brutal-badge bg-white">Submission</span>
         <h1 className="mt-2 text-2xl md:text-3xl font-black">Submit project</h1>
-        <p className="mt-1 text-sm text-white/80">
+        <p className="mt-1 text-sm text-white">
           Every upload becomes a numbered version. Old versions are never overwritten.
         </p>
       </div>

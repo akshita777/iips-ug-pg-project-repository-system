@@ -69,19 +69,7 @@
   .brutal-table tr:last-child td {
     @apply border-b-0;
   }
-  .ticker-track {
-    @apply flex items-center gap-8 whitespace-nowrap;
-  }
   .skeleton {
     @apply animate-pulse bg-muted border border-ink/10 rounded-lg;
-  }
-}
-
-@keyframes ticker {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
   }
 }

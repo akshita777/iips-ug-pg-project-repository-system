@@ -42,7 +42,7 @@ export function ProjectsList() {
         <div className="brutal-card bg-primary p-6 flex flex-wrap items-center justify-between gap-3 text-white">
           <div>
             <h1 className="text-2xl md:text-3xl font-black">Projects</h1>
-            <p className="mt-1 text-sm text-white/80">BCA and MCA submissions with live status.</p>
+            <p className="mt-1 text-sm text-white">BCA and MCA submissions with live status.</p>
           </div>
           <Link href="/projects/new" className="brutal-btn bg-ink text-white text-sm">
             New project

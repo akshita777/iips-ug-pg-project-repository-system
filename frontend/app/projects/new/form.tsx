@@ -45,25 +45,25 @@ export function NewProjectForm() {
     <Card className="bg-white">
       <div className="space-y-4">
         <Input
-          label="Title"
+          label="Project title *"
           name="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Smart attendance system"
+          placeholder="e.g. Smart Attendance System using Face Recognition"
         />
         <Textarea
           label="Abstract"
           name="abstractText"
           value={abstractText}
           onChange={(e) => setAbstractText(e.target.value)}
-          placeholder="What problem does it solve and how?"
+          placeholder="What problem does it solve and how? Aim for 3 to 5 sentences."
         />
         <Input
           label="Tech stack"
           name="techStack"
           value={techStack}
           onChange={(e) => setTechStack(e.target.value)}
-          placeholder="Next.js, Spring Boot, PostgreSQL"
+          placeholder="e.g. Next.js, Spring Boot, PostgreSQL"
         />
         <div className="border-2 border-dashed border-ink rounded-lg bg-muted p-5 text-center text-sm">
           <p className="font-display font-bold">Report and code archive</p>
