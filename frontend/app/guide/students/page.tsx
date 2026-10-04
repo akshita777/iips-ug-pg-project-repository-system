@@ -10,8 +10,10 @@ import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { Avatar } from "@/components/ui/avatar";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function MyStudentsPage() {
+  usePageTitle("My students");
   const [rows, setRows] = React.useState<GuideAllocation[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");

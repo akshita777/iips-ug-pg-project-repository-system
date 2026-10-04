@@ -13,8 +13,10 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/ui/badge";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function PreferencesPage() {
+  usePageTitle("Guide preferences");
   const { push } = useToast();
   const [mine, setMine] = React.useState<GuideAllocation[]>([]);
   const [projectId, setProjectId] = React.useState("");

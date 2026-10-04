@@ -9,8 +9,10 @@ import { PageBand } from "@/components/layout/page-band";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function NotificationsPage() {
+  usePageTitle("Notifications");
   const { push } = useToast();
   const [items, setItems] = React.useState<AppNotification[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -56,7 +58,12 @@ export default function NotificationsPage() {
             <div className="space-y-3">
               {items.map((n) => (
                 <div key={n.id} className={`card ${n.read ? "" : "bg-blue-soft/40"}`}>
-                  <p className="font-bold m-0">{n.title || "Update"}</p>
+                  <p className="font-bold m-0">
+                    {!n.read && (
+                      <span className="chip bg-navy text-white mr-2">New</span>
+                    )}
+                    {n.title || "Update"}
+                  </p>
                   <p className="mt-1 text-sm muted">{n.message || "No details."}</p>
                   {!n.read && (
                     <Button variant="white" size="sm" type="button" onClick={() => markRead(n.id)} className="mt-2">

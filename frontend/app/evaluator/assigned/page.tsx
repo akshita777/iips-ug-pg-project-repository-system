@@ -13,8 +13,10 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { StatusBadge } from "@/components/ui/badge";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function AssignedPage() {
+  usePageTitle("Assigned evaluations");
   const { push } = useToast();
   const [assigned, setAssigned] = React.useState<Evaluation[]>([]);
   const [rubrics, setRubrics] = React.useState<Rubric[]>([]);
@@ -101,19 +103,22 @@ export default function AssignedPage() {
               <Input label="Total marks" name="marks" value={marks} onChange={(e) => setMarks(e.target.value)} placeholder="e.g. 85" />
             </div>
             <div className="seg" role="group" aria-label="Rubric">
-              {rubrics.map((r) => (
-                <button
-                  key={r.id}
-                  type="button"
-                  aria-pressed={rubricId === String(r.id)}
-                  onClick={() => setRubricId(String(r.id))}
-                  className="seg-btn"
-                >
-                  {r.name}
-                </button>
-              ))}
-              {rubrics.length === 0 && (
-                <span className="text-sm muted px-4 inline-flex items-center min-h-[42px]">No rubrics seeded yet.</span>
+              {rubrics.length === 0 ? (
+                <span className="text-sm muted px-4 inline-flex items-center min-h-[42px]">
+                  No rubrics yet. Create the standard one to begin.
+                </span>
+              ) : (
+                rubrics.map((r) => (
+                  <button
+                    key={r.id}
+                    type="button"
+                    aria-pressed={rubricId === String(r.id)}
+                    onClick={() => setRubricId(String(r.id))}
+                    className="seg-btn"
+                  >
+                    {r.name}
+                  </button>
+                ))
               )}
             </div>
             {rubrics.length === 0 && (

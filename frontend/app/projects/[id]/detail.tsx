@@ -277,7 +277,9 @@ export function ProjectDetail({ id }: { id: string }) {
               {error && <Alert tone="danger">{error}</Alert>}
 
               {(role === "FACULTY" || role === "COORDINATOR" || role === "ADMIN") && (
-                <div className="card flex flex-wrap gap-2">
+                <div className="card">
+                  <h2 className="card-title">Guide actions</h2>
+                  <div className="flex flex-wrap gap-2">
                   <Button variant="white" size="sm" type="button" onClick={() => act("/review", "Moved to review.")}>
                     Start review
                   </Button>
@@ -290,6 +292,7 @@ export function ProjectDetail({ id }: { id: string }) {
                   <Button variant="white" size="sm" type="button" onClick={() => act("/submit", "Submitted for review.")}>
                     Submit
                   </Button>
+                  </div>
                 </div>
               )}
 

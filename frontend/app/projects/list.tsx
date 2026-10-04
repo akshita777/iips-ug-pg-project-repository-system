@@ -12,6 +12,7 @@ import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { filterProjects, paginate, pageCount, type ProjectFilter } from "@/lib/filters";
+import { usePageTitle } from "@/lib/use-title";
 
 const PAGE_SIZE = 8;
 
@@ -23,6 +24,7 @@ const buckets: { value: ProjectFilter; label: string }[] = [
 ];
 
 export function ProjectsList() {
+  usePageTitle("Projects");
   const { role } = useAuth();
   const [projects, setProjects] = React.useState<Project[]>([]);
   const [loading, setLoading] = React.useState(true);

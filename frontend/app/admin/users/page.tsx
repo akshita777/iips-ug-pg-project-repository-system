@@ -11,10 +11,12 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
+import { usePageTitle } from "@/lib/use-title";
 
 const roles: Role[] = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN"];
 
 export default function UsersPage() {
+  usePageTitle("Users and system");
   const { push } = useToast();
   const [users, setUsers] = React.useState<UserRow[]>([]);
   const [summary, setSummary] = React.useState<Record<string, unknown> | null>(null);

@@ -11,8 +11,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function AllocationPage() {
+  usePageTitle("Guide allocation");
   const { push } = useToast();
   const [rows, setRows] = React.useState<GuideAllocation[]>([]);
   const [loading, setLoading] = React.useState(true);

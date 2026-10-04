@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
+import { GithubButton } from "@/components/auth/github-button";
+import { useAuth } from "@/lib/auth";
 import api from "@/lib/api";
 
 const roles = ["STUDENT", "FACULTY", "COORDINATOR", "EVALUATOR", "ADMIN"] as const;
@@ -20,12 +22,17 @@ const schema = z.object({
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { token, ready } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<(typeof roles)[number]>("STUDENT");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (ready && token) router.replace("/dashboard");
+  }, [ready, token, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -57,9 +64,7 @@ export default function RegisterPage() {
           <span className="kicker">IIPS Project Portal</span>
           <h1>Create account</h1>
           <p className="muted">Join the IIPS project portal.</p>
-          <Link href="/api/auth/signin/github" className="btn btn-outline w-full mt-2">
-            Continue with GitHub
-          </Link>
+          <GithubButton />
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <Input label="Full name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Aarav Sharma" />
             <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />

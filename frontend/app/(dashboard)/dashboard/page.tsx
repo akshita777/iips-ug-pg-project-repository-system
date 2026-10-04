@@ -11,8 +11,10 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
 import { n } from "@/lib/format";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function DashboardPage() {
+  usePageTitle("Dashboard");
   const { role, email, logout } = useAuth();
   const [projects, setProjects] = React.useState<Project[]>([]);
   const [unread, setUnread] = React.useState<number | null>(null);

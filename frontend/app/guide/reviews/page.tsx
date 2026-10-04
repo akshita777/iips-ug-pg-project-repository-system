@@ -10,8 +10,10 @@ import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
 import { StatusBadge } from "@/components/ui/badge";
+import { usePageTitle } from "@/lib/use-title";
 
 export default function ReviewQueuePage() {
+  usePageTitle("Review queue");
   const [projects, setProjects] = React.useState<Project[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
