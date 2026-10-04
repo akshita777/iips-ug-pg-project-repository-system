@@ -1,90 +1,145 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, GitBranch, Users, Sparkles } from "lucide-react";
-
-const features = [
-  {
-    icon: BookOpen,
-    title: "Project Repository",
-    desc: "Submit and track BCA and MCA final projects with full version history.",
-    bg: "bg-primary",
-  },
-  {
-    icon: Users,
-    title: "Guide Allocation",
-    desc: "Preference based allocation with coordinator review and approval.",
-    bg: "bg-secondary",
-  },
-  {
-    icon: GitBranch,
-    title: "Version Control",
-    desc: "Link GitHub repos, track commits, branches and code reviews.",
-    bg: "bg-accent",
-  },
-];
+import { BookOpen, Users, GitBranch } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="space-y-10">
-      <section className="brutal-card relative overflow-hidden bg-primary p-8 md:p-12 text-center">
-        <span className="brutal-badge bg-white">
-          <Sparkles size={14} className="mr-1" /> OOAD Lab Project
-        </span>
-        <h1 className="mt-4 text-4xl md:text-6xl font-black leading-tight text-white">
-          IIPS Project
-          <br />
-          Portal
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base md:text-lg font-body text-white">
-          Academic project repository and record management for BCA Sem 1-6 and MCA Sem 7-10.
-          Submit projects, get guides allocated, track versions, and get evaluated.
-        </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/register" className="brutal-btn bg-ink text-white text-base">
-            Get Started <ArrowRight size={18} />
-          </Link>
-          <Link href="/login" className="brutal-btn bg-white text-base">
-            Login
-          </Link>
-        </div>
-      </section>
-
-      <section className="grid gap-5 md:grid-cols-3">
-        {features.map((f) => (
-          <div key={f.title} className="brutal-card brutal-card-hover p-6">
-            <div className={`inline-flex items-center justify-center border-2 border-ink rounded-lg p-2.5 ${f.bg} ${f.bg === "bg-primary" ? "text-white" : ""}`}>
-              <f.icon size={22} strokeWidth={2.5} />
-            </div>
-            <h2 className="mt-4 text-xl font-black">{f.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink/70">{f.desc}</p>
+    <>
+      <section
+        className="border-b border-line"
+        style={{
+          background:
+            "linear-gradient(rgb(255 255 255 / 0.90), rgb(255 255 255 / 0.90)), url(/brand/iips-campus.webp) center 40% / cover",
+        }}
+      >
+        <div className="wrap py-12">
+          <span className="inline-flex items-center gap-2 bg-paper border border-line-strong rounded-full px-4 py-2 text-[0.8rem] font-bold uppercase text-navy" style={{ letterSpacing: "0.06em" }}>
+            <span className="inline-block h-2 w-2 rounded-full bg-good" aria-hidden="true" />
+            Academic session 2026-27
+          </span>
+          <h1 className="mt-4">
+            <span className="block">IIPS Project</span>
+            <span className="block text-blue">Repository Portal</span>
+          </h1>
+          <p className="text-ink-2 text-lg max-w-[60ch]">
+            International Institute of Professional Studies, DAVV Indore
+          </p>
+          <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-ink-2 mt-2">
+            <span className="inline-flex items-center gap-2">
+              <BookOpen size={18} aria-hidden="true" /> MCA (5 Years) Integrated projects
+            </span>
+            <span className="inline-block w-px h-4 bg-line-strong" aria-hidden="true" />
+            <span className="inline-flex items-center gap-2">
+              <Users size={18} aria-hidden="true" /> Students, guides and evaluators
+            </span>
+          </p>
+          <div className="flex flex-wrap gap-3 mt-6">
+            <Link href="/projects" className="btn">
+              Browse Projects
+            </Link>
+            <Link href="/register" className="btn btn-outline">
+              Get Started
+            </Link>
           </div>
-        ))}
+          <dl className="grid gap-5 mt-10 grid-cols-2 md:grid-cols-4 max-w-3xl">
+            {[
+              ["Submissions", "Draft to evaluated, every version kept"],
+              ["Guide allocation", "Preferences plus coordinator confirm"],
+              ["Reviews", "Guide feedback threads per project"],
+              ["Evaluation", "Rubric marks with feedback"],
+            ].map(([term, def]) => (
+              <div key={term}>
+                <dt className="text-[0.85rem] font-bold uppercase text-muted" style={{ letterSpacing: "0.05em" }}>
+                  {term}
+                </dt>
+                <dd className="m-0 mt-1 text-[0.95rem] text-ink-2">{def}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
-      <section className="brutal-card bg-white p-6 md:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-2xl font-black">How it works</h2>
-          <Link href="/design-system" className="font-mono text-xs font-bold uppercase tracking-wide underline underline-offset-4">
-            View design system
-          </Link>
-        </div>
-        <ol className="mt-4 grid gap-3 md:grid-cols-4 text-sm">
+      <section className="section">
+        <div className="wrap grid grid-3">
           {[
-            ["1", "Register", "Create your student or faculty account.", "bg-primary"],
-            ["2", "Submit", "Upload your project with version history.", "bg-accent"],
-            ["3", "Review", "Guide reviews and approves your work.", "bg-secondary"],
-            ["4", "Evaluate", "Evaluators grade using a rubric.", "bg-success"],
-          ].map(([n, title, desc, bg]) => (
-            <li
-              key={n}
-              className={`border-2 border-ink rounded-lg p-4 ${bg} ${bg === "bg-primary" ? "text-white" : ""}`}
-            >
-              <span className="brutal-badge bg-ink text-white">{n}</span>
-              <p className="mt-2 font-display font-bold">{title}</p>
-              <p className={`mt-1 ${bg === "bg-primary" ? "text-white" : "text-ink/70"}`}>{desc}</p>
-            </li>
+            {
+              icon: BookOpen,
+              title: "Project Repository",
+              desc: "Submit BCA and MCA final projects with full version history. Every upload becomes a numbered version.",
+              href: "/projects",
+            },
+            {
+              icon: Users,
+              title: "Guide Allocation",
+              desc: "Rank your preferred guides. Coordinators confirm or adjust every allocation.",
+              href: "/preferences",
+            },
+            {
+              icon: GitBranch,
+              title: "Reviews and Evaluation",
+              desc: "Link GitHub repos, collect guide reviews, and receive rubric marks with feedback.",
+              href: "/dashboard",
+            },
+          ].map((f) => (
+            <Link key={f.title} href={f.href} className="card no-underline hover:border-blue transition-colors">
+              <h2 className="card-title flex items-center gap-2">
+                <f.icon size={20} aria-hidden="true" className="text-blue" />
+                {f.title}
+              </h2>
+              <p className="muted m-0">{f.desc}</p>
+            </Link>
           ))}
-        </ol>
+        </div>
       </section>
-    </div>
+
+      <section className="section section-band">
+        <div className="wrap grid grid-2 items-start">
+          <div>
+            <span className="kicker">About the portal</span>
+            <h2>One place for IIPS project records</h2>
+            <p className="muted">
+              Submissions come from students. Guide allocations come from preferences plus
+              coordinator review. Marks and feedback come from evaluators against published
+              rubrics. Nothing lives in a spreadsheet.
+            </p>
+            <dl className="grid gap-5 mt-6 grid-cols-3">
+              {[
+                ["5", "Roles: student, guide, coordinator, evaluator, admin"],
+                ["6", "Workflow stages from draft to evaluated"],
+                ["100", "Marks scale on every rubric"],
+              ].map(([v, label]) => (
+                <div key={label}>
+                  <dd className="m-0 num text-2xl font-extrabold text-navy">{v}</dd>
+                  <dt className="text-[0.85rem] muted">{label}</dt>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div className="card">
+            <h3 className="kicker">How it works</h3>
+            <ol className="m-0 p-0 list-none grid gap-3">
+              {[
+                ["Register", "Create your student, faculty, coordinator, evaluator, or admin account."],
+                ["Submit", "Upload your project. Every file becomes a numbered version."],
+                ["Review", "Your guide reviews, approves, or returns the submission."],
+                ["Evaluate", "Evaluators grade against the rubric and leave feedback."],
+              ].map(([title, desc], i) => (
+                <li key={title} className="flex gap-3">
+                  <span className="chip flex-none" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="font-bold m-0">{title}</p>
+                    <p className="muted small m-0">{desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <Link href="/design-system" className="text-sm font-semibold inline-block mt-4">
+              View the design system
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

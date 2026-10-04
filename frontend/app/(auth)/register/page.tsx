@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
 import api from "@/lib/api";
@@ -52,44 +51,48 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md">
-      <Card className="bg-white">
-        <CardTitle className="text-2xl">Create account</CardTitle>
-        <CardDescription>Join the IIPS project portal.</CardDescription>
-        <Link href="/api/auth/signin/github" className="brutal-btn bg-ink text-white block text-center mt-4">Continue with GitHub</Link>
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <Input label="Full name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Aarav Sharma" />
-          <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
-          <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 characters" />
-          <div className="space-y-1.5">
-            <label className="font-display text-sm font-bold uppercase tracking-wide">Role</label>
-            <div className="flex flex-wrap gap-2">
-              {roles.map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setRole(r)}
-                  className={`brutal-badge cursor-pointer ${role === r ? "bg-ink text-white" : "bg-white"}`}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
-          </div>
-          {error && (
-            <Alert tone="danger">{error}</Alert>
-          )}
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating..." : "Create account"}
-          </Button>
-        </form>
-        <p className="mt-4 text-sm text-center">
-          Have an account?{" "}
-          <Link href="/login" className="font-bold underline underline-offset-2">
-            Login
+    <div className="section">
+      <div className="wrap">
+        <div className="mx-auto max-w-md card">
+          <span className="kicker">IIPS Project Portal</span>
+          <h1>Create account</h1>
+          <p className="muted">Join the IIPS project portal.</p>
+          <Link href="/api/auth/signin/github" className="btn btn-outline w-full mt-2">
+            Continue with GitHub
           </Link>
-        </p>
-      </Card>
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+            <Input label="Full name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Aarav Sharma" />
+            <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
+            <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 characters" />
+            <div className="space-y-1.5">
+              <span className="ctl-label" id="role-label">Role</span>
+              <div className="seg" role="group" aria-labelledby="role-label">
+                {roles.map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    aria-pressed={role === r}
+                    onClick={() => setRole(r)}
+                    className="seg-btn"
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {error && <Alert tone="danger">{error}</Alert>}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating..." : "Create account"}
+            </Button>
+          </form>
+          <p className="mt-4 text-sm text-center">
+            Have an account?{" "}
+            <Link href="/login" className="font-semibold">
+              Login
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
 import api from "@/lib/api";
@@ -46,28 +45,31 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md">
-      <Card className="bg-white">
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <CardDescription>Login to your IIPS project account.</CardDescription>
-        <Link href="/api/auth/signin/github" className="brutal-btn bg-ink text-white block text-center mt-4">Continue with GitHub</Link>
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
-          <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" />
-          {error && (
-            <Alert tone="danger">{error}</Alert>
-          )}
-          <Button type="submit" variant="dark" className="w-full" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </Button>
-        </form>
-        <p className="mt-4 text-sm text-center">
-          No account?{" "}
-          <Link href="/register" className="font-bold underline underline-offset-2">
-            Register
+    <div className="section">
+      <div className="wrap">
+        <div className="mx-auto max-w-md card">
+          <span className="kicker">IIPS Project Portal</span>
+          <h1>Welcome back</h1>
+          <p className="muted">Login to your IIPS project account.</p>
+          <Link href="/api/auth/signin/github" className="btn btn-outline w-full mt-2">
+            Continue with GitHub
           </Link>
-        </p>
-      </Card>
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+            <Input label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@iips.edu" />
+            <Input label="Password" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" />
+            {error && <Alert tone="danger">{error}</Alert>}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </Button>
+          </form>
+          <p className="mt-4 text-sm text-center">
+            No account?{" "}
+            <Link href="/register" className="font-semibold">
+              Register
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

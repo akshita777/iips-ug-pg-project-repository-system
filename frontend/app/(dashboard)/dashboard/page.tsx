@@ -6,9 +6,11 @@ import api from "@/lib/api";
 import { apiErrorMessage, type Project } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
 import { Protected } from "@/components/layout/protected";
-import { Card, CardTitle, CardDescription } from "@/components/ui/card";
+import { PageBand } from "@/components/layout/page-band";
+import { Card, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
+import { n } from "@/lib/format";
 
 export default function DashboardPage() {
   const { role, email, logout } = useAuth();
@@ -32,54 +34,64 @@ export default function DashboardPage() {
 
   return (
     <Protected>
-      <div className="space-y-6">
-        {error && <Alert tone="warn">{error}</Alert>}
-        <div className="brutal-card bg-white p-6 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black">{role ?? "STUDENT"} Dashboard</h1>
-            <p className="mt-1 text-sm text-ink/70">
-              {email ?? "Your projects, versions, and evaluation results."}
-              {unread !== null && unread > 0 && ` You have ${unread} unread notifications.`}
-            </p>
+      <PageBand
+        kicker={role ?? "Student"}
+        title={`${role ?? "Student"} dashboard`}
+        lead={`${email ?? "Your projects, versions, and evaluation results."}${
+          unread !== null && unread > 0 ? ` You have ${unread} unread notifications.` : ""
+        }`}
+        crumbs={[{ label: "Dashboard" }]}
+      />
+      <div className="section">
+        <div className="wrap space-y-6">
+          {error && <Alert tone="warn">{error}</Alert>}
+
+          <div className="grid grid-3">
+            <div className="card">
+              <h2 className="card-title">Projects</h2>
+              <p className="num text-3xl font-extrabold text-navy m-0">{n(projects.length)}</p>
+              <p className="muted small">Live from the project registry.</p>
+              <Link href="/projects" className="btn btn-outline btn-small mt-3">
+                Open projects
+              </Link>
+            </div>
+            <div className="card">
+              <h2 className="card-title">In review</h2>
+              <p className="num text-3xl font-extrabold text-navy m-0">{n(underReview)}</p>
+              <p className="muted small">Submitted plus under review right now.</p>
+              <Link href="/guide/reviews" className="btn btn-outline btn-small mt-3">
+                Review queue
+              </Link>
+            </div>
+            <div className="card">
+              <h2 className="card-title">Evaluated</h2>
+              <p className="num text-3xl font-extrabold text-navy m-0">{n(evaluated)}</p>
+              <p className="muted small">
+                Approved plus evaluated outcomes.
+                {unread !== null && unread > 0 && ` ${unread} unread notifications.`}
+              </p>
+              <Link href="/notifications" className="btn btn-outline btn-small mt-3">
+                Notifications
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <StatusBadge status={role ?? "STUDENT"} className="bg-ink text-white" />
-            <button type="button" onClick={logout} className="brutal-badge cursor-pointer bg-danger text-dangerInk">
+
+          <Card>
+            <CardTitle>Workflows</CardTitle>
+            <ul className="chips">
+              <li><Link href="/projects/new" className="chip no-underline">Submit</Link></li>
+              <li><Link href="/coordinator/allocation" className="chip no-underline">Allocation</Link></li>
+              <li><Link href="/evaluator/assigned" className="chip no-underline">Evaluate</Link></li>
+              <li><Link href="/admin/users" className="chip no-underline">Admin</Link></li>
+            </ul>
+          </Card>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <StatusBadge status={role ?? "STUDENT"} />
+            <button type="button" onClick={logout} className="btn btn-outline btn-small">
               Logout
             </button>
           </div>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-3">
-          <Card className="bg-primary brutal-card-hover text-white">
-            <CardTitle>{projects.length} projects</CardTitle>
-            <CardDescription className="!text-white">Live from GET /projects.</CardDescription>
-            <Link href="/projects" className="brutal-btn bg-white text-sm mt-3">
-              Open projects
-            </Link>
-          </Card>
-          <Card className="bg-warn brutal-card-hover">
-            <CardTitle>{underReview} in review</CardTitle>
-            <CardDescription className="!text-ink/70">Submitted plus under review right now.</CardDescription>
-            <Link href="/guide/reviews" className="brutal-btn bg-white text-sm mt-3">
-              Review queue
-            </Link>
-          </Card>
-          <Card className="bg-success brutal-card-hover">
-            <CardTitle>{evaluated} evaluated</CardTitle>
-            <CardDescription className="!text-ink/70">Approved plus evaluated outcomes.</CardDescription>
-            <Link href="/notifications" className="brutal-btn bg-white text-sm mt-3">
-              Notifications{unread ? ` (${unread})` : ""}
-            </Link>
-          </Card>
-        </div>
-
-        <div className="brutal-card bg-white p-4 flex flex-wrap items-center gap-2 text-sm">
-          <span className="font-display font-bold">Workflows:</span>
-          <Link href="/projects/new" className="brutal-badge bg-primary text-white">Submit</Link>
-          <Link href="/coordinator/allocation" className="brutal-badge bg-lilac">Allocation</Link>
-          <Link href="/evaluator/assigned" className="brutal-badge bg-accent">Evaluate</Link>
-          <Link href="/admin/users" className="brutal-badge bg-secondary">Admin</Link>
         </div>
       </div>
     </Protected>
