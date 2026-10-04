@@ -6,14 +6,21 @@ import api from "@/lib/api";
 import { apiErrorMessage, type Project, type ProjectStatus } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
 import { Protected } from "@/components/layout/protected";
+import { PageBand } from "@/components/layout/page-band";
 import { StatusBadge } from "@/components/ui/badge";
 import { Table, TableSkeleton } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
-import { SelectField } from "@/components/ui/select";
 import { filterProjects, paginate, pageCount, type ProjectFilter } from "@/lib/filters";
 
 const PAGE_SIZE = 8;
+
+const buckets: { value: ProjectFilter; label: string }[] = [
+  { value: "ALL", label: "All" },
+  { value: "ACTIVE", label: "Draft and active" },
+  { value: "REVIEWING", label: "Reviewing" },
+  { value: "DONE", label: "Decided" },
+];
 
 export function ProjectsList() {
   const { role } = useAuth();
@@ -38,132 +45,138 @@ export function ProjectsList() {
 
   return (
     <Protected>
-      <div className="space-y-5">
-        <div className="brutal-card bg-primary p-6 flex flex-wrap items-center justify-between gap-3 text-white">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black">Projects</h1>
-            <p className="mt-1 text-sm text-white">BCA and MCA submissions with live status.</p>
-          </div>
-          <Link href="/projects/new" className="brutal-btn bg-ink text-white text-sm">
-            New project
-          </Link>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="space-y-1.5">
-            <label htmlFor="search" className="font-display text-sm font-bold uppercase tracking-wide">
-              Search
-            </label>
-            <input
-              id="search"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Title, abstract, or tech stack"
-              className="brutal-input"
-            />
-          </div>
-          <SelectField
-            label="Status"
-            name="status"
-            value={bucket}
-            onChange={(v) => {
-              setBucket(v as ProjectFilter);
-              setPage(1);
-            }}
-            placeholder="All statuses"
-            options={[
-              { value: "ALL", label: "All statuses" },
-              { value: "ACTIVE", label: "Draft and active" },
-              { value: "REVIEWING", label: "Submitted and reviewing" },
-              { value: "DONE", label: "Approved and evaluated" },
-            ]}
-          />
-        </div>
-
-        {error && (
-          <Alert tone="danger">
-            {error} You can still{" "}
-            <button type="button" className="underline font-bold" onClick={() => window.location.reload()}>
-              retry
-            </button>
-            .
-          </Alert>
-        )}
-
-        {loading ? (
-          <div className="brutal-card bg-white">
-            <TableSkeleton rows={4} />
-          </div>
-        ) : filtered.length === 0 && !error ? (
-          <EmptyState
-            title="No projects match"
-            desc="Try a different search or status filter, or create a new project."
-            actionHref="/projects/new"
-            actionLabel="Submit a project"
-          />
-        ) : (
-          <>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Stack</th>
-                  <th>Open</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visible.map((p) => (
-                  <tr key={p.id}>
-                    <td className="font-bold">{p.title}</td>
-                    <td>
-                      <StatusBadge status={p.status as ProjectStatus} />
-                    </td>
-                    <td className="font-mono text-xs">{p.techStack || "—"}</td>
-                    <td>
-                      <Link href={`/projects/${p.id}`} className="font-bold underline underline-offset-2 text-sm">
-                        View
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-ink/60">
-                Page {page} of {pages}, {filtered.length} total
+      <PageBand
+        kicker="Registry"
+        title="Projects"
+        lead="MCA (5 Years) Integrated submissions with live status."
+        crumbs={[{ label: "Projects" }]}
+      >
+        <Link href="/projects/new" className="btn btn-amber btn-small mt-4">
+          New project
+        </Link>
+      </PageBand>
+      <div className="section">
+        <div className="wrap space-y-5">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex-1 min-w-[220px]">
+              <label htmlFor="search" className="ctl-label">
+                Search
+              </label>
+              <input
+                id="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Title, abstract, or tech stack"
+                className="ctl-input"
+              />
+            </div>
+            <div>
+              <span className="ctl-label" id="status-filter">
+                Status
               </span>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className="brutal-badge bg-white disabled:opacity-50"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => p - 1)}
-                >
-                  Prev
-                </button>
-                <button
-                  type="button"
-                  className="brutal-badge bg-white disabled:opacity-50"
-                  disabled={page >= pages}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  Next
-                </button>
+              <div className="seg" role="group" aria-labelledby="status-filter">
+                {buckets.map((b) => (
+                  <button
+                    key={b.value}
+                    type="button"
+                    aria-pressed={bucket === b.value}
+                    onClick={() => {
+                      setBucket(b.value);
+                      setPage(1);
+                    }}
+                    className="seg-btn"
+                  >
+                    {b.label}
+                  </button>
+                ))}
               </div>
             </div>
-          </>
-        )}
-        {role && (
-          <p className="text-center text-xs text-ink/50">
-            Signed in as {role.toLowerCase()}.
-          </p>
-        )}
+          </div>
+
+          {error && (
+            <Alert tone="danger">
+              {error} You can still{" "}
+              <button type="button" className="underline font-semibold" onClick={() => window.location.reload()}>
+                retry
+              </button>
+              .
+            </Alert>
+          )}
+
+          {loading ? (
+            <div className="card">
+              <TableSkeleton rows={4} />
+            </div>
+          ) : filtered.length === 0 && !error ? (
+            <EmptyState
+              title="No projects match"
+              desc="Try a different search or status filter, or create a new project."
+              actionHref="/projects/new"
+              actionLabel="Submit a project"
+            />
+          ) : (
+            <>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Stack</th>
+                    <th className="n">Open</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((p) => (
+                    <tr key={p.id}>
+                      <td className="font-bold">
+                        <Link href={`/projects/${p.id}`} className="no-underline hover:underline">
+                          {p.title}
+                        </Link>
+                      </td>
+                      <td>
+                        <StatusBadge status={p.status as ProjectStatus} />
+                      </td>
+                      <td className="font-mono text-xs">{p.techStack || "—"}</td>
+                      <td className="n">
+                        <Link href={`/projects/${p.id}`} className="text-sm font-semibold">
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <div className="flex items-center justify-between text-sm">
+                <span className="muted num">
+                  Page {page} of {pages}, {filtered.length} total
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-small"
+                    disabled={page <= 1}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-small"
+                    disabled={page >= pages}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+          {role && <p className="text-center text-xs muted">Signed in as {role.toLowerCase()}.</p>}
+        </div>
       </div>
     </Protected>
   );
 }
-

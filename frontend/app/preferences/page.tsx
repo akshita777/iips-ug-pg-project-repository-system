@@ -56,64 +56,65 @@ export default function PreferencesPage() {
 
   return (
     <Protected allowed={["STUDENT"]}>
-      <div className="space-y-5">
-        <div className="brutal-card bg-secondary p-6">
-          <h1 className="text-2xl md:text-3xl font-black">Guide preferences</h1>
-          <p className="mt-1 text-sm text-ink/70">
-            Rank your preferred guides by faculty user id. First id is rank 1. Saving replaces your old list.
-          </p>
-        </div>
+      <PageBand
+        kicker="Allocation"
+        title="Guide preferences"
+        lead="Rank your preferred guides by faculty user id. First id is rank 1. Saving replaces your old list."
+        crumbs={[{ label: "Preferences" }]}
+      />
+      <div className="section">
+        <div className="wrap space-y-5">
+          {error && <Alert tone="danger">{error}</Alert>}
 
-        {error && <Alert tone="danger">{error}</Alert>}
+          <div className="card space-y-3">
+            <Input
+              label="My project ID"
+              name="projectId"
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              placeholder="e.g. 1"
+            />
+            <Input
+              label="Faculty IDs in rank order"
+              name="facultyIds"
+              value={facultyIds}
+              onChange={(e) => setFacultyIds(e.target.value)}
+              placeholder="e.g. 4, 7, 2"
+            />
+            <Button size="sm" type="button" disabled={saving} onClick={save}>
+              {saving ? "Saving..." : "Save preferences"}
+            </Button>
+          </div>
 
-        <div className="brutal-card bg-white p-5 space-y-3">
-          <Input
-            label="My project ID"
-            name="projectId"
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
-            placeholder="e.g. 1"
-          />
-          <Input
-            label="Faculty IDs in rank order"
-            name="facultyIds"
-            value={facultyIds}
-            onChange={(e) => setFacultyIds(e.target.value)}
-            placeholder="e.g. 4, 7, 2"
-          />
-          <Button variant="dark" size="sm" type="button" disabled={saving} onClick={save}>
-            {saving ? "Saving..." : "Save preferences"}
-          </Button>
-        </div>
-
-        <div className="brutal-card bg-white p-5">
-          <p className="font-display font-bold">My allocation</p>
-          {mine.length === 0 ? (
-            <div className="mt-2">
-              <EmptyState title="No allocation yet" desc="Your confirmed guide appears here once the coordinator runs allocation." />
-            </div>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>Faculty</th>
-                  <th>Project</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {mine.map((r) => (
-                  <tr key={r.id}>
-                    <td className="font-bold">{r.facultyName || (r.facultyId ? `#${r.facultyId}` : "Unassigned")}</td>
-                    <td className="text-ink/70">{r.projectTitle || (r.projectId ? `#${r.projectId}` : "—")}</td>
-                    <td>
-                      <StatusBadge status={(r.status || "PENDING").replace(/ /g, "_")} />
-                    </td>
+          <div className="card">
+            <h2 className="card-title">My allocation</h2>
+            {mine.length === 0 ? (
+              <div className="mt-2">
+                <EmptyState title="No allocation yet" desc="Your confirmed guide appears here once the coordinator runs allocation." />
+              </div>
+            ) : (
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Faculty</th>
+                    <th>Project</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
+                </thead>
+                <tbody>
+                  {mine.map((r) => (
+                    <tr key={r.id}>
+                      <td className="font-bold">{r.facultyName || (r.facultyId ? `#${r.facultyId}` : "Unassigned")}</td>
+                      <td className="muted">{r.projectTitle || (r.projectId ? `#${r.projectId}` : "—")}</td>
+                      <td>
+                        <StatusBadge status={(r.status || "PENDING").replace(/ /g, "_")} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </div>
         </div>
       </div>
     </Protected>

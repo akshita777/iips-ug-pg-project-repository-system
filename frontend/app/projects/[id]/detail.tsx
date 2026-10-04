@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/components/ui/toast";
 import { Protected } from "@/components/layout/protected";
+import { PageBand } from "@/components/layout/page-band";
 import { StatusBadge } from "@/components/ui/badge";
 import { Tabs } from "@/components/ui/tabs";
 import { Table, TableSkeleton } from "@/components/ui/table";
@@ -242,301 +243,315 @@ export function ProjectDetail({ id }: { id: string }) {
 
   return (
     <Protected>
-      <div className="space-y-5">
-        {error && <Alert tone="danger">{error}</Alert>}
-        {loading || !project ? (
-          <div className="space-y-3">
-            <div className="skeleton h-28 w-full" />
-            <div className="brutal-card bg-white">
-              <TableSkeleton rows={3} />
+      {loading || !project ? (
+        <>
+          <PageBand kicker="Project" title="Loading project" crumbs={[{ label: "Projects", href: "/projects" }]} />
+          <div className="section">
+            <div className="wrap space-y-3">
+              <div className="skeleton h-28 w-full" />
+              <div className="card">
+                <TableSkeleton rows={3} />
+              </div>
             </div>
           </div>
-        ) : (
-          <>
-            <div className="brutal-card bg-white p-6 flex flex-wrap items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="font-mono text-xs uppercase tracking-wide text-ink/60">Project #{project.id}</p>
-                <h1 className="text-2xl md:text-3xl font-black break-words">{project.title}</h1>
-                <p className="mt-1 text-sm text-ink/70">{project.abstractText || "No abstract yet."}</p>
-                {project.techStack && <p className="mt-1 font-mono text-xs">{project.techStack}</p>}
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge status={project.status} />
-                <span className="brutal-badge bg-muted font-mono">v{versions[0]?.versionNumber ?? 1}</span>
-                <Button variant="white" size="sm" type="button" onClick={exportZip}>
-                  Export ZIP
-                </Button>
-              </div>
+        </>
+      ) : (
+        <>
+          <PageBand
+            kicker={`Project #${project.id}`}
+            title={project.title}
+            lead={project.abstractText || "No abstract yet."}
+            crumbs={[{ label: "Projects", href: "/projects" }, { label: project.title }]}
+          >
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              <StatusBadge status={project.status} />
+              <span className="chip font-mono">v{versions[0]?.versionNumber ?? 1}</span>
+              {project.techStack && <span className="chip font-mono">{project.techStack}</span>}
+              <Button variant="white" size="sm" type="button" onClick={exportZip}>
+                Export ZIP
+              </Button>
             </div>
+          </PageBand>
+          <div className="section">
+            <div className="wrap space-y-5">
+              {error && <Alert tone="danger">{error}</Alert>}
 
-            {(role === "FACULTY" || role === "COORDINATOR" || role === "ADMIN") && (
-              <div className="brutal-card bg-warn p-4 flex flex-wrap gap-2">
-                <Button variant="white" size="sm" type="button" onClick={() => act("/review", "Moved to review.")}>
-                  Start review
-                </Button>
-                <Button variant="success" size="sm" type="button" onClick={() => act("/approve", "Project approved.")}>
-                  Approve
-                </Button>
-                <Button variant="danger" size="sm" type="button" onClick={() => act("/reject", "Project rejected.")}>
-                  Reject
-                </Button>
-                <Button variant="dark" size="sm" type="button" onClick={() => act("/submit", "Submitted for review.")}>
-                  Submit
-                </Button>
-              </div>
-            )}
-
-            <Tabs tabs={tabs} active={active} onChange={setActive} />
-
-            {active === "files" && (
-              <div className="space-y-4">
-                {role === "STUDENT" && (
-                  <div className="brutal-card bg-primary p-5 space-y-3 text-white">
-                    <p className="font-display font-bold">Upload a new version</p>
-                    <input
-                      type="file"
-                      aria-label="Version file"
-                      onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                      className="w-full text-sm font-bold"
-                    />
-                    <Input
-                      label="Comments"
-                      name="comments"
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      placeholder="What changed in this version?"
-                    />
-                    <Button variant="dark" size="sm" type="button" disabled={uploading} onClick={uploadVersion}>
-                      {uploading ? "Uploading..." : "Upload version"}
-                    </Button>
-                  </div>
-                )}
-                {versions.length === 0 ? (
-                  <EmptyState title="No versions yet" desc="Upload the first file to start version history." />
-                ) : (
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Version</th>
-                        <th>File</th>
-                        <th>Comments</th>
-                        <th>Uploaded</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {versions.map((v) => (
-                        <tr key={v.id}>
-                          <td className="font-mono font-bold">v{v.versionNumber}</td>
-                          <td className="font-mono text-xs break-all">{v.filePath}</td>
-                          <td className="text-ink/70">{v.comments || "—"}</td>
-                          <td className="text-xs">{formatRelative(v.uploadedAt)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                )}
-              </div>
-            )}
-
-            {active === "reviews" && (
-              <div className="space-y-4">
-                <div className="brutal-card bg-white p-5 space-y-3">
-                  <p className="font-display font-bold">Post a review</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["PENDING", "CHANGES_REQUESTED", "APPROVED"].map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setReviewStatus(s)}
-                        className={`brutal-badge cursor-pointer ${reviewStatus === s ? "bg-ink text-white" : "bg-white"}`}
-                      >
-                        {s.replace(/_/g, " ")}
-                      </button>
-                    ))}
-                  </div>
-                  <Textarea
-                    label="Comments"
-                    value={reviewComments}
-                    onChange={(e) => setReviewComments(e.target.value)}
-                    placeholder="Line level feedback, what to fix, what is good."
-                  />
-                  <Button variant="dark" size="sm" type="button" onClick={postReview}>
-                    Post review
+              {(role === "FACULTY" || role === "COORDINATOR" || role === "ADMIN") && (
+                <div className="card flex flex-wrap gap-2">
+                  <Button variant="white" size="sm" type="button" onClick={() => act("/review", "Moved to review.")}>
+                    Start review
+                  </Button>
+                  <Button variant="success" size="sm" type="button" onClick={() => act("/approve", "Project approved.")}>
+                    Approve
+                  </Button>
+                  <Button variant="danger" size="sm" type="button" onClick={() => act("/reject", "Project rejected.")}>
+                    Reject
+                  </Button>
+                  <Button variant="white" size="sm" type="button" onClick={() => act("/submit", "Submitted for review.")}>
+                    Submit
                   </Button>
                 </div>
-                {reviews.length === 0 ? (
-                  <EmptyState title="No reviews yet" desc="Guide feedback appears here once posted." />
-                ) : (
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Status</th>
-                        <th>Comments</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {reviews.map((r) => (
-                        <tr key={r.id}>
-                          <td>
-                            <StatusBadge status={r.status} />
-                          </td>
-                          <td className="text-ink/70">{r.comments || "—"}</td>
-                          <td className="text-xs">{formatRelative(r.createdAt)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                )}
-              </div>
-            )}
+              )}
 
-            {active === "repo" && (
-              <div className="space-y-4">
-                <div className="brutal-card bg-accent p-5 space-y-3">
-                  <p className="font-display font-bold">GitHub repository</p>
-                  {repo ? (
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="brutal-badge bg-white font-mono text-xs break-all">{repo.repoUrl}</span>
-                      <Button variant="dark" size="sm" type="button" onClick={syncRepo}>
-                        Sync commits
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      <Input
-                        label="Repo URL"
-                        name="repoUrl"
-                        value={repoUrl}
-                        onChange={(e) => setRepoUrl(e.target.value)}
-                        placeholder="https://github.com/owner/name"
+              <Tabs tabs={tabs} active={active} onChange={setActive} />
+
+              {active === "files" && (
+                <div className="space-y-4">
+                  {role === "STUDENT" && (
+                    <div className="card space-y-3">
+                      <h2 className="card-title">Upload a new version</h2>
+                      <input
+                        type="file"
+                        aria-label="Version file"
+                        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                        className="w-full text-sm font-semibold"
                       />
-                      <Button variant="dark" size="sm" type="button" onClick={linkRepo}>
-                        Link repo
+                      <Input
+                        label="Comments"
+                        name="comments"
+                        value={comments}
+                        onChange={(e) => setComments(e.target.value)}
+                        placeholder="What changed in this version?"
+                      />
+                      <Button size="sm" type="button" disabled={uploading} onClick={uploadVersion}>
+                        {uploading ? "Uploading..." : "Upload version"}
                       </Button>
                     </div>
                   )}
-                  {branches.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {branches.map((b) => (
-                        <span key={b.name} className="brutal-badge bg-white font-mono text-xs">
-                          {b.name}
-                        </span>
-                      ))}
-                    </div>
+                  {versions.length === 0 ? (
+                    <EmptyState title="No versions yet" desc="Upload the first file to start version history." />
+                  ) : (
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>Version</th>
+                          <th>File</th>
+                          <th>Comments</th>
+                          <th>Uploaded</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {versions.map((v) => (
+                          <tr key={v.id}>
+                            <td className="font-mono font-bold">v{v.versionNumber}</td>
+                            <td className="font-mono text-xs break-all">{v.filePath}</td>
+                            <td className="muted">{v.comments || "—"}</td>
+                            <td className="text-xs">{formatRelative(v.uploadedAt)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
                   )}
                 </div>
-                {commits.length === 0 ? (
-                  <EmptyState title="No commits synced" desc="Link a repo and hit sync to pull commit history." />
-                ) : (
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>SHA</th>
-                        <th>Message</th>
-                        <th>Author</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {commits.map((c) => (
-                        <tr key={c.id}>
-                          <td className="font-mono text-xs">{c.sha?.slice(0, 7) || c.id}</td>
-                          <td className="text-ink/70">{c.message || "—"}</td>
-                          <td>{c.author || "—"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                )}
-              </div>
-            )}
+              )}
 
-            {active === "team" && (
-              <div className="space-y-4">
-                <div className="brutal-card bg-secondary p-5">
-                  <p className="font-display font-bold">Add team member</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    <Input
-                      label="Student user ID"
-                      name="memberId"
-                      value={memberId}
-                      onChange={(e) => setMemberId(e.target.value)}
-                      placeholder="e.g. 4"
+              {active === "reviews" && (
+                <div className="space-y-4">
+                  <div className="card space-y-3">
+                    <h2 className="card-title">Post a review</h2>
+                    <div className="seg" role="group" aria-label="Review status">
+                      {["PENDING", "CHANGES_REQUESTED", "APPROVED"].map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          aria-pressed={reviewStatus === s}
+                          onClick={() => setReviewStatus(s)}
+                          className="seg-btn"
+                        >
+                          {s.replace(/_/g, " ")}
+                        </button>
+                      ))}
+                    </div>
+                    <Textarea
+                      label="Comments"
+                      value={reviewComments}
+                      onChange={(e) => setReviewComments(e.target.value)}
+                      placeholder="Line level feedback, what to fix, what is good."
                     />
-                    <Input
-                      label="Team role"
-                      name="memberRole"
-                      value={memberRole}
-                      onChange={(e) => setMemberRole(e.target.value)}
-                      placeholder="MEMBER"
-                    />
-                    <Button variant="dark" size="sm" type="button" onClick={addMember}>
-                      Add
+                    <Button size="sm" type="button" onClick={postReview}>
+                      Post review
                     </Button>
                   </div>
+                  {reviews.length === 0 ? (
+                    <EmptyState title="No reviews yet" desc="Guide feedback appears here once posted." />
+                  ) : (
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>Status</th>
+                          <th>Comments</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reviews.map((r) => (
+                          <tr key={r.id}>
+                            <td>
+                              <StatusBadge status={r.status} />
+                            </td>
+                            <td className="muted">{r.comments || "—"}</td>
+                            <td className="text-xs">{formatRelative(r.createdAt)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  )}
                 </div>
-                {team.length === 0 ? (
-                  <EmptyState title="No team yet" desc="Add collaborators by their student user id." />
-                ) : (
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {team.map((m, i) => (
-                      <div key={m.id} className="brutal-card bg-white p-4 flex items-center gap-3">
-                        <Avatar name={m.studentName || `Member ${m.studentId}`} index={i} />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-display font-bold">{m.studentName || `User ${m.studentId}`}</p>
-                          <p className="font-mono text-xs uppercase">{m.teamRole}</p>
-                        </div>
-                        <Button variant="danger" size="sm" type="button" onClick={() => removeMember(m.id)}>
-                          Remove
+              )}
+
+              {active === "repo" && (
+                <div className="space-y-4">
+                  <div className="card space-y-3">
+                    <h2 className="card-title">GitHub repository</h2>
+                    {repo ? (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="chip font-mono break-all">{repo.repoUrl}</span>
+                        <Button size="sm" type="button" onClick={syncRepo}>
+                          Sync commits
                         </Button>
                       </div>
-                    ))}
+                    ) : (
+                      <div className="flex flex-wrap items-end gap-2">
+                        <div className="flex-1 min-w-[240px]">
+                          <Input
+                            label="Repo URL"
+                            name="repoUrl"
+                            value={repoUrl}
+                            onChange={(e) => setRepoUrl(e.target.value)}
+                            placeholder="https://github.com/owner/name"
+                          />
+                        </div>
+                        <Button size="sm" type="button" onClick={linkRepo}>
+                          Link repo
+                        </Button>
+                      </div>
+                    )}
+                    {branches.length > 0 && (
+                      <ul className="chips">
+                        {branches.map((b) => (
+                          <li key={b.name} className="chip font-mono">
+                            {b.name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                )}
-              </div>
-            )}
-
-            {active === "wiki" && (
-              <div className="space-y-4">
-                <div className="brutal-card bg-lilac p-5 space-y-3">
-                  <p className="font-display font-bold">Save wiki page</p>
-                  <Input label="Title" name="wikiTitle" value={wikiTitle} onChange={(e) => setWikiTitle(e.target.value)} placeholder="Setup guide" />
-                  <Textarea label="Body" value={wikiBody} onChange={(e) => setWikiBody(e.target.value)} placeholder="Markdown supported by the viewer." />
-                  <Button variant="dark" size="sm" type="button" onClick={saveWiki}>
-                    Save page
-                  </Button>
+                  {commits.length === 0 ? (
+                    <EmptyState title="No commits synced" desc="Link a repo and hit sync to pull commit history." />
+                  ) : (
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>SHA</th>
+                          <th>Message</th>
+                          <th>Author</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {commits.map((c) => (
+                          <tr key={c.id}>
+                            <td className="font-mono text-xs">{c.sha?.slice(0, 7) || c.id}</td>
+                            <td className="muted">{c.message || "—"}</td>
+                            <td>{c.author || "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  )}
                 </div>
-                {wiki.length === 0 ? (
-                  <EmptyState title="No wiki pages" desc="Document setup, architecture, and demo steps here." />
-                ) : (
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {wiki.map((p) => (
-                      <div key={p.id} className="brutal-card bg-white p-4">
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="font-display font-bold">{p.title}</p>
-                          <Button variant="danger" size="sm" type="button" onClick={() => deleteWiki(p.id)}>
-                            Delete
+              )}
+
+              {active === "team" && (
+                <div className="space-y-4">
+                  <div className="card">
+                    <h2 className="card-title">Add team member</h2>
+                    <div className="mt-2 flex flex-wrap items-end gap-2">
+                      <div className="flex-1 min-w-[160px]">
+                        <Input
+                          label="Student user ID"
+                          name="memberId"
+                          value={memberId}
+                          onChange={(e) => setMemberId(e.target.value)}
+                          placeholder="e.g. 4"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-[160px]">
+                        <Input
+                          label="Team role"
+                          name="memberRole"
+                          value={memberRole}
+                          onChange={(e) => setMemberRole(e.target.value)}
+                          placeholder="MEMBER"
+                        />
+                      </div>
+                      <Button size="sm" type="button" onClick={addMember}>
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                  {team.length === 0 ? (
+                    <EmptyState title="No team yet" desc="Add collaborators by their student user id." />
+                  ) : (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {team.map((m, i) => (
+                        <div key={m.id} className="card flex items-center gap-3">
+                          <Avatar name={m.studentName || `Member ${m.studentId}`} index={i} />
+                          <div className="min-w-0 flex-1">
+                            <p className="font-bold m-0">{m.studentName || `User ${m.studentId}`}</p>
+                            <p className="font-mono text-xs uppercase muted m-0">{m.teamRole}</p>
+                          </div>
+                          <Button variant="danger" size="sm" type="button" onClick={() => removeMember(m.id)}>
+                            Remove
                           </Button>
                         </div>
-                        <p className="mt-1 text-sm text-ink/70 whitespace-pre-wrap">{p.body || "Empty page."}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
-            {active === "result" && (
-              <EmptyState
-                title="Evaluation lives on the evaluator flow"
-                desc="Rubric marks and feedback appear here after an evaluator submits. Evaluators use the Assigned queue."
-                actionHref="/evaluator/assigned"
-                actionLabel="Go to assigned"
-              />
-            )}
-          </>
-        )}
-      </div>
+              {active === "wiki" && (
+                <div className="space-y-4">
+                  <div className="card space-y-3">
+                    <h2 className="card-title">Save wiki page</h2>
+                    <Input label="Title" name="wikiTitle" value={wikiTitle} onChange={(e) => setWikiTitle(e.target.value)} placeholder="Setup guide" />
+                    <Textarea label="Body" value={wikiBody} onChange={(e) => setWikiBody(e.target.value)} placeholder="Markdown supported by the viewer." />
+                    <Button size="sm" type="button" onClick={saveWiki}>
+                      Save page
+                    </Button>
+                  </div>
+                  {wiki.length === 0 ? (
+                    <EmptyState title="No wiki pages" desc="Document setup, architecture, and demo steps here." />
+                  ) : (
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {wiki.map((p) => (
+                        <div key={p.id} className="card">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-bold m-0">{p.title}</p>
+                            <Button variant="danger" size="sm" type="button" onClick={() => deleteWiki(p.id)}>
+                              Delete
+                            </Button>
+                          </div>
+                          <p className="mt-1 text-sm muted whitespace-pre-wrap">{p.body || "Empty page."}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {active === "result" && (
+                <EmptyState
+                  title="Evaluation lives on the evaluator flow"
+                  desc="Rubric marks and feedback appear here after an evaluator submits. Evaluators use the Assigned queue."
+                  actionHref="/evaluator/assigned"
+                  actionLabel="Go to assigned"
+                />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </Protected>
   );
 }

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input, Textarea } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
 import api from "@/lib/api";
@@ -42,7 +41,7 @@ export function NewProjectForm() {
   }
 
   return (
-    <Card className="bg-white">
+    <div className="card">
       <div className="space-y-4">
         <Input
           label="Project title *"
@@ -65,13 +64,15 @@ export function NewProjectForm() {
           onChange={(e) => setTechStack(e.target.value)}
           placeholder="e.g. Next.js, Spring Boot, PostgreSQL"
         />
-        <div className="border-2 border-dashed border-ink rounded-lg bg-muted p-5 text-center text-sm">
-          <p className="font-display font-bold">Report and code archive</p>
-          <p className="mt-1 text-ink/70">File upload lands with version history in the next step.</p>
+        <div className="border border-dashed border-line-strong rounded-card bg-band p-5 text-center text-sm">
+          <p className="font-mono text-xs font-bold uppercase text-muted mb-1" style={{ letterSpacing: "0.08em" }}>
+            Report and code archive
+          </p>
+          <p className="mt-1 muted leading-relaxed">File upload lands with version history in the next step.</p>
         </div>
         {error && <Alert tone="danger">{error}</Alert>}
-        <div className="flex flex-wrap gap-3">
-          <Button type="button" variant="dark" disabled={loading} onClick={() => submit(false)}>
+        <div className="flex flex-wrap gap-3 pt-1">
+          <Button type="button" disabled={loading} onClick={() => submit(false)}>
             {loading ? "Submitting..." : "Submit for review"}
           </Button>
           <Button type="button" variant="white" disabled={loading} onClick={() => submit(true)}>
@@ -79,6 +80,6 @@ export function NewProjectForm() {
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
