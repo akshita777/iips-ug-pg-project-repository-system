@@ -373,7 +373,7 @@ export function ProjectDetail({ id }: { id: string }) {
 
   return (
     <Protected>
-      {loading || !project ? (
+      {loading ? (
         <>
           <PageBand kicker="Project" title="Loading project" crumbs={[{ label: "Projects", href: "/projects" }]} />
           <div className="section">
@@ -382,6 +382,15 @@ export function ProjectDetail({ id }: { id: string }) {
               <div className="card">
                 <TableSkeleton rows={3} />
               </div>
+            </div>
+          </div>
+        </>
+      ) : !project ? (
+        <>
+          <PageBand kicker="Project" title="Project not found" crumbs={[{ label: "Projects", href: "/projects" }]} />
+          <div className="section">
+            <div className="wrap">
+              <Alert tone="danger">{error || "Could not load project."}</Alert>
             </div>
           </div>
         </>

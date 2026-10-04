@@ -48,11 +48,10 @@ test.describe("submission form validation (no data written)", () => {
 });
 
 test.describe("project detail", () => {
-  test("unknown project id does not show a perpetual loader", async ({ page }) => {
+  test("unknown project id shows an error, not a perpetual loader", async ({ page }) => {
     await loginAs(page, "student-a");
     await page.goto("/projects/999999");
-    // BUG (recorded): on load failure the page keeps the "Loading project"
-    // skeleton forever because the error state is never rendered.
-    await expect(page.getByText("Loading project")).toBeHidden({ timeout: 15000 });
+    await expect(page.getByRole("heading", { name: "Project not found" })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Loading project")).toBeHidden();
   });
 });

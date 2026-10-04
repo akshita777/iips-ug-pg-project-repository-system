@@ -39,6 +39,16 @@ with schema up to date. Local runs should use `mvn spring-boot:run` with
 adequate memory or a process supervisor; this is an environment note, not a
 finding against the code.
 
+## Final verification (2026-10-04)
+
+- Backend `mvn verify`: BUILD SUCCESS (7 tests, Docker-gated flow test skips locally).
+- Frontend `tsc --noEmit`, `eslint`, and `next build` (production): all clean.
+- Read-only Chromium suite: **58 passed, 30 skipped, 0 failed** (EXIT 0).
+  F1 is fixed and the upgraded test asserts the "Project not found" error state.
+- Write lifecycle: 21 steps green on Chromium, Firefox, WebKit (62 passes).
+- One discarded run (47 failures in ~130ms) was diagnosed as both dev servers
+  being reaped by the environment, not a regression; re-ran green after restart.
+
 ## OAuth and profile-gate results (2026-10-04)
 
 GitHub login resolves to register-or-dashboard correctly at the seams that
@@ -173,7 +183,7 @@ byte-small by design).
 
 ## Sign-off
 
-- [ ] F1 fixed (read-only suite has a failing test waiting to go green)
+- [x] F1 fixed (was 3 failing tests, now asserts the error state, green)
 - [ ] F2/F3 resolved with teammate, suite rerun
 - [x] Write-permission run closes the skips (21 lifecycle tests green x3 engines)
 - [ ] GitHub-backed flows (repo link, OAuth) still need live tokens
