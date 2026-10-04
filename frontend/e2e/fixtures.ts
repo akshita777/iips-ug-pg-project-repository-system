@@ -1,4 +1,4 @@
-import { test as base, type Page, expect } from "@playwright/test";
+import { test as base, type Page, type APIRequestContext, expect } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -46,3 +46,4 @@ export async function logout(page: Page) {
 
 export const test = base;
 export { expect };
+export type { APIRequestContext };

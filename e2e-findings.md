@@ -16,6 +16,30 @@
 
 All 3 failures are the same bug on 3 engines (finding F1). Everything else that could run without writes passes on every browser.
 
+## Write-run results (E2E_WRITE=1, approved 2026-10-04)
+
+| Suite | Passed | Failed |
+|-------|--------|--------|
+| Chromium lifecycle (21 steps) | 21 | 0 |
+| Firefox + WebKit lifecycle | 41 | 0 |
+
+The full vertical slice works end to end: UI form create, team add plus
+duplicate rejection, preferences, mentor assign, deadline open, suggest plus
+confirm, slot offer plus book plus double-book rejection, Supabase version
+upload plus empty-file rejection, review plus bad-status rejection, submit,
+startReview, approve, resubmit rejection, over-100 marks rejection, valid
+evaluation to EVALUATED, rubric create plus update, wiki save plus list plus
+endpoint delete, team member endpoint remove, public showcase inclusion,
+non-empty ZIP export, and the detail page showing the evaluated project.
+Teardown verified afterward: 0 projects, 0 allocations, 0 mentors left;
+storage object deleted (HTTP 200); only the 6 seed accounts remain.
+
+E5. The backend process died mid-campaign (Maven exit 137, machine OOM-killed
+the 48-minute-old `spring-boot:run`, not an app bug). Restarted clean in 6.7s
+with schema up to date. Local runs should use `mvn spring-boot:run` with
+adequate memory or a process supervisor; this is an environment note, not a
+finding against the code.
+
 ## Environment problems hit during the run
 
 E1. Backend would not boot: Flyway `Validate failed, checksum mismatch for migration version 8`.
@@ -100,10 +124,11 @@ every E2E depends on `:8080` being up first.
 
 ## Skipped for write-permission (30 total: 10 chromium + 20 others)
 
-Project create, submit-for-review, version upload, review post, repo link, wiki save,
-team add, allocation run, rubric save, marks submit, preference save, role change,
-notification mark-read. Each names its endpoint and unblock condition in the spec.
-Re-run with write+cleanup approved to close these.
+The 30 skips from the read-only run are now covered by `e2e/write.spec.ts`
+(21 lifecycle tests, green on Chromium, Firefox, and WebKit). Remaining
+unexecuted: repo linking (needs a real GitHub token), GitHub OAuth round-trip
+(needs `GITHUB_ID`/`GITHUB_SECRET`), 100 MB-scale upload (fixtures are
+byte-small by design).
 
 ## Coverage analysis
 
@@ -135,6 +160,7 @@ Re-run with write+cleanup approved to close these.
 
 ## Sign-off
 
-- [ ] F1 fixed (suite has a failing test waiting to go green)
+- [ ] F1 fixed (read-only suite has a failing test waiting to go green)
 - [ ] F2/F3 resolved with teammate, suite rerun
-- [ ] Write-permission run closes the 30 skips
+- [x] Write-permission run closes the skips (21 lifecycle tests green x3 engines)
+- [ ] GitHub-backed flows (repo link, OAuth) still need live tokens
