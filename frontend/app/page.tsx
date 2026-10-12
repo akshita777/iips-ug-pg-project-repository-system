@@ -66,7 +66,7 @@ export default function Home() {
             {
               icon: BookOpen,
               title: "Project Repository",
-              desc: "Submit MCA (5 Years) Integrated final projects with full version history. Every upload becomes a numbered version.",
+              desc: "Browse MCA (5 Years) Integrated final projects with full version history and complete tech stacks.",
               href: "/projects",
             },
             {

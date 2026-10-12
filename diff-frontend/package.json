@@ -1,0 +1,55 @@
+{
+	"name": "iips-research-portal",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"description": "IIPS Research Portal: faculty profiles, publications and research scores.",
+	"packageManager": "pnpm@10.11.0",
+	"engines": {
+		"node": ">=22.18.0"
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview --port 4190",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test": "vitest run",
+		"test:e2e": "playwright test",
+		"screenshots": "node scripts/screenshots.ts",
+		"data": "pnpm data:iips && pnpm data:scholar && pnpm data:openalex && pnpm data:build",
+		"data:iips": "node scripts/data/iips.ts",
+		"data:scholar": "node scripts/data/scholar.ts",
+		"data:openalex": "node scripts/data/openalex.ts",
+		"data:build": "node scripts/data/build.ts"
+	},
+	"dependencies": {
+		"zod": "^4.6.5"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "^4.13.0",
+		"@eslint/js": "^10.0.1",
+		"@playwright/test": "^1.60.0",
+		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@types/node": "^24.0.0",
+		"eslint": "^10.4.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.19.0",
+		"globals": "^17.6.0",
+		"node-html-parser": "^9.0.4",
+		"prettier": "^3.8.3",
+		"prettier-plugin-svelte": "^4.1.0",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"sharp": "^0.35.5",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.60.1",
+		"vite": "^8.0.16",
+		"vitest": "^4.1.8"
+	}
+}

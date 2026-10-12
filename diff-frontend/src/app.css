@@ -1,0 +1,359 @@
+/* IIPS Research Portal. Colours follow the IIPS-CoMET site: navy and IEEE blue, amber for calls to action. */
+:root {
+	color-scheme: light;
+	--font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+	--navy: #004b76;
+	--navy-deep: #00395a;
+	--blue: #00629b;
+	--blue-soft: #e6f0f7;
+	--cyan: #00b5e2;
+	/* darker than the CoMET amber so white text on it passes WCAG AA */
+	--amber: #b45309;
+	--amber-text: #92400e;
+	--cream: #fffbeb;
+	--cream-line: #fde68a;
+	--bg: #ffffff;
+	--band: #f8fafc;
+	--line: #e2e8f0;
+	--line-strong: #cbd5e1;
+	--text: #1e293b;
+	--text-2: #475569;
+	--muted: #526070;
+	--good: #166534;
+	--good-soft: #dcfce7;
+	--warn: #92400e;
+	--warn-soft: #fef3c7;
+	--bad: #991b1b;
+	--bad-soft: #fee2e2;
+	--radius: 6px;
+	--shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.08);
+	--wrap: 1200px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font);
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	color: var(--text);
+	background: var(--bg);
+	overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+	color: var(--navy);
+	line-height: 1.25;
+	margin: 0 0 12px;
+	letter-spacing: -0.01em;
+}
+h1 {
+	font-size: clamp(1.6rem, 3vw, 2.1rem);
+	font-weight: 800;
+}
+h2 {
+	font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+	font-weight: 750;
+}
+h3 {
+	font-size: 1.08rem;
+	font-weight: 700;
+}
+p {
+	margin: 0 0 12px;
+}
+a {
+	color: var(--blue);
+	text-underline-offset: 3px;
+}
+a:hover {
+	color: var(--navy-deep);
+}
+img {
+	max-width: 100%;
+}
+
+:focus-visible {
+	outline: 3px solid var(--amber);
+	outline-offset: 2px;
+}
+
+.sr-only {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* layout */
+.wrap {
+	width: 100%;
+	max-width: var(--wrap);
+	margin: 0 auto;
+	padding-left: clamp(16px, 4vw, 40px);
+	padding-right: clamp(16px, 4vw, 40px);
+}
+.section {
+	padding: clamp(40px, 6vw, 72px) 0;
+}
+.section.band {
+	background: var(--band);
+	border-top: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+.section-head {
+	margin-bottom: 28px;
+}
+.section-head.center {
+	text-align: center;
+}
+.section-head .lead {
+	color: var(--text-2);
+	max-width: 60ch;
+}
+.section-head.center .lead {
+	margin: 0 auto;
+}
+
+/* small uppercase label above a heading, as on the CoMET site */
+.kicker {
+	display: block;
+	color: var(--blue);
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	margin-bottom: 8px;
+}
+
+.muted {
+	color: var(--muted);
+}
+.small {
+	font-size: 0.9rem;
+}
+.num {
+	font-variant-numeric: tabular-nums;
+}
+
+/* cards */
+.card {
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	padding: 22px;
+}
+.card-title {
+	color: var(--navy);
+	font-weight: 700;
+	font-size: 1.05rem;
+	padding-bottom: 12px;
+	margin-bottom: 12px;
+	border-bottom: 1px solid var(--line);
+}
+.grid {
+	display: grid;
+	gap: 20px;
+}
+.grid-3 {
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.grid-2 {
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 10px 20px;
+	border-radius: 4px;
+	border: 1px solid var(--navy);
+	background: var(--navy);
+	color: #fff;
+	font: inherit;
+	font-size: 0.92rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.btn:hover {
+	background: var(--navy-deep);
+	color: #fff;
+}
+.btn-outline {
+	background: #fff;
+	color: var(--navy);
+}
+.btn-outline:hover {
+	background: var(--blue-soft);
+	color: var(--navy-deep);
+}
+.btn-amber {
+	background: var(--amber);
+	border-color: var(--amber);
+}
+.btn-amber:hover {
+	background: #92400e;
+}
+.btn-small {
+	min-height: 36px;
+	padding: 6px 12px;
+	font-size: 0.8rem;
+}
+
+/* plain tables */
+.table-wrap {
+	overflow-x: auto;
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	background: #fff;
+}
+table.data {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+table.data th,
+table.data td {
+	padding: 12px 14px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid var(--line);
+}
+table.data th {
+	background: var(--band);
+	color: var(--navy);
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+table.data tr:last-child td {
+	border-bottom: 0;
+}
+table.data td.n,
+table.data th.n {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+/* chips */
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.chip {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: var(--blue-soft);
+	color: var(--navy);
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+/* form controls */
+.input,
+.select {
+	min-height: 44px;
+	padding: 8px 12px;
+	border: 1px solid var(--line-strong);
+	border-radius: 4px;
+	background: #fff;
+	color: var(--text);
+	font: inherit;
+	font-size: 1rem;
+}
+.input:focus,
+.select:focus {
+	border-color: var(--blue);
+}
+
+/* tabs used as filters */
+.seg {
+	display: inline-flex;
+	flex-wrap: wrap;
+	border: 1px solid var(--line-strong);
+	border-radius: 4px;
+	overflow: hidden;
+	background: #fff;
+}
+.seg button {
+	min-height: 42px;
+	padding: 8px 16px;
+	border: 0;
+	border-right: 1px solid var(--line-strong);
+	background: transparent;
+	color: var(--text-2);
+	font: inherit;
+	font-size: 0.92rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+.seg button:last-child {
+	border-right: 0;
+}
+.seg button[aria-pressed='true'] {
+	background: var(--navy);
+	color: #fff;
+}
+.seg .count {
+	color: var(--muted);
+	font-weight: 500;
+	margin-left: 4px;
+}
+.seg button[aria-pressed='true'] .count {
+	color: #d6e4ef;
+}
+
+details.more > summary {
+	cursor: pointer;
+	color: var(--blue);
+	font-weight: 600;
+	padding: 8px 0;
+}
+
+@media print {
+	.no-print {
+		display: none !important;
+	}
+	.card {
+		box-shadow: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition: none !important;
+		animation: none !important;
+	}
+}

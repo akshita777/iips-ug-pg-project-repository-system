@@ -11,14 +11,12 @@ digraph class_diagram {
 
   user [label="{User|name\l email\l password\l}"];
 
-  student [label="{Student|roll number\l program code\l batch year\l section\l semester\l|+ submit synopsis()\l+ submit project()\l+ upload version()\l}"];
   faculty [label="{Faculty|employee id\l department\l max capacity\l|+ review submission()\l+ approve or reject()\l}"];
   coordinator [label="{Coordinator|employee id\l department\l|+ set deadlines()\l+ confirm allocation()\l}"];
   evaluator [label="{Evaluator|employee id\l organization\l external?\l|+ grade project()\l}"];
   admin [label="{Administrator\l|\l}"];
 
   batchmentor [label="{Batch Mentor|program code\l batch year\l|+ assign guides()\l}"];
-  synopsis [label="{Synopsis|title\l summary\l status\l|+ submit()\l+ approve()\l+ return()\l}"];
   deadline [label="{Deadline Window|project type\l opens on\l closes on\l}"];
   slot [label="{Review Slot|starts at\l booked by\l|+ book()\l+ cancel()\l}"];
 
@@ -37,7 +35,6 @@ digraph class_diagram {
 
   { rank=same; student; faculty; }
   { rank=same; coordinator; evaluator; admin; }
-  { rank=same; allocation; synopsis; slot; preference; review; batchmentor; }
   { rank=same; version; team; }
 
   user -> student [dir=back, arrowhead="empty", label="is a"];
@@ -51,8 +48,6 @@ digraph class_diagram {
   faculty -> slot [arrowhead="vee", label="offers"];
   student -> slot [arrowhead="vee", label="books"];
 
-  student -> synopsis [arrowhead="vee", label="writes 1..*"];
-  synopsis -> project [arrowhead="vee", label="approved into 0..1"];
   student -> project [arrowhead="vee", label="submits 1..*"];
   project -> version [arrowhead="diamond", label="has 1..*"];
   project -> team [arrowhead="vee", label="has 1..2"];

@@ -21,19 +21,16 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final GuideAllocationRepository allocationRepository;
     private final ApplicationEventPublisher events;
-    private final SynopsisService synopsisService;
     private final DeadlineService deadlineService;
 
     public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
                           GuideAllocationRepository allocationRepository,
                           ApplicationEventPublisher events,
-                          SynopsisService synopsisService,
                           DeadlineService deadlineService) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.allocationRepository = allocationRepository;
         this.events = events;
-        this.synopsisService = synopsisService;
         this.deadlineService = deadlineService;
     }
 
@@ -72,9 +69,7 @@ public class ProjectService {
                 && (student.getSemester() == null || student.getSemester() != 10)) {
             throw new IllegalStateException("Major projects belong to semester 10");
         }
-        if (!synopsisService.hasApproved(student)) {
-            throw new IllegalStateException("An approved synopsis is required before creating a project");
-        }
+
         Project project = new Project();
         project.setStudent(student);
         project.setTitle(req.title());

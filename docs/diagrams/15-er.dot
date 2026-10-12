@@ -14,7 +14,6 @@ digraph er_diagram {
   evals [label="{evaluations|id (PK)\l project id (FK)\l evaluator id (FK)\l rubric id (FK)\l total marks\l feedback\l}"];
   rubrics [label="{rubrics|id (PK)\l name\l criteria (JSON)\l}"];
   batch [label="{batch mentors|id (PK)\l faculty id (FK)\l program code\l batch year\l}"];
-  synopsis [label="{synopses|id (PK)\l student id (FK)\l title\l summary\l status\l}"];
   windows [label="{deadline windows|id (PK)\l batch mentor id (FK)\l project type\l opens on\l closes on\l}"];
   slots [label="{review slots|id (PK)\l faculty id (FK)\l student id (FK)\l starts at\l status\l}"];
   prefs [label="{guide preferences|id (PK)\l student id (FK)\l faculty id (FK)\l rank\l}"];
@@ -28,8 +27,6 @@ digraph er_diagram {
   rubrics -> evals [label="1 used in N"];
   users -> evals [label="1 writes N"];
   users -> batch [label="1 mentors 1"];
-  users -> synopsis [label="1 writes N"];
-  synopsis -> projects [label="1 opens 0..1"];
   batch -> windows [label="1 sets N"];
   users -> slots [label="1 offers N"];
   slots -> users [label="booked by 0..1"];

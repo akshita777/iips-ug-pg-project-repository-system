@@ -84,4 +84,64 @@ public class AuthService {
         String token = jwtUtil.generateToken(email, user.getRole());
         return new AuthResponse(token, refreshToken, email, user.getRole());
     }
+
+    @org.springframework.beans.factory.annotation.Value("${supabase.url}")
+    private String supabaseUrl;
+
+    @org.springframework.beans.factory.annotation.Value("${supabase.service-key}")
+    private String supabaseKey;
+
+    public AuthResponse supabaseLogin(String accessToken) {
+        if (supabaseUrl == null || supabaseUrl.isBlank()) {
+            throw new IllegalArgumentException("Backend configuration error: SUPABASE_URL is missing");
+        }
+        if (supabaseKey == null || supabaseKey.isBlank()) {
+            throw new IllegalArgumentException("Backend configuration error: SUPABASE_SERVICE_KEY is missing");
+        }
+
+        org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        headers.set("apikey", supabaseKey);
+        org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>("", headers);
+        
+        try {
+            org.springframework.http.ResponseEntity<java.util.Map> response = restTemplate.exchange(
+                    supabaseUrl + "/auth/v1/user?apikey=" + supabaseKey, 
+                    org.springframework.http.HttpMethod.GET, 
+                    entity, 
+                    java.util.Map.class);
+            
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                String email = (String) response.getBody().get("email");
+                if (email == null) throw new IllegalArgumentException("Email missing from GitHub profile");
+                
+                String name = "Unknown";
+                if (response.getBody().get("user_metadata") instanceof java.util.Map) {
+                    java.util.Map meta = (java.util.Map) response.getBody().get("user_metadata");
+                    if (meta.get("full_name") != null) {
+                        name = (String) meta.get("full_name");
+                    } else if (meta.get("name") != null) {
+                        name = (String) meta.get("name");
+                    }
+                }
+                
+                var userOpt = userRepository.findByEmail(email);
+                if (userOpt.isEmpty()) {
+                    return new AuthResponse(null, null, email, "INCOMPLETE", name, true);
+                }
+                
+                var user = userOpt.get();
+                String token = jwtUtil.generateToken(email, user.getRole());
+                String refresh = jwtUtil.generateRefreshToken(email);
+                return new AuthResponse(token, refresh, email, user.getRole(), user.getName(), false);
+            } else {
+                throw new IllegalArgumentException("Invalid Supabase token");
+            }
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            throw new IllegalArgumentException("Authentication with Supabase failed: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Authentication with Supabase failed: " + e.getMessage());
+        }
+    }
 }

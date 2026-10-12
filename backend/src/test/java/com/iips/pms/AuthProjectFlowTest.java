@@ -47,8 +47,7 @@ class AuthProjectFlowTest {
     @Autowired
     private com.iips.pms.repository.UserRepository userRepository;
 
-    @Autowired
-    private com.iips.pms.repository.SynopsisRepository synopsisRepository;
+
 
     @Test
     void registerLoginCreateAndSubmitProject() throws Exception {
@@ -65,12 +64,7 @@ class AuthProjectFlowTest {
                 {"title":"Flow Project","abstractText":"Abstract","techStack":"Java"}""";
         com.iips.pms.entity.User student =
                 userRepository.findByEmail("flow@iips.edu").orElseThrow();
-        com.iips.pms.entity.Synopsis synopsis = new com.iips.pms.entity.Synopsis();
-        synopsis.setStudent((com.iips.pms.entity.Student) student);
-        synopsis.setTitle("Flow Synopsis");
-        synopsis.setSummary("Summary");
-        synopsis.setStatus(com.iips.pms.entity.Synopsis.SynopsisStatus.APPROVED);
-        synopsisRepository.save(synopsis);
+        
         String projectResponse = mockMvc.perform(post("/api/v1/projects")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)

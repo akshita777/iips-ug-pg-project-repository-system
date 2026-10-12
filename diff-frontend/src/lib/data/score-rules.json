@@ -1,0 +1,67 @@
+{
+	"name": "IIPS Research Index (2026)",
+	"recentYears": 5,
+	"weights": {
+		"journal": 1,
+		"book": 2,
+		"patent": 2,
+		"chapter": 0.5,
+		"conference": 0.5,
+		"other": 0.5,
+		"thesis": 0
+	},
+	"phdOngoingShare": 0.5,
+	"minPapersForAverage": 3,
+	"pillars": [
+		{
+			"id": "output",
+			"label": "Output",
+			"about": "Everything published, weighted by type",
+			"parts": [{ "metric": "weightedPapers", "label": "Weighted papers", "max": 20, "target": 60 }]
+		},
+		{
+			"id": "impact",
+			"label": "Impact",
+			"about": "How much the work is cited",
+			"parts": [
+				{ "metric": "citations", "label": "Citations", "max": 10, "target": 1000 },
+				{ "metric": "h", "label": "h-index", "max": 10, "target": 15 }
+			]
+		},
+		{
+			"id": "quality",
+			"label": "Quality",
+			"about": "How well each paper is cited",
+			"parts": [
+				{ "metric": "citesPerPaper", "label": "Citations per paper", "max": 10, "target": 15 },
+				{ "metric": "i10", "label": "i10-index", "max": 10, "target": 10 }
+			]
+		},
+		{
+			"id": "recent",
+			"label": "Recent work",
+			"about": "The last 5 years",
+			"parts": [
+				{ "metric": "recentWeighted", "label": "Weighted papers", "max": 14, "target": 15 },
+				{ "metric": "activeYears", "label": "Years with a paper", "max": 6, "target": 5 }
+			]
+		},
+		{
+			"id": "mentoring",
+			"label": "Mentoring",
+			"about": "Ph.D. guidance, patents and books",
+			"parts": [
+				{ "metric": "phd", "label": "Ph.D. scholars", "max": 14, "target": 8 },
+				{ "metric": "patentsBooks", "label": "Patents and books", "max": 6, "target": 3 }
+			]
+		}
+	],
+	"grades": [
+		{ "grade": "A+", "min": 75 },
+		{ "grade": "A", "min": 60 },
+		{ "grade": "B+", "min": 45 },
+		{ "grade": "B", "min": 30 },
+		{ "grade": "C", "min": 15 },
+		{ "grade": "D", "min": 0 }
+	]
+}

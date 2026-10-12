@@ -34,4 +34,9 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refresh(@RequestBody Map<String, String> body) {
         return ResponseEntity.ok(authService.refresh(body.get("refreshToken")));
     }
+
+    @PostMapping("/supabase")
+    public ResponseEntity<AuthResponse> supabaseLogin(@RequestBody Map<String, String> body) {
+        return ResponseEntity.ok(authService.supabaseLogin(body.get("access_token")));
+    }
 }

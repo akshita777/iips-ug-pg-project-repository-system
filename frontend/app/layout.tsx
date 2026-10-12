@@ -63,8 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </span>
                 <span>
                   Academic session 2026-27: MCA (5 Years) Integrated final submissions open.{" "}
-                  <Link href="/projects/new" className="text-amber-text font-semibold">
-                    Submit your project
+                  <Link href="/login" className="text-amber-text font-semibold">
+                    Login to submit
                   </Link>
                   .
                 </span>

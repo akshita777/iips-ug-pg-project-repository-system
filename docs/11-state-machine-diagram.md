@@ -14,7 +14,7 @@ States: Draft, Submitted, Under Review, Approved, Needs Changes, Awaiting Evalua
 
 Source: [11-state-student.dot](diagrams/11-state-student.dot).
 
-BCA semesters 1 to 5 build the profile. Semester 6 carries the BCA final project and viva. MCA semesters 7 to 9 build the profile again. Semester 10 carries the MCA final project and viva.
+Semesters 1 to 9 build the academic profile. Semester 10 carries the final major project and viva.
 
 ## 11.3 Guide Allocation States
 

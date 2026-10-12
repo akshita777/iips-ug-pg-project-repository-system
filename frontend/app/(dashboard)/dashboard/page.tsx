@@ -79,12 +79,15 @@ export default function DashboardPage() {
           </div>
 
           <Card>
-            <CardTitle>Workflows</CardTitle>
+            <CardTitle>Actions</CardTitle>
             <ul className="chips">
-              <li><Link href="/projects/new" className="chip no-underline">Submit</Link></li>
-              <li><Link href="/coordinator/allocation" className="chip no-underline">Allocation</Link></li>
-              <li><Link href="/evaluator/assigned" className="chip no-underline">Evaluate</Link></li>
-              <li><Link href="/admin/users" className="chip no-underline">Admin</Link></li>
+              {role === "STUDENT" && <li><Link href="/projects/new" className="chip no-underline font-semibold bg-blue-soft text-navy">Submit a project</Link></li>}
+              {role === "STUDENT" && <li><Link href="/preferences" className="chip no-underline">Guide preferences</Link></li>}
+              {role === "FACULTY" && <li><Link href="/guide/reviews" className="chip no-underline">Review queue</Link></li>}
+              {role === "COORDINATOR" && <li><Link href="/coordinator/allocation" className="chip no-underline">Manage allocations</Link></li>}
+              {role === "EVALUATOR" && <li><Link href="/evaluator/assigned" className="chip no-underline">Evaluate assigned projects</Link></li>}
+              {role === "ADMIN" && <li><Link href="/admin/users" className="chip no-underline">Manage users</Link></li>}
+              {role === "ADMIN" && <li><Link href="/admin/analytics" className="chip no-underline">Analytics</Link></li>}
             </ul>
           </Card>
 

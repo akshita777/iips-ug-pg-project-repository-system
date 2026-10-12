@@ -1,6 +1,6 @@
 # 8. Object Diagram
 
-## 8.1 Sem-6 BCA Minor Project (Snapshot)
+## 8.1 Sem-6 MCA (5 Yrs) Minor Project (Snapshot)
 
 A two student team with an approved synopsis and two submitted versions.
 

@@ -9,26 +9,19 @@ digraph activity_evaluation {
 
   start [label="", shape=circle, style="filled", fillcolor="black", width=0.25, height=0.25];
   approved [label="Guide approves project"];
-  assign [label="Project assigned to evaluators"];
-  internal [label="Internal evaluator reviews"];
-  external [label="External evaluator reviews"];
-  marks_in [label="Internal marks submitted"];
-  marks_ex [label="External marks submitted"];
-  total [label="Final score calculated"];
-  pass [label="Score passing?", shape=diamond, style="filled", fillcolor="white"];
-  report [label="Report generated"];
-  rework [label="Returned for rework"];
+  assign [label="Project assigned to evaluator"];
+  marks_in [label="Evaluator grades via rubric"];
+  total [label="Feedback and marks saved"];
+  pass [label="Score >= 40?", shape=diamond, style="filled", fillcolor="white"];
+  report [label="Project set to Evaluated"];
+  rework [label="Returned for rework in same term"];
   inform [label="Student gets notified"];
   end [label="", shape=doublecircle, style="filled", fillcolor="white", color="black", width=0.3, height=0.3];
 
   start -> approved;
   approved -> assign;
-  assign -> internal;
-  assign -> external;
-  internal -> marks_in;
-  external -> marks_ex;
+  assign -> marks_in;
   marks_in -> total;
-  marks_ex -> total;
   total -> pass;
   pass -> report [label="yes"];
   pass -> rework [label="no"];
